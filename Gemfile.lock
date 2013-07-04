@@ -25,6 +25,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  rack
   rack-test
   rake
   rspec

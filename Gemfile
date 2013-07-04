@@ -1,5 +1,7 @@
 source 'https://rubygems.org/'
 
+gem 'rack'
+
 group :production do
   gem 'unicorn', '4.6.3'
 end
