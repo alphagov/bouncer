@@ -11,7 +11,7 @@ describe Bouncer do
   let(:hostname) { 'example.com' }
   let(:path) { '/' }
   let(:url) { "http://#{hostname}#{path}" }
-  let(:path_hash) { double }
+  let(:path_hash) { double 'path hash' }
   let(:site) { double 'site' }
   let(:mappings) { double 'mappings' }
   let(:mapping) { double 'mapping' }
