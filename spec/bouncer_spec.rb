@@ -69,6 +69,27 @@ describe Bouncer do
     end
   end
 
+  context 'when the URL has been redirected' do
+    let(:status_code) { 301 }
+    let(:new_url) { double 'new URL' }
+
+    before(:each) do
+      mapping.stub new_url: new_url
+    end
+
+    it_should_behave_like 'a redirector'
+
+    it 'should respond with a redirect' do
+      get url
+      last_response.should be_redirect
+    end
+
+    it 'should redirect to the new URL' do
+      get url
+      last_response.location.should == new_url
+    end
+  end
+
   context 'when the URL has been archived' do
     let(:status_code) { 410 }
 

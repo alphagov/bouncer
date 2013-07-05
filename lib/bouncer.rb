@@ -9,6 +9,8 @@ class Bouncer
     mapping = host.site.mappings.find_by path_hash: path_hash
 
     case mapping.http_status
+    when '301'
+      [301, { 'Location' => mapping.new_url }, []]
     when '410'
       [410, {}, []]
     end
