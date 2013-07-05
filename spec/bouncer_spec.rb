@@ -7,7 +7,6 @@ describe Bouncer do
   include Rack::Test::Methods
 
   let(:app) { subject }
-  let(:host_class) { double 'Host' }
   let(:host) { double 'host' }
   let(:hostname) { 'example.com' }
   let(:path) { '/' }
@@ -18,9 +17,8 @@ describe Bouncer do
   let(:mapping) { double 'mapping' }
 
   before(:each) do
-    stub_const 'Host', host_class
-
-    host_class.stub find_by: host
+    stub_const 'Host', double
+    Host.stub find_by: host
     Digest::SHA1.stub hexdigest: path_hash
     host.stub site: site
     site.stub mappings: mappings
@@ -34,7 +32,7 @@ describe Bouncer do
     end
 
     it 'should find the right host' do
-      host_class.should_receive(:find_by).with(host: hostname)
+      Host.should_receive(:find_by).with(host: hostname)
       get url
     end
 
