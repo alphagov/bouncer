@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 require 'rack/test'
-require_relative '../lib/bouncer'
+require 'bouncer'
 
 describe Bouncer do
   include Rack::Test::Methods
