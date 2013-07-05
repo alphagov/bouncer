@@ -17,4 +17,21 @@ describe Site do
       Site.create
     end
   end
+
+  describe '#create_mapping' do
+    let(:attributes) { double 'attributes' }
+    let(:mapping) { double 'mapping' }
+
+    before(:each) do
+      stub_const 'Mapping', double
+      Mapping.stub create: mapping
+    end
+
+    specify { subject.create_mapping(attributes).should == mapping }
+
+    specify do
+      Mapping.should_receive(:create).with(attributes)
+      subject.create_mapping(attributes)
+    end
+  end
 end
