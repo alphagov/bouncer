@@ -73,5 +73,10 @@ describe Bouncer do
     let(:status_code) { 410 }
 
     it_should_behave_like 'a redirector'
+
+    it 'should respond with a client error' do
+      get url
+      last_response.should be_client_error
+    end
   end
 end
