@@ -34,4 +34,21 @@ describe Site do
       subject.create_mapping(attributes)
     end
   end
+
+  describe '#create_host' do
+    let(:attributes) { double 'attributes' }
+    let(:host) { double 'host' }
+
+    before(:each) do
+      stub_const 'Host', double
+      Host.stub create: host
+    end
+
+    specify { subject.create_host(attributes).should == host }
+
+    specify do
+      Host.should_receive(:create).with(attributes)
+      subject.create_host(attributes)
+    end
+  end
 end

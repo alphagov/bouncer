@@ -1,3 +1,4 @@
+require 'host'
 require 'mapping'
 
 class Site
@@ -7,5 +8,9 @@ class Site
 
   def create_mapping(*args)
     Mapping.create(*args)
+  end
+
+  def create_host(*args)
+    Host.create(*args)
   end
 end
