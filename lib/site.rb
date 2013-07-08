@@ -10,7 +10,7 @@ class Site
     Mapping.create(*args)
   end
 
-  def create_host(*args)
-    Host.create(*args)
+  def create_host(attributes)
+    Host.create(attributes.merge(site: self))
   end
 end

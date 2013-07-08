@@ -36,7 +36,8 @@ describe Site do
   end
 
   describe '#create_host' do
-    let(:attributes) { double 'attributes' }
+    let(:hostname) { double 'hostname' }
+    let(:attributes) { { host: hostname } }
     let(:host) { double 'host' }
 
     before(:each) do
@@ -47,7 +48,7 @@ describe Site do
     specify { subject.create_host(attributes).should == host }
 
     specify do
-      Host.should_receive(:create).with(attributes)
+      Host.should_receive(:create).with(host: hostname, site: subject)
       subject.create_host(attributes)
     end
   end
