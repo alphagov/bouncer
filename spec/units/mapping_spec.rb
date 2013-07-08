@@ -31,4 +31,22 @@ describe Mapping do
     its(:http_status) { should == http_status }
     its(:new_url) { should == new_url }
   end
+
+  describe '#path_hash' do
+    let(:path) { double 'path' }
+    let(:path_hash) { double 'path hash' }
+    subject { Mapping.new path: path }
+
+    before(:each) do
+      stub_const 'Digest::SHA1', double
+      Digest::SHA1.stub hexdigest: path_hash
+    end
+
+    specify do
+      Digest::SHA1.should_receive(:hexdigest).with(path)
+      subject.path_hash
+    end
+
+    its(:path_hash) { should == path_hash }
+  end
 end
