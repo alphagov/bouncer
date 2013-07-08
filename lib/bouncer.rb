@@ -1,6 +1,8 @@
 require 'digest/sha1'
 require 'rack/request'
 
+require 'host'
+
 class Bouncer
   def call(env)
     request = Rack::Request.new(env)
