@@ -1,3 +1,5 @@
+require 'record_collection'
+
 class Host < Struct.new(:site, :host)
   def self.create(*args)
     new(*args).tap do |host|
@@ -6,15 +8,15 @@ class Host < Struct.new(:site, :host)
   end
 
   def self.all
-    @all ||= []
+    @all ||= RecordCollection.new([])
   end
 
   def self.destroy_all
-    @all = []
+    @all = RecordCollection.new([])
   end
 
   def self.find_by(params)
-    all.detect { |host| params.all? { |key, value| host[key] == value } }
+    all.find_by(params)
   end
 
   def initialize(attributes)
