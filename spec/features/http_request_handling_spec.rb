@@ -2,6 +2,7 @@ require 'spec_helper'
 
 require 'rack/test'
 require 'bouncer'
+require 'site'
 
 describe 'HTTP request handling' do
   include Rack::Test::Methods
