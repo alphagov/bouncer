@@ -18,4 +18,13 @@ describe Host do
       Host.create(attributes)
     end
   end
+
+  describe '.new' do
+    let(:hostname) { double 'hostname' }
+
+    subject { Host.new host: hostname }
+
+    it { should be_a Host }
+    its(:host) { should == hostname }
+  end
 end
