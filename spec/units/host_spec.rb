@@ -27,4 +27,17 @@ describe Host do
     it { should be_a Host }
     its(:host) { should == hostname }
   end
+
+  describe '.find_by' do
+    let(:hostname) { double 'hostname' }
+    let(:other_hostname) { double 'other hostname' }
+
+    before(:each) do
+      Host.destroy_all # to avoid hosts leaking in from other specs
+      Host.create host: other_hostname
+      @host = Host.create host: hostname
+    end
+
+    specify { Host.find_by(host: hostname).should == @host }
+  end
 end

@@ -1,6 +1,20 @@
 class Host < Struct.new(:host)
   def self.create(*args)
-    new *args
+    new(*args).tap do |host|
+      all << host
+    end
+  end
+
+  def self.all
+    @all ||= []
+  end
+
+  def self.destroy_all
+    @all = []
+  end
+
+  def self.find_by(params)
+    all.detect { |host| params.all? { |key, value| host[key] == value } }
   end
 
   def initialize(attributes)
