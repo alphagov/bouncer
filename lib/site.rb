@@ -6,8 +6,14 @@ class Site
     new
   end
 
+  def mappings
+    @mappings ||= []
+  end
+
   def create_mapping(*args)
-    Mapping.create(*args)
+    Mapping.create(*args).tap do |mapping|
+      mappings << mapping
+    end
   end
 
   def create_host(attributes)

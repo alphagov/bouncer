@@ -35,6 +35,26 @@ describe Site do
     end
   end
 
+  describe '#mappings' do
+    let(:first_mapping) { double 'first mapping' }
+    let(:first_mapping_attributes) { double 'first mapping attributes' }
+    let(:second_mapping) { double 'second mapping' }
+    let(:second_mapping_attributes) { double 'second mapping attributes' }
+
+    before(:each) do
+      stub_const 'Mapping', double
+      Mapping.stub(:create).with(first_mapping_attributes).and_return(first_mapping)
+      Mapping.stub(:create).with(second_mapping_attributes).and_return(second_mapping)
+
+      subject.create_mapping first_mapping_attributes
+      subject.create_mapping second_mapping_attributes
+    end
+
+    it { should have(2).mappings }
+    its(:mappings) { should include first_mapping }
+    its(:mappings) { should include second_mapping }
+  end
+
   describe '#create_host' do
     let(:hostname) { double 'hostname' }
     let(:attributes) { { host: hostname } }
