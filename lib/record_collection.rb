@@ -3,6 +3,14 @@ class RecordCollection < Struct.new(:records)
     records << record
   end
 
+  def size
+    records.size
+  end
+
+  def include?(record)
+    records.include?(record)
+  end
+
   def find_by(params)
     records.detect { |record| params.all? { |key, value| record[key] == value } }
   end

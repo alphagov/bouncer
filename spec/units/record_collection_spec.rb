@@ -22,6 +22,49 @@ describe RecordCollection do
     end
   end
 
+  describe '#size' do
+    let(:records) { double 'records' }
+    subject { RecordCollection.new(records) }
+
+    before(:each) do
+      records.stub size: 7
+    end
+
+    specify do
+      records.should_receive(:size).with(no_args)
+      subject.size
+    end
+
+    its(:size) { should == 7 }
+  end
+
+  describe '#include?' do
+    let(:records) { double 'records' }
+    let(:record) { double 'record' }
+    subject { RecordCollection.new(records) }
+
+    specify do
+      records.should_receive(:include?).with(record)
+      subject.include?(record)
+    end
+
+    context 'when the collection includes the record' do
+      before(:each) do
+        records.stub include?: true
+      end
+
+      it { should include record }
+    end
+
+    context 'when the collection doesn\'t include the record' do
+      before(:each) do
+        records.stub include?: false
+      end
+
+      it { should_not include record }
+    end
+  end
+
   describe '#find_by' do
     let(:first_value) { double 'first value' }
     let(:second_value) { double 'second value' }
