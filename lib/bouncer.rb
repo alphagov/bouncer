@@ -1,5 +1,5 @@
-require 'rack'
 require 'digest/sha1'
+require 'rack/request'
 
 class Bouncer
   def call(env)
