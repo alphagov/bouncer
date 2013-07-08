@@ -20,11 +20,13 @@ describe Host do
   end
 
   describe '.new' do
+    let(:site) { double 'site' }
     let(:hostname) { double 'hostname' }
 
-    subject { Host.new host: hostname }
+    subject { Host.new site: site, host: hostname }
 
     it { should be_a Host }
+    its(:site) { should == site }
     its(:host) { should == hostname }
   end
 

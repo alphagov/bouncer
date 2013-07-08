@@ -1,4 +1,4 @@
-class Host < Struct.new(:host)
+class Host < Struct.new(:site, :host)
   def self.create(*args)
     new(*args).tap do |host|
       all << host
