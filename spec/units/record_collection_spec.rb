@@ -73,8 +73,8 @@ describe RecordCollection do
     subject { RecordCollection.new([first_record, second_record]) }
 
     before(:each) do
-      first_record.stub(:[]).with(:value).and_return(first_value)
-      second_record.stub(:[]).with(:value).and_return(second_value)
+      first_record.stub value: first_value
+      second_record.stub value: second_value
     end
 
     specify { subject.find_by(value: first_value).should == first_record }

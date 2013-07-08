@@ -12,6 +12,6 @@ class RecordCollection < Struct.new(:records)
   end
 
   def find_by(params)
-    records.detect { |record| params.all? { |key, value| record[key] == value } }
+    records.detect { |record| params.all? { |key, value| record.send(key) == value } }
   end
 end
