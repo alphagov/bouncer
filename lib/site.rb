@@ -1,5 +1,6 @@
 require 'host'
 require 'mapping'
+require 'record_collection'
 
 class Site
   def self.create
@@ -7,7 +8,7 @@ class Site
   end
 
   def mappings
-    @mappings ||= []
+    @mappings ||= RecordCollection.new([])
   end
 
   def create_mapping(*args)
