@@ -5,7 +5,7 @@ require 'host'
 describe Host do
   describe '.create' do
     let(:attributes) { double 'attributes' }
-    let(:host) { double 'host' }
+    let(:host) { double 'host', save: true }
 
     before(:each) do
       Host.stub new: host
@@ -20,7 +20,7 @@ describe Host do
   end
 
   describe '.new' do
-    let(:site) { double 'site' }
+    let(:site) { Site.new }
     let(:hostname) { double 'hostname' }
 
     subject { Host.new site: site, host: hostname }
@@ -31,8 +31,8 @@ describe Host do
   end
 
   describe '.find_by' do
-    let(:hostname) { double 'hostname' }
-    let(:other_hostname) { double 'other hostname' }
+    let(:hostname) { 'www.minitrue.gov.uk' }
+    let(:other_hostname) { 'www.minipax.gov.uk' }
 
     before(:each) do
       Host.destroy_all # to avoid hosts leaking in from other specs
