@@ -9,14 +9,14 @@ describe 'HTTP request handling' do
   include Rack::Test::Methods
 
   let(:app) { Bouncer.new }
-  let(:site) { Site.create.tap { |site| site.create_host host: 'www.minitrue.gov.uk' } }
+  let(:site) { Site.create.tap { |site| site.hosts.create host: 'www.minitrue.gov.uk' } }
 
   before(:each) do
     Host.destroy_all
   end
 
   specify 'visiting a URL which has been redirected' do
-    site.create_mapping \
+    site.mappings.create \
       path:         '/a-redirected-page',
       path_hash:    Digest::SHA1.hexdigest('/a-redirected-page'),
       http_status:  '301',
@@ -29,7 +29,7 @@ describe 'HTTP request handling' do
   end
 
   specify 'visiting a URL which has been archived' do
-    site.create_mapping \
+    site.mappings.create \
       path:         '/an-archived-page',
       path_hash:    Digest::SHA1.hexdigest('/an-archived-page'),
       http_status:  '410'
