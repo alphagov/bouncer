@@ -1,4 +1,3 @@
-$LOAD_PATH.unshift File.expand_path('../lib', __FILE__)
-require 'bouncer'
+require './boot'
 
 run Bouncer.new
