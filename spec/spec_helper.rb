@@ -16,4 +16,5 @@ RSpec.configure do |config|
   config.order = 'random'
 end
 
+RACK_ENV = 'test'
 require_relative '../boot'
