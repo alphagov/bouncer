@@ -1,5 +1,6 @@
 source 'https://rubygems.org/'
 
+gem 'activerecord'
 gem 'rack'
 
 group :production do
