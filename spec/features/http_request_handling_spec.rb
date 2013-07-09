@@ -1,5 +1,6 @@
 require 'spec_helper'
 
+require 'digest/sha1'
 require 'rack/test'
 require 'bouncer'
 require 'site'
@@ -17,6 +18,7 @@ describe 'HTTP request handling' do
   specify 'visiting a URL which has been redirected' do
     site.create_mapping \
       path:         '/a-redirected-page',
+      path_hash:    Digest::SHA1.hexdigest('/a-redirected-page'),
       http_status:  '301',
       new_url:      'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page'
 
@@ -29,6 +31,7 @@ describe 'HTTP request handling' do
   specify 'visiting a URL which has been archived' do
     site.create_mapping \
       path:         '/an-archived-page',
+      path_hash:    Digest::SHA1.hexdigest('/an-archived-page'),
       http_status:  '410'
 
     get 'http://www.minitrue.gov.uk/an-archived-page'
