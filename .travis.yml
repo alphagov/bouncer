@@ -4,6 +4,12 @@ rvm:
 bundler_args: --without development
 script:
   - bundle exec rake
+before_install:
+  - mysql -u root -e "CREATE USER 'transition'@'localhost' IDENTIFIED BY 'transition'"
+  - mysql -u root -e 'CREATE DATABASE transition_test'
+  - mysql -u root -e "GRANT ALL ON transition_test.* TO 'transition'@'localhost'"
+  - mysql -u root -D transition_test < db/structure.sql
+  - cp config/database.travis.yml config/database.yml
 branches:
   except:
     - master

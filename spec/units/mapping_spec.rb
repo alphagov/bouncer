@@ -5,7 +5,7 @@ require 'mapping'
 describe Mapping do
   describe '.create' do
     let(:attributes) { double 'attributes' }
-    let(:mapping) { double 'mapping' }
+    let(:mapping) { double 'mapping', save: true }
 
     before(:each) do
       Mapping.stub new: mapping
