@@ -38,4 +38,14 @@ describe 'HTTP request handling' do
     last_response.should be_client_error
     last_response.status.should == 410
   end
+
+  specify 'visiting an unrecognised path on a recognised host' do
+    get 'http://www.minitrue.gov.uk/an-unrecognised-page'
+    last_response.should be_not_found
+  end
+
+  specify 'visiting an unrecognised host' do
+    get 'http://www.minipax.gov.uk/an-unrecognised-page'
+    last_response.should be_not_found
+  end
 end
