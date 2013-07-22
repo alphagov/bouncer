@@ -42,10 +42,12 @@ describe 'HTTP request handling' do
   specify 'visiting an unrecognised path on a recognised host' do
     get 'http://www.minitrue.gov.uk/an-unrecognised-page'
     last_response.should be_not_found
+    last_response.body.should include '<title>404 - Not Found</title>'
   end
 
   specify 'visiting an unrecognised host' do
     get 'http://www.minipax.gov.uk/an-unrecognised-page'
     last_response.should be_not_found
+    last_response.body.should include '<title>404 - Not Found</title>'
   end
 end
