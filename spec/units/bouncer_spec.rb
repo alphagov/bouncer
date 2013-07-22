@@ -31,7 +31,7 @@ describe Bouncer do
       expect { get url }.to_not raise_error
     end
 
-    it 'should find the right host' do
+    it 'should try to find the right host' do
       Host.should_receive(:find_by).with(host: hostname)
       get url
     end
@@ -51,7 +51,7 @@ describe Bouncer do
       get url
     end
 
-    it 'should find the right mapping' do
+    it 'should try to find the right mapping' do
       mappings.should_receive(:find_by).with(path_hash: path_hash)
       get url
     end
