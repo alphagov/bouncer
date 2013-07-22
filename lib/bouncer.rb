@@ -16,7 +16,8 @@ class Bouncer
     when '410'
       [410, {}, []]
     else
-      [404, {}, []]
+      template = File.read(File.expand_path('../../templates/404.erb', __FILE__))
+      [404, {}, [template]]
     end
   end
 end
