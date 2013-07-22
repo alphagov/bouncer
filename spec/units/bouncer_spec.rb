@@ -36,6 +36,15 @@ describe Bouncer do
       get url
     end
 
+    it 'should respond with the correct status code' do
+      get url
+      last_response.status.should == status_code
+    end
+  end
+
+  shared_examples 'a redirector which recognises the host' do
+    it_should_behave_like 'a redirector'
+
     it 'should hash the path' do
       Digest::SHA1.should_receive(:hexdigest).with(path)
       get url
@@ -55,15 +64,14 @@ describe Bouncer do
       mappings.should_receive(:find_by).with(path_hash: path_hash)
       get url
     end
+  end
+
+  shared_examples 'a redirector which recognises the host and path' do
+    it_should_behave_like 'a redirector which recognises the host'
 
     it 'should get the mapping\'s status code' do
       mapping.should_receive(:http_status).with(no_args)
       get url
-    end
-
-    it 'should respond with the correct status code' do
-      get url
-      last_response.status.should == status_code
     end
   end
 
@@ -75,7 +83,7 @@ describe Bouncer do
       mapping.stub new_url: new_url
     end
 
-    it_should_behave_like 'a redirector'
+    it_should_behave_like 'a redirector which recognises the host and path'
 
     it 'should respond with a redirect' do
       get url
@@ -91,7 +99,7 @@ describe Bouncer do
   context 'when the URL has been archived' do
     let(:status_code) { 410 }
 
-    it_should_behave_like 'a redirector'
+    it_should_behave_like 'a redirector which recognises the host and path'
 
     it 'should respond with a client error' do
       get url
