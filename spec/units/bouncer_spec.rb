@@ -122,5 +122,17 @@ describe Bouncer do
         end
       end
     end
+
+    context 'when the path is not recognised' do
+      let(:mapping) { nil }
+      let(:status_code) { 404 }
+
+      it_should_behave_like 'a redirector which recognises the host'
+
+      it 'should respond with a not found' do
+        get url
+        last_response.should be_not_found
+      end
+    end
   end
 end
