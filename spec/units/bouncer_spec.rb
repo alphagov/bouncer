@@ -85,6 +85,11 @@ describe Bouncer do
 
     it_should_behave_like 'a redirector which recognises the host and path'
 
+    it 'should get the mapping\'s new URL' do
+      mapping.should_receive(:new_url).with(no_args)
+      get url
+    end
+
     it 'should respond with a redirect' do
       get url
       last_response.should be_redirect
