@@ -135,4 +135,16 @@ describe Bouncer do
       end
     end
   end
+
+  context 'when the host is not recognised' do
+    let(:host) { nil }
+    let(:status_code) { 404 }
+
+    it_should_behave_like 'a redirector'
+
+    it 'should respond with a not found' do
+      get url
+      last_response.should be_not_found
+    end
+  end
 end
