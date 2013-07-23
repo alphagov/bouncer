@@ -43,6 +43,7 @@ describe 'HTTP request handling' do
     get 'http://www.minitrue.gov.uk/an-unrecognised-page'
     last_response.should be_not_found
     last_response.body.should include '<title>404 - Not Found</title>'
+    last_response.body.should include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>'
   end
 
   specify 'visiting an unrecognised host' do
