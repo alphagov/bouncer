@@ -1,4 +1,6 @@
 require 'digest/sha1'
+require 'erb'
+require 'ostruct'
 require 'rack/request'
 
 require 'host'
@@ -17,7 +19,9 @@ class Bouncer
       [410, {}, []]
     else
       template = File.read(File.expand_path('../../templates/404.erb', __FILE__))
-      [404, {}, [template]]
+      site_attributes = OpenStruct.new homepage: 'http://www.gov.uk/government/organisations/ministry-of-truth', title: 'Ministry of Truth'
+      html = ERB.new(template).result(site_attributes.instance_eval { binding })
+      [404, {}, [html]]
     end
   end
 end
