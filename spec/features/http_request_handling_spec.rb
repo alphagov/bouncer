@@ -9,7 +9,8 @@ describe 'HTTP request handling' do
   include Rack::Test::Methods
 
   let(:app) { Bouncer.new }
-  let!(:site) { Site.create(site: 'minitrue').tap { |site| site.hosts.create host: 'www.minitrue.gov.uk' } }
+  let(:organisation) { Organisation.create homepage: 'http://www.gov.uk/government/organisations/ministry-of-truth', title: 'Ministry of Truth' }
+  let!(:site) { organisation.sites.create.tap { |site| site.hosts.create host: 'www.minitrue.gov.uk' } }
 
   specify 'visiting a URL which has been redirected' do
     site.mappings.create \
@@ -43,7 +44,10 @@ describe 'HTTP request handling' do
   end
 
   specify 'visiting an unrecognised path on a different recognised host' do
-    Site.create(site: 'miniluv').tap { |site| site.hosts.create host: 'www.miniluv.gov.uk' }
+    Organisation.create(homepage: 'http://www.gov.uk/government/organisations/ministry-of-love', title: 'Ministry of Love').
+      sites.create.
+      hosts.create host: 'www.miniluv.gov.uk'
+
     get 'http://www.miniluv.gov.uk/an-unrecognised-page'
     last_response.should be_not_found
     last_response.body.should include '<title>404 - Not Found</title>'

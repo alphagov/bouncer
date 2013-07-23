@@ -27,11 +27,11 @@ class Bouncer
   end
 
   def attributes_for_site(site)
-    case site.try(:site)
-    when 'minitrue'
-      { homepage: 'http://www.gov.uk/government/organisations/ministry-of-truth', title: 'Ministry of Truth' }
-    when 'miniluv'
-      { homepage: 'http://www.gov.uk/government/organisations/ministry-of-love', title: 'Ministry of Love' }
-    end
+    organisation = site.try(:organisation)
+
+    {
+      homepage: organisation.try(:homepage),
+      title: organisation.try(:title)
+    }
   end
 end
