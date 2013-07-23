@@ -9,7 +9,7 @@ describe 'HTTP request handling' do
   include Rack::Test::Methods
 
   let(:app) { Bouncer.new }
-  let(:site) { Site.create(site: 'minitrue').tap { |site| site.hosts.create host: 'www.minitrue.gov.uk' } }
+  let!(:site) { Site.create(site: 'minitrue').tap { |site| site.hosts.create host: 'www.minitrue.gov.uk' } }
 
   specify 'visiting a URL which has been redirected' do
     site.mappings.create \
