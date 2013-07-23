@@ -10,7 +10,8 @@ class Bouncer
     request = Rack::Request.new(env)
     host = Host.find_by host: request.host
     path_hash = Digest::SHA1.hexdigest(request.path)
-    mapping = host.site.mappings.find_by path_hash: path_hash if host
+    site = host.site if host
+    mapping = site.mappings.find_by path_hash: path_hash if site
 
     case mapping.try(:http_status)
     when '301'
@@ -19,9 +20,18 @@ class Bouncer
       [410, {}, []]
     else
       template = File.read(File.expand_path('../../templates/404.erb', __FILE__))
-      site_attributes = OpenStruct.new homepage: 'http://www.gov.uk/government/organisations/ministry-of-truth', title: 'Ministry of Truth'
+      site_attributes = OpenStruct.new(attributes_for_site(site))
       html = ERB.new(template).result(site_attributes.instance_eval { binding })
       [404, {}, [html]]
+    end
+  end
+
+  def attributes_for_site(site)
+    case site.try(:site)
+    when 'minitrue'
+      { homepage: 'http://www.gov.uk/government/organisations/ministry-of-truth', title: 'Ministry of Truth' }
+    when 'miniluv'
+      { homepage: 'http://www.gov.uk/government/organisations/ministry-of-love', title: 'Ministry of Love' }
     end
   end
 end
