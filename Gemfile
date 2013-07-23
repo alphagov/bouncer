@@ -9,6 +9,7 @@ group :production do
 end
 
 group :test do
+  gem 'database_cleaner'
   gem 'rack-test'
   gem 'rake'
   gem 'rspec'
