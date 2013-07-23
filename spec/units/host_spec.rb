@@ -35,7 +35,6 @@ describe Host do
     let(:other_hostname) { 'www.minipax.gov.uk' }
 
     before(:each) do
-      Host.destroy_all # to avoid hosts leaking in from other specs
       Host.create host: other_hostname
       @host = Host.create host: hostname
     end

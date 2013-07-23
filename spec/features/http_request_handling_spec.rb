@@ -11,10 +11,6 @@ describe 'HTTP request handling' do
   let(:app) { Bouncer.new }
   let(:site) { Site.create(site: 'minitrue').tap { |site| site.hosts.create host: 'www.minitrue.gov.uk' } }
 
-  before(:each) do
-    Host.destroy_all
-  end
-
   specify 'visiting a URL which has been redirected' do
     site.mappings.create \
       path:         '/a-redirected-page',
