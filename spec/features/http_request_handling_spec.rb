@@ -46,6 +46,14 @@ describe 'HTTP request handling' do
     last_response.body.should include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>'
   end
 
+  specify 'visiting an unrecognised path on a different recognised host' do
+    Site.create.tap { |site| site.hosts.create host: 'www.miniluv.gov.uk' }
+    get 'http://www.miniluv.gov.uk/an-unrecognised-page'
+    last_response.should be_not_found
+    last_response.body.should include '<title>404 - Not Found</title>'
+    last_response.body.should include '<a href="http://www.gov.uk/government/organisations/ministry-of-love"><span>Ministry of Love</span></a>'
+  end
+
   specify 'visiting an unrecognised host' do
     get 'http://www.minipax.gov.uk/an-unrecognised-page'
     last_response.should be_not_found
