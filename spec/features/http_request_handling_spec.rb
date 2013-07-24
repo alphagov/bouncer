@@ -9,7 +9,7 @@ describe 'HTTP request handling' do
   include Rack::Test::Methods
 
   let(:app) { Bouncer.new }
-  let(:organisation) { Organisation.create homepage: 'http://www.gov.uk/government/organisations/ministry-of-truth', title: 'Ministry of Truth', css: 'ministry-of-truth' }
+  let(:organisation) { Organisation.create homepage: 'http://www.gov.uk/government/organisations/ministry-of-truth', title: 'Ministry of Truth', css: 'ministry-of-truth', furl: 'www.gov.uk/mot' }
   let!(:site) { organisation.sites.create(tna_timestamp: '2012-10-26 06:52:14').tap { |site| site.hosts.create host: 'www.minitrue.gov.uk' } }
 
   specify 'visiting a URL which has been redirected' do
@@ -50,6 +50,7 @@ describe 'HTTP request handling' do
     last_response.body.should include '<title>410 - Page Archived</title>'
     last_response.body.should include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>'
     last_response.body.should include '<div class="organisation ministry-of-truth">'
+    last_response.body.should include 'Visit the new Ministry of Truth site at <a href="http://www.gov.uk/government/organisations/ministry-of-truth">www.gov.uk/mot</a>'
     last_response.content_type.should == 'text/html'
   end
 

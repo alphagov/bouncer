@@ -37,6 +37,7 @@ class Bouncer
       homepage: organisation.try(:homepage),
       title: organisation.try(:title),
       css: organisation.try(:css),
+      furl: organisation.try(:furl),
       host: host.try(:host),
       tna_timestamp: site.try(:tna_timestamp).try(:strftime, '%Y%m%d%H%M%S')
     }
