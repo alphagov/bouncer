@@ -17,7 +17,8 @@ class Bouncer
     when '301'
       [301, { 'Location' => mapping.new_url }, []]
     when '410'
-      [410, {}, []]
+      template = File.read(File.expand_path('../../templates/410.erb', __FILE__))
+      [410, { 'Content-Type' => 'text/html' }, [template]]
     else
       template = File.read(File.expand_path('../../templates/404.erb', __FILE__))
       template_context = template_context_for_host(host)
