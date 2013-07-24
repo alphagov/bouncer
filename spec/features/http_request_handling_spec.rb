@@ -10,7 +10,7 @@ describe 'HTTP request handling' do
 
   let(:app) { Bouncer.new }
   let(:organisation) { Organisation.create homepage: 'http://www.gov.uk/government/organisations/ministry-of-truth', title: 'Ministry of Truth', css: 'ministry-of-truth' }
-  let!(:site) { organisation.sites.create.tap { |site| site.hosts.create host: 'www.minitrue.gov.uk' } }
+  let!(:site) { organisation.sites.create(tna_timestamp: '2012-10-26 06:52:14').tap { |site| site.hosts.create host: 'www.minitrue.gov.uk' } }
 
   specify 'visiting a URL which has been redirected' do
     site.mappings.create \
@@ -42,11 +42,12 @@ describe 'HTTP request handling' do
     last_response.body.should include '<title>404 - Not Found</title>'
     last_response.body.should include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>'
     last_response.body.should include '<div class="organisation ministry-of-truth">'
+    last_response.body.should include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk">UK Government Web Archive</a>'
   end
 
   specify 'visiting an unrecognised path on a different recognised host' do
     Organisation.create(homepage: 'http://www.gov.uk/government/organisations/ministry-of-love', title: 'Ministry of Love', css: 'ministry-of-love').
-      sites.create.
+      sites.create(tna_timestamp: '2013-07-24 10:32:51').
       hosts.create host: 'www.miniluv.gov.uk'
 
     get 'http://www.miniluv.gov.uk/an-unrecognised-page'
@@ -54,6 +55,7 @@ describe 'HTTP request handling' do
     last_response.body.should include '<title>404 - Not Found</title>'
     last_response.body.should include '<a href="http://www.gov.uk/government/organisations/ministry-of-love"><span>Ministry of Love</span></a>'
     last_response.body.should include '<div class="organisation ministry-of-love">'
+    last_response.body.should include '<a href="http://webarchive.nationalarchives.gov.uk/20130724103251/http://www.miniluv.gov.uk">UK Government Web Archive</a>'
   end
 
   specify 'visiting an unrecognised host' do

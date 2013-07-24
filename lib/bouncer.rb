@@ -20,19 +20,22 @@ class Bouncer
       [410, {}, []]
     else
       template = File.read(File.expand_path('../../templates/404.erb', __FILE__))
-      template_context = template_context_for_site(site)
+      template_context = template_context_for_host(host)
       html = ERB.new(template).result(template_context)
       [404, {}, [html]]
     end
   end
 
-  def template_context_for_site(site)
+  def template_context_for_host(host)
+    site = host.try(:site)
     organisation = site.try(:organisation)
 
     attributes = {
       homepage: organisation.try(:homepage),
       title: organisation.try(:title),
-      css: organisation.try(:css)
+      css: organisation.try(:css),
+      host: host.try(:host),
+      tna_timestamp: site.try(:tna_timestamp).try(:strftime, '%Y%m%d%H%M%S')
     }
 
     template_context_from_hash(attributes)
