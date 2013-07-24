@@ -48,6 +48,8 @@ describe 'HTTP request handling' do
     last_response.should be_client_error
     last_response.status.should == 410
     last_response.body.should include '<title>410 - Page Archived</title>'
+    last_response.body.should include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>'
+    last_response.body.should include '<div class="organisation ministry-of-truth">'
     last_response.content_type.should == 'text/html'
   end
 
