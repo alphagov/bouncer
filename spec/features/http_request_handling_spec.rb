@@ -9,7 +9,7 @@ describe 'HTTP request handling' do
   include Rack::Test::Methods
 
   let(:app) { Bouncer.new }
-  let(:organisation) { Organisation.create homepage: 'http://www.gov.uk/government/organisations/ministry-of-truth', title: 'Ministry of Truth' }
+  let(:organisation) { Organisation.create homepage: 'http://www.gov.uk/government/organisations/ministry-of-truth', title: 'Ministry of Truth', css: 'ministry-of-truth' }
   let!(:site) { organisation.sites.create.tap { |site| site.hosts.create host: 'www.minitrue.gov.uk' } }
 
   specify 'visiting a URL which has been redirected' do
@@ -41,10 +41,11 @@ describe 'HTTP request handling' do
     last_response.should be_not_found
     last_response.body.should include '<title>404 - Not Found</title>'
     last_response.body.should include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>'
+    last_response.body.should include '<div class="organisation ministry-of-truth">'
   end
 
   specify 'visiting an unrecognised path on a different recognised host' do
-    Organisation.create(homepage: 'http://www.gov.uk/government/organisations/ministry-of-love', title: 'Ministry of Love').
+    Organisation.create(homepage: 'http://www.gov.uk/government/organisations/ministry-of-love', title: 'Ministry of Love', css: 'ministry-of-love').
       sites.create.
       hosts.create host: 'www.miniluv.gov.uk'
 
@@ -52,6 +53,7 @@ describe 'HTTP request handling' do
     last_response.should be_not_found
     last_response.body.should include '<title>404 - Not Found</title>'
     last_response.body.should include '<a href="http://www.gov.uk/government/organisations/ministry-of-love"><span>Ministry of Love</span></a>'
+    last_response.body.should include '<div class="organisation ministry-of-love">'
   end
 
   specify 'visiting an unrecognised host' do

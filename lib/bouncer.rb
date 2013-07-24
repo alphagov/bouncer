@@ -31,7 +31,8 @@ class Bouncer
 
     {
       homepage: organisation.try(:homepage),
-      title: organisation.try(:title)
+      title: organisation.try(:title),
+      css: organisation.try(:css)
     }
   end
 end
