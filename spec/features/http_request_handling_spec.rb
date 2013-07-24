@@ -47,6 +47,8 @@ describe 'HTTP request handling' do
     get 'http://www.minitrue.gov.uk/an-archived-page'
     last_response.should be_client_error
     last_response.status.should == 410
+    last_response.body.should include '<title>410 - Page Archived</title>'
+    last_response.content_type.should == 'text/html'
   end
 
   specify 'visiting an unrecognised path on a recognised host' do
