@@ -51,6 +51,7 @@ describe 'HTTP request handling' do
     last_response.body.should include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>'
     last_response.body.should include '<div class="organisation ministry-of-truth">'
     last_response.body.should include 'Visit the new Ministry of Truth site at <a href="http://www.gov.uk/government/organisations/ministry-of-truth">www.gov.uk/mot</a>'
+    last_response.body.should include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk/an-archived-page">This item has been archived</a>'
     last_response.content_type.should == 'text/html'
   end
 

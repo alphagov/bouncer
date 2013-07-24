@@ -18,18 +18,18 @@ class Bouncer
       [301, { 'Location' => mapping.new_url }, []]
     when '410'
       template = File.read(File.expand_path('../../templates/410.erb', __FILE__))
-      template_context = template_context_for_host(host)
+      template_context = template_context_for_host_and_request(host, request)
       html = ERB.new(template).result(template_context)
       [410, { 'Content-Type' => 'text/html' }, [html]]
     else
       template = File.read(File.expand_path('../../templates/404.erb', __FILE__))
-      template_context = template_context_for_host(host)
+      template_context = template_context_for_host_and_request(host, request)
       html = ERB.new(template).result(template_context)
       [404, { 'Content-Type' => 'text/html' }, [html]]
     end
   end
 
-  def template_context_for_host(host)
+  def template_context_for_host_and_request(host, request)
     site = host.try(:site)
     organisation = site.try(:organisation)
 
@@ -39,7 +39,8 @@ class Bouncer
       css: organisation.try(:css),
       furl: organisation.try(:furl),
       host: host.try(:host),
-      tna_timestamp: site.try(:tna_timestamp).try(:strftime, '%Y%m%d%H%M%S')
+      tna_timestamp: site.try(:tna_timestamp).try(:strftime, '%Y%m%d%H%M%S'),
+      request_uri: request.fullpath
     }
 
     template_context_from_hash(attributes)
