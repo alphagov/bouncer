@@ -43,6 +43,7 @@ describe 'HTTP request handling' do
     last_response.body.should include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>'
     last_response.body.should include '<div class="organisation ministry-of-truth">'
     last_response.body.should include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk">UK Government Web Archive</a>'
+    last_response.content_type.should == 'text/html'
   end
 
   specify 'visiting an unrecognised path on a different recognised host' do
@@ -56,6 +57,7 @@ describe 'HTTP request handling' do
     last_response.body.should include '<a href="http://www.gov.uk/government/organisations/ministry-of-love"><span>Ministry of Love</span></a>'
     last_response.body.should include '<div class="organisation ministry-of-love">'
     last_response.body.should include '<a href="http://webarchive.nationalarchives.gov.uk/20130724103251/http://www.miniluv.gov.uk">UK Government Web Archive</a>'
+    last_response.content_type.should == 'text/html'
   end
 
   specify 'visiting an unrecognised host' do

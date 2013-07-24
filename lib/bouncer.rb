@@ -22,7 +22,7 @@ class Bouncer
       template = File.read(File.expand_path('../../templates/404.erb', __FILE__))
       template_context = template_context_for_host(host)
       html = ERB.new(template).result(template_context)
-      [404, {}, [html]]
+      [404, { 'Content-Type' => 'text/html' }, [html]]
     end
   end
 
