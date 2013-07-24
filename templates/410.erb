@@ -1,46 +1,5 @@
-<?php
-include(dirname(__FILE__)."/../../lib/url.php");
-$c14n_url = c14n_url($_SERVER['REQUEST_URI'], '<%= query_param = options ? options.sub(/^.*--query-string /, '') : "" %>');
-
-$location_suggested_links = array();
-$query_suggested_links = array();
-$archive_links = array();
-
-# generated php files
-<%= IO.popen('
-    site=' + site + '
-    cd dist > /dev/null
-    maps=maps/$site
-    for file in $maps/*.php
-    do
-        if [ -f $file ] ; then
-            echo "include(dirname(__FILE__).\"/../../$file\");"
-        fi
-    done
-').readlines.join('') %>
-/*
- *  archive link
- */
-$archive_link = 'http://webarchive.nationalarchives.gov.uk/<%=tna_timestamp%>/http://<%=host%>' . $_SERVER['REQUEST_URI'];
-
-if (isset($archive_links[$c14n_url])) {
-  $archive_link = $archive_links[$c14n_url];
-}
-
-/*
- *  suggested link
- */
-if (isset($location_suggested_link[$c14n_url])) {
-    $suggested_link = $location_suggested_link[$c14n_url];
-} else {
-    preg_match("/(<%= query_param.sub(/[:, ]/, '|') %>)=\w+/i", $c14n_url, $matches);
-    if (isset($matches[0]) && isset($query_suggested_link[$matches[0]])) {
-        $suggested_link = $query_suggested_link[$matches[0]];
-    }
-}
-
-
-?><!DOCTYPE html>
+<% archive_link = "http://webarchive.nationalarchives.gov.uk/#{tna_timestamp}/http://#{host}#{request_uri}" %>
+<!DOCTYPE html>
 <html class="no-branding">
   <head>
     <meta charset="utf-8">
@@ -67,18 +26,16 @@ if (isset($location_suggested_link[$c14n_url])) {
               <div class="organisation <%= css || "no-organisation" %>">
                 <a href="<%= homepage %>"><span><%= title %></span></a>
               </div>
-              <a href="<?= $archive_link ?>">This item has been archived</a>
+              <a href="<%= archive_link %>">This item has been archived</a>
             </h2>
             <p class="either-or">You can either</p>
-            <p class="call-to-action"><a href="<?= $archive_link ?>">View the item you were looking for</a> in the UK Government Web Archive</p>
+            <p class="call-to-action"><a href="<%= archive_link %>">View the item you were looking for</a> in the UK Government Web Archive</p>
             <p class="either-or">or</p>
             <p class="call-to-action">Visit the new <%= title %> site at <a href="<%= homepage %>"><%= furl %></a></p>
-<?php
-if (isset($suggested_link)) {
-echo "            <p class=\"either-or\">or</p>";
-echo "            <p class=\"call-to-action\">Visit $suggested_link for more information on this topic.</p>";
-}
-?>
+            <% if suggested_link %>
+              <p class="either-or">or</p>
+              <p class="call-to-action">Visit <%= suggested_link %> for more information on this topic.</p>
+            <% end %>
           </div>
           <div id="footer">
             <p><a href="https://www.gov.uk/support">Our support pages</a> have answers to the most common questions about GOV.UK.
