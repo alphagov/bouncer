@@ -20,19 +20,25 @@ class Bouncer
       [410, {}, []]
     else
       template = File.read(File.expand_path('../../templates/404.erb', __FILE__))
-      site_attributes = OpenStruct.new(attributes_for_site(site))
-      html = ERB.new(template).result(site_attributes.instance_eval { binding })
+      template_context = template_context_for_site(site)
+      html = ERB.new(template).result(template_context)
       [404, {}, [html]]
     end
   end
 
-  def attributes_for_site(site)
+  def template_context_for_site(site)
     organisation = site.try(:organisation)
 
-    {
+    attributes = {
       homepage: organisation.try(:homepage),
       title: organisation.try(:title),
       css: organisation.try(:css)
     }
+
+    template_context_from_hash(attributes)
+  end
+
+  def template_context_from_hash(hash)
+    OpenStruct.new(hash).instance_eval { binding }
   end
 end
