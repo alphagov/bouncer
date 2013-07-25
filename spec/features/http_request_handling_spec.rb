@@ -121,4 +121,14 @@ describe 'HTTP request handling' do
     last_response.should be_not_found
     last_response.body.should include '<title>404 - Not Found</title>'
   end
+
+  specify 'visiting a /404 URL' do
+    get 'http://www.minitrue.gov.uk/404'
+    last_response.should be_not_found
+    last_response.body.should include '<title>404 - Not Found</title>'
+    last_response.body.should include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>'
+    last_response.body.should include '<div class="organisation ministry-of-truth">'
+    last_response.body.should include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk">UK Government Web Archive</a>'
+    last_response.content_type.should == 'text/html'
+  end
 end
