@@ -9,7 +9,7 @@ class Bouncer
   def call(env)
     request = Rack::Request.new(env)
     host = Host.find_by host: request.host
-    path_hash = Digest::SHA1.hexdigest(request.path)
+    path_hash = Digest::SHA1.hexdigest(request.fullpath)
     site = host.site if host
     mapping = site.mappings.find_by path_hash: path_hash if site
 

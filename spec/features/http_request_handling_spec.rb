@@ -25,6 +25,19 @@ describe 'HTTP request handling' do
     last_response.location.should == 'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page'
   end
 
+  specify 'visiting a URL with query parameters which has been redirected' do
+    site.mappings.create \
+      path:         '/a-redirected-page?p=np',
+      path_hash:    Digest::SHA1.hexdigest('/a-redirected-page?p=np'),
+      http_status:  '301',
+      new_url:      'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page'
+
+    get 'http://www.minitrue.gov.uk/a-redirected-page?p=np'
+    last_response.should be_redirect
+    last_response.status.should == 301
+    last_response.location.should == 'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page'
+  end
+
   specify 'visiting a URL which has been archived' do
     site.mappings.create \
       path:         '/an-archived-page',
