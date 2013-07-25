@@ -1,4 +1,4 @@
-<% archive_link = "http://webarchive.nationalarchives.gov.uk/#{tna_timestamp}/http://#{host}#{request_uri}" %>
+<% archive_link = archive_url || "http://webarchive.nationalarchives.gov.uk/#{tna_timestamp}/http://#{host}#{request_uri}" %>
 <!DOCTYPE html>
 <html class="no-branding">
   <head>

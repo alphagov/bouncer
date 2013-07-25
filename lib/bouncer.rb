@@ -42,7 +42,8 @@ class Bouncer
       host: host.try(:host),
       tna_timestamp: site.try(:tna_timestamp).try(:strftime, '%Y%m%d%H%M%S'),
       request_uri: request.fullpath,
-      suggested_link: suggested_url.nil? ? nil : %Q{<a href="#{suggested_url}">#{suggested_url.gsub(%r{\Ahttps?://|/\z}, '')}</a>}
+      suggested_link: suggested_url.nil? ? nil : %Q{<a href="#{suggested_url}">#{suggested_url.gsub(%r{\Ahttps?://|/\z}, '')}</a>},
+      archive_url: mapping.try(:archive_url)
     }
 
     template_context_from_hash(attributes)

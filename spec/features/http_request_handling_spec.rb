@@ -74,6 +74,24 @@ describe 'HTTP request handling' do
     last_response.content_type.should == 'text/html'
   end
 
+  specify 'visiting a URL which has been archived with an archive URL' do
+    site.mappings.create \
+      path:         '/an-archived-page',
+      path_hash:    Digest::SHA1.hexdigest('/an-archived-page'),
+      http_status:  '410',
+      archive_url:  'http://webarchive.nationalarchives.gov.uk/20130101000000/http://www.minitrue.gov.uk/an-archived-page/the_actual_page.php'
+
+    get 'http://www.minitrue.gov.uk/an-archived-page'
+    last_response.should be_client_error
+    last_response.status.should == 410
+    last_response.body.should include '<title>410 - Page Archived</title>'
+    last_response.body.should include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>'
+    last_response.body.should include '<div class="organisation ministry-of-truth">'
+    last_response.body.should include 'Visit the new Ministry of Truth site at <a href="http://www.gov.uk/government/organisations/ministry-of-truth">www.gov.uk/mot</a>'
+    last_response.body.should include '<a href="http://webarchive.nationalarchives.gov.uk/20130101000000/http://www.minitrue.gov.uk/an-archived-page/the_actual_page.php">This item has been archived</a>'
+    last_response.content_type.should == 'text/html'
+  end
+
   specify 'visiting an unrecognised path on a recognised host' do
     get 'http://www.minitrue.gov.uk/an-unrecognised-page'
     last_response.should be_not_found
