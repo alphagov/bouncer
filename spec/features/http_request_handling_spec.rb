@@ -152,6 +152,11 @@ describe 'HTTP request handling' do
       http_status:  '301',
       new_url:      'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page'
     site.mappings.create \
+      path:         '/a-redirected-page?p=np',
+      path_hash:    Digest::SHA1.hexdigest('/a-redirected-page?p=np'),
+      http_status:  '301',
+      new_url:      'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page'
+    site.mappings.create \
       path:         '/an-archived-page',
       path_hash:    Digest::SHA1.hexdigest('/an-archived-page'),
       http_status:  '410'
@@ -161,6 +166,7 @@ describe 'HTTP request handling' do
     last_response.body.should be_valid_xml
     last_response.body.should be_valid_sitemap
     last_response.body.should have_sitemap_entry_for 'http://www.minitrue.gov.uk/a-redirected-page'
+    last_response.body.should have_sitemap_entry_for 'http://www.minitrue.gov.uk/a-redirected-page?p=np'
     last_response.body.should have_sitemap_entry_for 'http://www.minitrue.gov.uk/an-archived-page'
     last_response.content_type.should == 'application/xml'
   end
