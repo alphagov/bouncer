@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 require 'digest/sha1'
+require 'nokogiri'
 require 'rack/test'
 require 'bouncer'
 require 'site'
@@ -145,8 +146,40 @@ describe 'HTTP request handling' do
   end
 
   specify 'visiting a /sitemap.xml URL' do
+    site.mappings.create \
+      path:         '/a-redirected-page',
+      path_hash:    Digest::SHA1.hexdigest('/a-redirected-page'),
+      http_status:  '301',
+      new_url:      'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page'
+    site.mappings.create \
+      path:         '/an-archived-page',
+      path_hash:    Digest::SHA1.hexdigest('/an-archived-page'),
+      http_status:  '410'
+
     get 'http://www.minitrue.gov.uk/sitemap.xml'
     last_response.should be_ok
+    last_response.body.should be_valid_xml
+    last_response.body.should be_valid_sitemap
     last_response.content_type.should == 'application/xml'
+  end
+end
+
+RSpec::Matchers.define :be_valid_xml do
+  match do |string|
+    begin
+      Nokogiri::XML::Document.parse(string) { |config| config.strict }
+      true
+    rescue Nokogiri::XML::SyntaxError
+      false
+    end
+  end
+end
+
+RSpec::Matchers.define :be_valid_sitemap do
+  match do |string|
+    sitemap = Nokogiri::XML::Document.parse(string)
+    schema = Nokogiri::XML::Schema.new(File.read(File.expand_path('../sitemap.xsd', __FILE__)))
+
+    schema.valid?(sitemap)
   end
 end

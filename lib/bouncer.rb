@@ -1,5 +1,6 @@
 require 'digest/sha1'
 require 'erb'
+require 'nokogiri'
 require 'ostruct'
 require 'rack/request'
 
@@ -11,11 +12,22 @@ class Bouncer
     host = Host.find_by host: request.host
     path_hash = Digest::SHA1.hexdigest(request.fullpath)
     site = host.site if host
+    mappings = site.mappings if site
 
     if request.path == '/sitemap.xml'
-      [200, { 'Content-Type' => 'application/xml' }, []]
+      sitemap = Nokogiri::XML::Builder.new do |xml|
+        xml.urlset xmlns: 'http://www.sitemaps.org/schemas/sitemap/0.9' do
+          mappings.each do |mapping|
+            xml.url do
+              xml.loc mapping.path
+            end
+          end
+        end
+      end
+
+      [200, { 'Content-Type' => 'application/xml' }, [sitemap.to_xml]]
     else
-      mapping = site.mappings.find_by path_hash: path_hash if site
+      mapping = mappings.find_by path_hash: path_hash if mappings
 
       case mapping.try(:http_status)
       when '301'
