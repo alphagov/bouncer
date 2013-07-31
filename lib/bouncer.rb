@@ -11,27 +11,32 @@ class Bouncer
     host = Host.find_by host: request.host
     path_hash = Digest::SHA1.hexdigest(request.fullpath)
     site = host.site if host
-    mapping = site.mappings.find_by path_hash: path_hash if site
 
-    case mapping.try(:http_status)
-    when '301'
-      [301, { 'Location' => mapping.new_url }, []]
-    when '410'
-      template = File.read(File.expand_path('../../templates/410.erb', __FILE__))
-      template_context = template_context_for_host_and_request_and_mapping(host, request, mapping)
-      html = ERB.new(template).result(template_context)
-      [410, { 'Content-Type' => 'text/html' }, [html]]
+    if request.path == '/sitemap.xml'
+      [200, { 'Content-Type' => 'application/xml' }, []]
     else
-      if request.path == '/410'
+      mapping = site.mappings.find_by path_hash: path_hash if site
+
+      case mapping.try(:http_status)
+      when '301'
+        [301, { 'Location' => mapping.new_url }, []]
+      when '410'
         template = File.read(File.expand_path('../../templates/410.erb', __FILE__))
         template_context = template_context_for_host_and_request_and_mapping(host, request, mapping)
         html = ERB.new(template).result(template_context)
         [410, { 'Content-Type' => 'text/html' }, [html]]
       else
-        template = File.read(File.expand_path('../../templates/404.erb', __FILE__))
-        template_context = template_context_for_host_and_request_and_mapping(host, request, mapping)
-        html = ERB.new(template).result(template_context)
-        [404, { 'Content-Type' => 'text/html' }, [html]]
+        if request.path == '/410'
+          template = File.read(File.expand_path('../../templates/410.erb', __FILE__))
+          template_context = template_context_for_host_and_request_and_mapping(host, request, mapping)
+          html = ERB.new(template).result(template_context)
+          [410, { 'Content-Type' => 'text/html' }, [html]]
+        else
+          template = File.read(File.expand_path('../../templates/404.erb', __FILE__))
+          template_context = template_context_for_host_and_request_and_mapping(host, request, mapping)
+          html = ERB.new(template).result(template_context)
+          [404, { 'Content-Type' => 'text/html' }, [html]]
+        end
       end
     end
   end

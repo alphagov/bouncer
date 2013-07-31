@@ -143,4 +143,10 @@ describe 'HTTP request handling' do
     last_response.body.should include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk/410">This item has been archived</a>'
     last_response.content_type.should == 'text/html'
   end
+
+  specify 'visiting a /sitemap.xml URL' do
+    get 'http://www.minitrue.gov.uk/sitemap.xml'
+    last_response.should be_ok
+    last_response.content_type.should == 'application/xml'
+  end
 end
