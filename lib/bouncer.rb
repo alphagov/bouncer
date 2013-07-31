@@ -3,6 +3,7 @@ require 'erb'
 require 'nokogiri'
 require 'ostruct'
 require 'rack/request'
+require 'uri'
 
 require 'host'
 
@@ -18,8 +19,14 @@ class Bouncer
       sitemap = Nokogiri::XML::Builder.new do |xml|
         xml.urlset xmlns: 'http://www.sitemaps.org/schemas/sitemap/0.9' do
           mappings.each do |mapping|
+            url =
+              URI.parse(mapping.path).tap do |uri|
+                uri.scheme = 'http'
+                uri.host = request.host
+              end
+
             xml.url do
-              xml.loc mapping.path
+              xml.loc url
             end
           end
         end

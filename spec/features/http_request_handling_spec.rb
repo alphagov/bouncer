@@ -160,6 +160,8 @@ describe 'HTTP request handling' do
     last_response.should be_ok
     last_response.body.should be_valid_xml
     last_response.body.should be_valid_sitemap
+    last_response.body.should have_sitemap_entry_for 'http://www.minitrue.gov.uk/a-redirected-page'
+    last_response.body.should have_sitemap_entry_for 'http://www.minitrue.gov.uk/an-archived-page'
     last_response.content_type.should == 'application/xml'
   end
 end
@@ -181,5 +183,12 @@ RSpec::Matchers.define :be_valid_sitemap do
     schema = Nokogiri::XML::Schema.new(File.read(File.expand_path('../sitemap.xsd', __FILE__)))
 
     schema.valid?(sitemap)
+  end
+end
+
+RSpec::Matchers.define :have_sitemap_entry_for do |url|
+  match do |string|
+    sitemap = Nokogiri::XML::Document.parse(string)
+    !sitemap.xpath("/xmlns:urlset/xmlns:url/xmlns:loc[text()='#{url}']").empty?
   end
 end
