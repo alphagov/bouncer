@@ -73,15 +73,15 @@ eof
     suggested_url = mapping.try(:suggested_url)
 
     {
-        homepage: organisation.try(:homepage),
-        title: organisation.try(:title),
-        css: organisation.try(:css),
-        furl: organisation.try(:furl),
-        host: host.try(:host),
-        tna_timestamp: site.try(:tna_timestamp).try(:strftime, '%Y%m%d%H%M%S'),
-        request_uri: request.fullpath,
-        suggested_link: suggested_url.nil? ? nil : %Q{<a href="#{suggested_url}">#{suggested_url.gsub(%r{\Ahttps?://|/\z}, '')}</a>},
-        archive_url: mapping.try(:archive_url)
+      homepage: organisation.try(:homepage),
+      title: organisation.try(:title),
+      css: organisation.try(:css),
+      furl: organisation.try(:furl),
+      host: host.try(:host),
+      tna_timestamp: site.try(:tna_timestamp).try(:strftime, '%Y%m%d%H%M%S'),
+      request_uri: request.fullpath,
+      suggested_link: suggested_url.nil? ? nil : %Q{<a href="#{suggested_url}">#{suggested_url.gsub(%r{\Ahttps?://|/\z}, '')}</a>},
+      archive_url: mapping.try(:archive_url)
     }
   end
 end
