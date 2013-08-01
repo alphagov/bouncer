@@ -25,16 +25,16 @@ class Bouncer
     context = RenderingContext.new(context_attributes_from_request(host, request, mapping))
 
     case mapping.try(:http_status)
-      when '301'
-        [301, {'Location' => mapping.new_url}, []]
-      when '410'
+    when '301'
+      [301, {'Location' => mapping.new_url}, []]
+    when '410'
+      [410, {'Content-Type' => 'text/html'}, [@renderer.render(context, 410)]]
+    else
+      if request.path == '/410'
         [410, {'Content-Type' => 'text/html'}, [@renderer.render(context, 410)]]
       else
-        if request.path == '/410'
-          [410, {'Content-Type' => 'text/html'}, [@renderer.render(context, 410)]]
-        else
-          [404, {'Content-Type' => 'text/html'}, [@renderer.render(context, 404)]]
-        end
+        [404, {'Content-Type' => 'text/html'}, [@renderer.render(context, 404)]]
+      end
     end
   end
 
