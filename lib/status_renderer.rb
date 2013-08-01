@@ -5,8 +5,7 @@ class StatusRenderer
 
   def template_content(status)
     filename = File.expand_path("../../templates/#{status}.erb", __FILE__)
-    return nil unless File.exist?(filename)
-    File.read(filename)
+    File.read(filename) if File.exist?(filename)
   end
 
   ##
