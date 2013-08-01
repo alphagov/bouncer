@@ -4,15 +4,22 @@ require 'nokogiri'
 require 'ostruct'
 require 'rack/request'
 require 'uri'
+require 'rendering_context'
+require 'status_renderer'
 
 require 'host'
 
 class Bouncer
+  def initialize()
+    @renderer = StatusRenderer.new
+  end
+
   def call(env)
     request = Rack::Request.new(env)
+
     host = Host.find_by host: request.host
-    path_hash = Digest::SHA1.hexdigest(request.fullpath)
     site = host.site if host
+
     mappings = site.mappings if site
 
     if request.path == '/sitemap.xml'
@@ -42,37 +49,30 @@ Sitemap: #{url}
 eof
       [200, {'Content-Type' => 'text/plain'}, [robots]]
     else
-      mapping = mappings.find_by path_hash: path_hash if mappings
-
-      mapping = site.mappings.find_by path_hash: path_hash if site
+      mapping = mappings.find_by path_hash: Digest::SHA1.hexdigest(request.fullpath) if mappings
+      context = RenderingContext.new(context_from_request_details(host, request, mapping))
 
       case mapping.try(:http_status)
         when '301'
           [301, {'Location' => mapping.new_url}, []]
         when '410'
-          [410, {'Content-Type' => 'text/html'}, [html_for(host, mapping, request, 410)]]
+          [410, {'Content-Type' => 'text/html'}, [@renderer.render(context, 410)]]
         else
           if request.path == '/410'
-            [410, {'Content-Type' => 'text/html'}, [html_for(host, mapping, request, 410)]]
+            [410, {'Content-Type' => 'text/html'}, [@renderer.render(context, 410)]]
           else
-            [404, {'Content-Type' => 'text/html'}, [html_for(host, mapping, request, 404)]]
+            [404, {'Content-Type' => 'text/html'}, [@renderer.render(context, 404)]]
           end
       end
     end
   end
 
-  def html_for(host, mapping, request, status)
-    template = File.read(File.expand_path("../../templates/#{status}.erb", __FILE__))
-    template_context = template_context_for_host_and_request_and_mapping(host, request, mapping)
-    ERB.new(template).result(template_context)
-  end
-
-  def template_context_for_host_and_request_and_mapping(host, request, mapping)
+  def context_from_request_details(host, request, mapping)
     site = host.try(:site)
     organisation = site.try(:organisation)
     suggested_url = mapping.try(:suggested_url)
 
-    attributes = {
+    {
         homepage: organisation.try(:homepage),
         title: organisation.try(:title),
         css: organisation.try(:css),
@@ -83,11 +83,5 @@ eof
         suggested_link: suggested_url.nil? ? nil : %Q{<a href="#{suggested_url}">#{suggested_url.gsub(%r{\Ahttps?://|/\z}, '')}</a>},
         archive_url: mapping.try(:archive_url)
     }
-
-    template_context_from_hash(attributes)
-  end
-
-  def template_context_from_hash(hash)
-    OpenStruct.new(hash).instance_eval { binding }
   end
 end
