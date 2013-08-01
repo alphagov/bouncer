@@ -1,14 +1,3 @@
-require 'digest/sha1'
-require 'erb'
-require 'nokogiri'
-require 'ostruct'
-require 'rack/request'
-require 'uri'
-require 'rendering_context'
-require 'status_renderer'
-
-require 'host'
-
 class Bouncer
   def initialize()
     @renderer = StatusRenderer.new
@@ -19,55 +8,65 @@ class Bouncer
 
     host = Host.find_by host: request.host
     site = host.site if host
-
     mappings = site.mappings if site
 
     if request.path == '/sitemap.xml'
-      sitemap = Nokogiri::XML::Builder.new do |xml|
-        xml.urlset xmlns: 'http://www.sitemaps.org/schemas/sitemap/0.9' do
-          mappings.each do |mapping|
-            url =
-                URI.parse(mapping.path).tap do |uri|
-                  uri.scheme = 'http'
-                  uri.host = request.host
-                end
+      serve_sitemap(request, mappings)
+    elsif request.path == '/robots.txt'
+      serve_robots(request)
+    else
+      serve_status(host, mappings, request)
+    end
+  end
 
-            xml.url do
-              xml.loc url
-            end
+  def serve_status(host, mappings, request)
+    mapping = mappings.find_by path_hash: Digest::SHA1.hexdigest(request.fullpath) if mappings
+    context = RenderingContext.new(context_attributes_from_request(host, request, mapping))
+
+    case mapping.try(:http_status)
+      when '301'
+        [301, {'Location' => mapping.new_url}, []]
+      when '410'
+        [410, {'Content-Type' => 'text/html'}, [@renderer.render(context, 410)]]
+      else
+        if request.path == '/410'
+          [410, {'Content-Type' => 'text/html'}, [@renderer.render(context, 410)]]
+        else
+          [404, {'Content-Type' => 'text/html'}, [@renderer.render(context, 404)]]
+        end
+    end
+  end
+
+  def serve_sitemap(request, mappings)
+    sitemap = Nokogiri::XML::Builder.new do |xml|
+      xml.urlset xmlns: 'http://www.sitemaps.org/schemas/sitemap/0.9' do
+        mappings.each do |mapping|
+          url = URI.parse(mapping.path).tap do |uri|
+            uri.scheme = 'http'
+            uri.host = request.host
+          end
+
+          xml.url do
+            xml.loc url
           end
         end
       end
+    end
 
-      [200, {'Content-Type' => 'application/xml'}, [sitemap.to_xml]]
-    elsif request.path == '/robots.txt'
-      url = URI::HTTP.build(host: request.host, path: '/sitemap.xml')
-      robots = <<eof
+    [200, {'Content-Type' => 'application/xml'}, [sitemap.to_xml]]
+  end
+
+  def serve_robots(request)
+    url = URI::HTTP.build(host: request.host, path: '/sitemap.xml')
+    robots = <<eof
 User-agent: *
 Disallow:
 Sitemap: #{url}
 eof
-      [200, {'Content-Type' => 'text/plain'}, [robots]]
-    else
-      mapping = mappings.find_by path_hash: Digest::SHA1.hexdigest(request.fullpath) if mappings
-      context = RenderingContext.new(context_from_request_details(host, request, mapping))
-
-      case mapping.try(:http_status)
-        when '301'
-          [301, {'Location' => mapping.new_url}, []]
-        when '410'
-          [410, {'Content-Type' => 'text/html'}, [@renderer.render(context, 410)]]
-        else
-          if request.path == '/410'
-            [410, {'Content-Type' => 'text/html'}, [@renderer.render(context, 410)]]
-          else
-            [404, {'Content-Type' => 'text/html'}, [@renderer.render(context, 404)]]
-          end
-      end
-    end
+    [200, {'Content-Type' => 'text/plain'}, [robots]]
   end
 
-  def context_from_request_details(host, request, mapping)
+  def context_attributes_from_request(host, request, mapping)
     site = host.try(:site)
     organisation = site.try(:organisation)
     suggested_url = mapping.try(:suggested_url)
