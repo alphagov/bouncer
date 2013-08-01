@@ -1,5 +1,5 @@
 bouncer
 =======
 
-This is a dumb redirector to sit at the end of the transition tools workflow. 
-It forms part of the transition tools MVP and may or may not exist later.
+This is a Rack-based redirector. It's being written as part of the agency transition effort and should,
+in time, replace [redirector](https://github.com/alphagov/redirector). But not just yet.
