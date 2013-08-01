@@ -176,6 +176,7 @@ describe 'HTTP request handling' do
     last_response.should be_ok
     last_response.body.should match %r{^User-agent: \*$}
     last_response.body.should match %r{^Disallow:$}
+    last_response.body.should match %r{^Sitemap: http://www.minitrue.gov.uk/sitemap.xml$}
     last_response.content_type.should == 'text/plain'
   end
 end

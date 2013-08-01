@@ -34,9 +34,11 @@ class Bouncer
 
       [200, { 'Content-Type' => 'application/xml' }, [sitemap.to_xml]]
     elsif request.path == '/robots.txt'
+      url = URI::HTTP.build(host: request.host, path: '/sitemap.xml')
       robots = <<eof
 User-agent: *
 Disallow:
+Sitemap: #{url}
 eof
       [200, { 'Content-Type' => 'text/plain' }, [robots]]
     else
