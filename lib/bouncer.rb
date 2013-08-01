@@ -26,14 +26,14 @@ class Bouncer
 
     case mapping.try(:http_status)
     when '301'
-      [301, {'Location' => mapping.new_url}, []]
+      [301, { 'Location' => mapping.new_url }, []]
     when '410'
-      [410, {'Content-Type' => 'text/html'}, [@renderer.render(context, 410)]]
+      [410, { 'Content-Type' => 'text/html' }, [@renderer.render(context, 410)]]
     else
       if request.path == '/410'
-        [410, {'Content-Type' => 'text/html'}, [@renderer.render(context, 410)]]
+        [410, { 'Content-Type' => 'text/html' }, [@renderer.render(context, 410)]]
       else
-        [404, {'Content-Type' => 'text/html'}, [@renderer.render(context, 404)]]
+        [404, { 'Content-Type' => 'text/html' }, [@renderer.render(context, 404)]]
       end
     end
   end
@@ -54,7 +54,7 @@ class Bouncer
       end
     end
 
-    [200, {'Content-Type' => 'application/xml'}, [sitemap.to_xml]]
+    [200, { 'Content-Type' => 'application/xml' }, [sitemap.to_xml]]
   end
 
   def serve_robots(request)
@@ -64,7 +64,7 @@ User-agent: *
 Disallow:
 Sitemap: #{url}
 eof
-    [200, {'Content-Type' => 'text/plain'}, [robots]]
+    [200, { 'Content-Type' => 'text/plain' }, [robots]]
   end
 
   def context_attributes_from_request(host, request, mapping)
