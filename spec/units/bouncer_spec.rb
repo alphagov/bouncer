@@ -8,7 +8,7 @@ describe Bouncer do
 
   let(:app) { subject }
   let(:hostname) { 'example.com' }
-  let(:path) { '/' }
+  let(:path) { '/an-interesting-page' }
   let(:url) { "http://#{hostname}#{path}" }
 
   before(:each) do

@@ -11,7 +11,7 @@ describe 'HTTP request handling' do
 
   let(:app) { Bouncer.new }
   let(:organisation) { Organisation.create homepage: 'http://www.gov.uk/government/organisations/ministry-of-truth', title: 'Ministry of Truth', css: 'ministry-of-truth', furl: 'www.gov.uk/mot' }
-  let!(:site) { organisation.sites.create(tna_timestamp: '2012-10-26 06:52:14').tap { |site| site.hosts.create host: 'www.minitrue.gov.uk' } }
+  let!(:site) { organisation.sites.create(tna_timestamp: '2012-10-26 06:52:14', homepage: 'http://www.gov.uk/government/organisations/ministry-of-truth').tap { |site| site.hosts.create host: 'www.minitrue.gov.uk' } }
 
   specify 'visiting a URL which has been redirected' do
     site.mappings.create \
@@ -178,6 +178,13 @@ describe 'HTTP request handling' do
     last_response.body.should match %r{^Disallow:$}
     last_response.body.should match %r{^Sitemap: http://www.minitrue.gov.uk/sitemap.xml$}
     last_response.content_type.should == 'text/plain'
+  end
+
+  specify 'visiting a homepage' do
+    get 'http://www.minitrue.gov.uk'
+    last_response.should be_redirect
+    last_response.status.should == 301
+    last_response.location.should == 'http://www.gov.uk/government/organisations/ministry-of-truth'
   end
 end
 

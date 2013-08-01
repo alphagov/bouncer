@@ -11,6 +11,8 @@ class Bouncer
     mappings = site.mappings if site
 
     case request.path
+    when '/'
+      serve_homepage(site)
     when '/sitemap.xml'
       serve_sitemap(request, mappings)
     when '/robots.txt'
@@ -65,6 +67,10 @@ Disallow:
 Sitemap: #{url}
 eof
     [200, { 'Content-Type' => 'text/plain' }, [robots]]
+  end
+
+  def serve_homepage(site)
+    [301, { 'Location' => site.homepage }, []]
   end
 
   def context_attributes_from_request(host, request, mapping)
