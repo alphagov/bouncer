@@ -10,9 +10,10 @@ class Bouncer
     site = host.site if host
     mappings = site.mappings if site
 
-    if request.path == '/sitemap.xml'
+    case request.path
+    when '/sitemap.xml'
       serve_sitemap(request, mappings)
-    elsif request.path == '/robots.txt'
+    when '/robots.txt'
       serve_robots(request)
     else
       serve_status(host, mappings, request)
