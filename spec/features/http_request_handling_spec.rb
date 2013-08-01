@@ -170,6 +170,14 @@ describe 'HTTP request handling' do
     last_response.body.should have_sitemap_entry_for 'http://www.minitrue.gov.uk/an-archived-page'
     last_response.content_type.should == 'application/xml'
   end
+
+  specify 'visiting a /robots.txt URL' do
+    get 'http://www.minitrue.gov.uk/robots.txt'
+    last_response.should be_ok
+    last_response.body.should match %r{^User-agent: \*$}
+    last_response.body.should match %r{^Disallow:$}
+    last_response.content_type.should == 'text/plain'
+  end
 end
 
 RSpec::Matchers.define :be_valid_xml do

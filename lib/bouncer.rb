@@ -33,6 +33,12 @@ class Bouncer
       end
 
       [200, { 'Content-Type' => 'application/xml' }, [sitemap.to_xml]]
+    elsif request.path == '/robots.txt'
+      robots = <<eof
+User-agent: *
+Disallow:
+eof
+      [200, { 'Content-Type' => 'text/plain' }, [robots]]
     else
       mapping = mappings.find_by path_hash: path_hash if mappings
 
