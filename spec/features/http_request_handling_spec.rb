@@ -1,11 +1,5 @@
 require 'spec_helper'
 
-require 'digest/sha1'
-require 'nokogiri'
-require 'rack/test'
-require 'bouncer'
-require 'site'
-
 describe 'HTTP request handling' do
   include Rack::Test::Methods
 

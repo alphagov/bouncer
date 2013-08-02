@@ -32,4 +32,5 @@ RSpec.configure do |config|
 end
 
 RACK_ENV = 'test'
+require 'rack/test'
 require_relative '../boot'
