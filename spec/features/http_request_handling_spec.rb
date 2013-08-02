@@ -1,17 +1,23 @@
 require 'spec_helper'
 
-require 'digest/sha1'
-require 'nokogiri'
-require 'rack/test'
-require 'bouncer'
-require 'site'
-
 describe 'HTTP request handling' do
   include Rack::Test::Methods
 
   let(:app) { Bouncer.new }
-  let(:organisation) { Organisation.create homepage: 'http://www.gov.uk/government/organisations/ministry-of-truth', title: 'Ministry of Truth', css: 'ministry-of-truth', furl: 'www.gov.uk/mot' }
-  let!(:site) { organisation.sites.create(tna_timestamp: '2012-10-26 06:52:14', homepage: 'http://www.gov.uk/government/organisations/ministry-of-truth').tap { |site| site.hosts.create host: 'www.minitrue.gov.uk' } }
+  let(:organisation) do
+    Organisation.create \
+      homepage: 'http://www.gov.uk/government/organisations/ministry-of-truth',
+      title: 'Ministry of Truth',
+      css: 'ministry-of-truth',
+      furl: 'www.gov.uk/mot'
+  end
+  let!(:site) do
+    organisation.sites.create(
+      tna_timestamp: '2012-10-26 06:52:14',
+      homepage: 'http://www.gov.uk/government/organisations/ministry-of-truth').tap do |site|
+      site.hosts.create host: 'www.minitrue.gov.uk'
+    end
+  end
 
   specify 'visiting a URL which has been redirected' do
     site.mappings.create \
@@ -185,32 +191,5 @@ describe 'HTTP request handling' do
     last_response.should be_redirect
     last_response.status.should == 301
     last_response.location.should == 'http://www.gov.uk/government/organisations/ministry-of-truth'
-  end
-end
-
-RSpec::Matchers.define :be_valid_xml do
-  match do |string|
-    begin
-      Nokogiri::XML::Document.parse(string) { |config| config.strict }
-      true
-    rescue Nokogiri::XML::SyntaxError
-      false
-    end
-  end
-end
-
-RSpec::Matchers.define :be_valid_sitemap do
-  match do |string|
-    sitemap = Nokogiri::XML::Document.parse(string)
-    schema = Nokogiri::XML::Schema.new(File.read(File.expand_path('../sitemap.xsd', __FILE__)))
-
-    schema.valid?(sitemap)
-  end
-end
-
-RSpec::Matchers.define :have_sitemap_entry_for do |url|
-  match do |string|
-    sitemap = Nokogiri::XML::Document.parse(string)
-    !sitemap.xpath("/xmlns:urlset/xmlns:url/xmlns:loc[text()='#{url}']").empty?
   end
 end
