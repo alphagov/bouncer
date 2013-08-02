@@ -3,7 +3,8 @@ require 'spec_helper'
 describe 'HTTP request handling' do
   include Rack::Test::Methods
 
-  let(:app) { Bouncer.new }
+  let(:app) { Rack::Builder.parse_file('config.ru')[0] }
+
   let(:organisation) do
     Organisation.create \
       homepage: 'http://www.gov.uk/government/organisations/ministry-of-truth',
@@ -11,6 +12,7 @@ describe 'HTTP request handling' do
       css: 'ministry-of-truth',
       furl: 'www.gov.uk/mot'
   end
+
   let!(:site) do
     organisation.sites.create(
       tna_timestamp: '2012-10-26 06:52:14',
@@ -19,14 +21,14 @@ describe 'HTTP request handling' do
     end
   end
 
-  specify 'visiting a URL which has been redirected' do
+  specify 'visiting a URL which has been redirected (but not canonicalised)' do
     site.mappings.create \
       path:         '/a-redirected-page',
       path_hash:    Digest::SHA1.hexdigest('/a-redirected-page'),
       http_status:  '301',
       new_url:      'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page'
 
-    get 'http://www.minitrue.gov.uk/a-redirected-page'
+    get 'http://www.minitrue.gov.uk/a-redirected-page///'
     last_response.should be_redirect
     last_response.status.should == 301
     last_response.location.should == 'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page'
@@ -34,12 +36,12 @@ describe 'HTTP request handling' do
 
   specify 'visiting a URL with query parameters which has been redirected' do
     site.mappings.create \
-      path:         '/a-redirected-page?p=np',
-      path_hash:    Digest::SHA1.hexdigest('/a-redirected-page?p=np'),
+      path:         '/a-redirected-page?a=1&b=2',
+      path_hash:    Digest::SHA1.hexdigest('/a-redirected-page?a=1&b=2'),
       http_status:  '301',
       new_url:      'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page'
 
-    get 'http://www.minitrue.gov.uk/a-redirected-page?p=np'
+    get 'https://www.MINITRUE.gov.uk/a-redirected-page?b=2&a=1'
     last_response.should be_redirect
     last_response.status.should == 301
     last_response.location.should == 'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page'

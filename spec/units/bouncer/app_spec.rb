@@ -1,12 +1,16 @@
 require 'spec_helper'
 
-describe Bouncer do
+##
+# Assume that test URLs have been through c14n
+# in middleware. Test accordingly, e.g. /my-path, not /my-path///, http not https, etc.
+# See +URI::BLURI.canonicalize!+ for rules
+describe Bouncer::App do
   include Rack::Test::Methods
 
-  let(:app) { subject }
-  let(:hostname) { 'example.com' }
-  let(:path) { '/an-interesting-page' }
-  let(:url) { "http://#{hostname}#{path}" }
+  let(:app)       { subject }
+  let(:hostname)  { 'example.com' }
+  let(:path)      { '/an-interesting-page' }
+  let(:url)       { "http://#{hostname}#{path}" }
 
   before(:each) do
     stub_const 'Host', double

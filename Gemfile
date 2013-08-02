@@ -4,6 +4,7 @@ gem 'activerecord'
 gem 'mysql2'
 gem 'nokogiri'
 gem 'rack'
+gem 'optic14n'
 
 group :production do
   gem 'unicorn', '4.6.3'
