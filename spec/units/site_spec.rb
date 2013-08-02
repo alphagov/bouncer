@@ -1,7 +1,5 @@
 require 'spec_helper'
 
-require 'site'
-
 describe Site do
   describe '.create' do
     let(:site) { double 'site', save: true }

@@ -1,7 +1,5 @@
 require 'spec_helper'
 
-require 'host'
-
 describe Host do
   describe '.create' do
     let(:attributes) { double 'attributes' }

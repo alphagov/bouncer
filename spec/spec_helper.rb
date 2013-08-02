@@ -32,4 +32,8 @@ RSpec.configure do |config|
 end
 
 RACK_ENV = 'test'
+
+Dir[File.dirname(__FILE__) + '/support/*.rb'].each {|file| require file }
+
+require 'rack/test'
 require_relative '../boot'
