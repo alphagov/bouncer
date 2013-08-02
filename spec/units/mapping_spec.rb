@@ -1,7 +1,5 @@
 require 'spec_helper'
 
-require 'mapping'
-
 describe Mapping do
   describe '.create' do
     let(:attributes) { double 'attributes' }

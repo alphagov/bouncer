@@ -1,7 +1,5 @@
 require 'spec_helper'
 
-require 'organisation'
-
 describe Organisation do
   describe '.create' do
     let(:attributes) { double 'attributes' }
