@@ -10,8 +10,20 @@ describe 'HTTP request handling' do
   include Rack::Test::Methods
 
   let(:app) { Bouncer.new }
-  let(:organisation) { Organisation.create homepage: 'http://www.gov.uk/government/organisations/ministry-of-truth', title: 'Ministry of Truth', css: 'ministry-of-truth', furl: 'www.gov.uk/mot' }
-  let!(:site) { organisation.sites.create(tna_timestamp: '2012-10-26 06:52:14', homepage: 'http://www.gov.uk/government/organisations/ministry-of-truth').tap { |site| site.hosts.create host: 'www.minitrue.gov.uk' } }
+  let(:organisation) do
+    Organisation.create \
+      homepage: 'http://www.gov.uk/government/organisations/ministry-of-truth',
+      title: 'Ministry of Truth',
+      css: 'ministry-of-truth',
+      furl: 'www.gov.uk/mot'
+  end
+  let!(:site) do
+    organisation.sites.create(
+      tna_timestamp: '2012-10-26 06:52:14',
+      homepage: 'http://www.gov.uk/government/organisations/ministry-of-truth').tap do |site|
+      site.hosts.create host: 'www.minitrue.gov.uk'
+    end
+  end
 
   specify 'visiting a URL which has been redirected' do
     site.mappings.create \
