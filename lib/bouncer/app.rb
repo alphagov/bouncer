@@ -18,7 +18,11 @@ class Bouncer::App
     when '/robots.txt'
       serve_robots(request)
     when '/healthcheck'
-      serve_healthcheck(request)
+      if request.host == Bouncer::Env.hostname then
+        serve_healthcheck(request)
+      else
+        serve_status(host, mappings, request)
+      end
     else
       serve_status(host, mappings, request)
     end
