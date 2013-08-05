@@ -17,6 +17,8 @@ class Bouncer::App
       serve_sitemap(request, mappings)
     when '/robots.txt'
       serve_robots(request)
+    when '/healthcheck'
+      serve_healthcheck(request)
     else
       serve_status(host, mappings, request)
     end
@@ -67,6 +69,10 @@ Disallow:
 Sitemap: #{url}
 eof
     [200, { 'Content-Type' => 'text/plain' }, [robots]]
+  end
+
+  def serve_healthcheck(request)
+    [200, { 'Content-Type' => 'text/plain' }, ['OK']]
   end
 
   def serve_homepage(site)
