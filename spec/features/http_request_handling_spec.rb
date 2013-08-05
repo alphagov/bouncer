@@ -194,4 +194,27 @@ describe 'HTTP request handling' do
     last_response.status.should == 301
     last_response.location.should == 'http://www.gov.uk/government/organisations/ministry-of-truth'
   end
+
+  describe 'visiting /healthcheck' do
+    context 'asking for an agency when no mapping exists' do
+      it '404s' do
+        get 'http://www.minitrue.gov.uk/healthcheck'
+        last_response.status.should == 404
+      end
+    end
+
+    context 'asking for Bouncer itself' do
+      before do
+        ENV['GOVUK_APP_NAME']   = 'bouncer'
+        ENV['GOVUK_APP_DOMAIN'] = 'testhost.alphagov.co.uk'
+      end
+
+      it 'serves a tiny text/plain' do
+        get 'http://bouncer.testhost.alphagov.co.uk/healthcheck'
+        last_response.status.should == 200
+        last_response.content_type.should == 'text/plain'
+        last_response.body.should match %r{^OK$}
+      end
+    end
+  end
 end
