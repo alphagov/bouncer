@@ -194,4 +194,10 @@ describe 'HTTP request handling' do
     last_response.status.should == 301
     last_response.location.should == 'http://www.gov.uk/government/organisations/ministry-of-truth'
   end
+
+  specify 'visiting /healthcheck' do
+    get 'http://www.minitrue.gov.uk/healthcheck'
+    last_response.should be_ok
+    last_response.body.should match %r{^OK$}
+  end
 end
