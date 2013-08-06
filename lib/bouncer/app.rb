@@ -11,8 +11,8 @@ class Bouncer::App
     if host.nil?
       serve_unrecognised_host
     else
-      site = host.site if host
-      mappings = site.mappings if site
+      site = host.site
+      mappings = site.mappings
 
       case request.path
       when '' # same as / after c14n
@@ -30,7 +30,7 @@ class Bouncer::App
   end
 
   def serve_status(host, mappings, request)
-    mapping = mappings.find_by path_hash: Digest::SHA1.hexdigest(request.fullpath) if mappings
+    mapping = mappings.find_by path_hash: Digest::SHA1.hexdigest(request.fullpath)
     context = RenderingContext.new(context_attributes_from_request(host, request, mapping))
 
     case mapping.try(:http_status)
