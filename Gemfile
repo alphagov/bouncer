@@ -5,7 +5,7 @@ gem 'activerecord'
 gem 'mysql2'
 gem 'nokogiri'
 gem 'rack'
-gem 'optic14n'
+gem 'optic14n', '>= 1.0.0'
 
 group :production do
   gem 'unicorn', '4.6.3'
