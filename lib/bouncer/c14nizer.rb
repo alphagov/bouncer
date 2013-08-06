@@ -10,7 +10,7 @@ module Bouncer
       BLURI(Rack::Request.new(env).url).tap do |bluri|
         bluri.canonicalize!(allow_query: :all)
         env['PATH_INFO'] = bluri.path
-        env['QUERY_STRING'] = bluri.query
+        env['QUERY_STRING'] = bluri.query || ''
       end
 
       @app.call(env)

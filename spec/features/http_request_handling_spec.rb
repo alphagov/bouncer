@@ -200,4 +200,23 @@ describe 'HTTP request handling' do
     last_response.should be_ok
     last_response.body.should match %r{^OK$}
   end
+
+  describe 'cases which break things in a vexing manner' do
+    # In dev (but not production), CommonLogger middleware is in use, which expects
+    # us not to violate the Rack spec. Part of this is not allowing nil query strings,
+    # which at time of writing optic14n does.
+    let(:app) { Rack::CommonLogger.new(Rack::Builder.parse_file('config.ru')[0]) }
+
+    specify 'Nil querystrings do not faze us' do
+      path = '/an-archived-page'
+      site.mappings.create \
+        path: path,
+        path_hash:    Digest::SHA1.hexdigest(path),
+        http_status:  '410'
+
+      get "http://www.minitrue.gov.uk#{path}"
+
+      last_response.status.should == 410
+    end
+  end
 end
