@@ -125,12 +125,6 @@ describe 'HTTP request handling' do
     last_response.content_type.should == 'text/html'
   end
 
-  specify 'visiting an unrecognised host' do
-    get 'http://www.minipax.gov.uk/an-unrecognised-page'
-    last_response.should be_not_found
-    last_response.body.should include '<title>404 - Not Found</title>'
-  end
-
   specify 'visiting a /404 URL' do
     get 'http://www.minitrue.gov.uk/404'
     last_response.should be_not_found
@@ -199,6 +193,20 @@ describe 'HTTP request handling' do
     get 'http://www.minitrue.gov.uk/healthcheck'
     last_response.should be_ok
     last_response.body.should match %r{^OK$}
+  end
+
+  context 'when the host is not recognised' do
+    specify 'visiting the homepage' do
+      get 'http://www.minipax.gov.uk/'
+      last_response.should be_not_found
+      last_response.body.should be_empty
+    end
+
+    specify 'visiting another page' do
+      get 'http://www.minipax.gov.uk/an-unrecognised-page'
+      last_response.should be_not_found
+      last_response.body.should be_empty
+    end
   end
 
   describe 'cases which break things in a vexing manner' do

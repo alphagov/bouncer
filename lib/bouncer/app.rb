@@ -7,25 +7,30 @@ class Bouncer::App
     request = Rack::Request.new(env)
 
     host = Host.find_by host: request.host
-    site = host.site if host
-    mappings = site.mappings if site
 
-    case request.path
-    when '' # same as / after c14n
-      serve_homepage(site)
-    when '/sitemap.xml'
-      serve_sitemap(request, mappings)
-    when '/robots.txt'
-      serve_robots(request)
-    when '/healthcheck'
-      serve_healthcheck(request)
+    if host.nil?
+      serve_unrecognised_host
     else
-      serve_status(host, mappings, request)
+      site = host.site
+      mappings = site.mappings
+
+      case request.path
+      when '' # same as / after c14n
+        serve_homepage(site)
+      when '/sitemap.xml'
+        serve_sitemap(request, mappings)
+      when '/robots.txt'
+        serve_robots(request)
+      when '/healthcheck'
+        serve_healthcheck(request)
+      else
+        serve_status(host, mappings, request)
+      end
     end
   end
 
   def serve_status(host, mappings, request)
-    mapping = mappings.find_by path_hash: Digest::SHA1.hexdigest(request.fullpath) if mappings
+    mapping = mappings.find_by path_hash: Digest::SHA1.hexdigest(request.fullpath)
     context = RenderingContext.new(context_attributes_from_request(host, request, mapping))
 
     case mapping.try(:http_status)
@@ -77,6 +82,10 @@ eof
 
   def serve_homepage(site)
     [301, { 'Location' => site.homepage }, []]
+  end
+
+  def serve_unrecognised_host
+    [404, {}, []]
   end
 
   def context_attributes_from_request(host, request, mapping)
