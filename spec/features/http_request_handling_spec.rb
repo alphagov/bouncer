@@ -239,4 +239,65 @@ describe 'HTTP request handling' do
       last_response.status.should == 410
     end
   end
+
+  describe 'rule-based redirects' do
+    describe 'DFID redirects' do
+      specify 'visiting a R4D URL' do
+        get 'http://www.dfid.gov.uk/r4d/Output/193679/Default.aspx'
+
+        last_response.should be_redirect
+        last_response.location.should == 'http://r4d.dfid.gov.uk/Output/193679/Default.aspx'
+      end
+    end
+
+    describe 'DH redirects' do
+      specify 'visiting a /dh_digitalassets/ URL' do
+        get 'http://www.dh.gov.uk/a/b/dh_digitalassets/c'
+
+        last_response.should be_client_error
+        last_response.status.should == 410
+      end
+    end
+
+    describe 'Directgov redirects' do
+      specify 'visiting a /en search URL' do
+        get 'http://www.direct.gov.uk/a/b/en/AdvancedSearch'
+
+        last_response.should be_redirect
+        last_response.location.should == 'https://www.gov.uk/search'
+      end
+
+      specify 'visiting a non-/en search URL' do
+        get 'http://www.direct.gov.uk/a/b/AdvancedSearch'
+
+        last_response.should be_redirect
+        last_response.location.should == 'https://www.gov.uk/search'
+      end
+
+      specify 'visiting a Fire Kills URL' do
+        get 'http://campaigns.direct.gov.uk/a/firekills/b'
+
+        last_response.should be_redirect
+        last_response.location.should == 'https://www.gov.uk/firekills'
+      end
+    end
+
+    describe 'Number 10 redirects' do
+      specify 'visiting a news URL' do
+        get 'http://www.number10.gov.uk/news/latest-news/2007/06/Brown-unveils-new-faces-12225'
+
+        last_response.should be_redirect
+        last_response.location.should == 'http://www.number10.gov.uk/news/Brown-unveils-new-faces'
+      end
+    end
+
+    describe 'Treasury redirects' do
+      specify 'visiting a CDN /d/* URL' do
+        get 'http://cdn.hm-treasury.gov.uk/d/dataset3.csv'
+
+        last_response.should be_redirect
+        last_response.location.should == 'http://www.hm-treasury.gov.uk/dataset3.csv'
+      end
+    end
+  end
 end
