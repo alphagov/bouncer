@@ -11,7 +11,7 @@ class Bouncer::App
     if host.nil?
       case request.path
       when '/healthcheck'
-        serve_healthcheck(request)
+        serve_healthcheck
       else
         serve_unrecognised_host
       end
@@ -79,7 +79,7 @@ eof
     [200, { 'Content-Type' => 'text/plain' }, [robots]]
   end
 
-  def serve_healthcheck(request)
+  def serve_healthcheck
     [200, { 'Content-Type' => 'text/plain' }, ['OK']]
   end
 
