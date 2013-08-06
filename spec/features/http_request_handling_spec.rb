@@ -256,6 +256,12 @@ describe 'HTTP request handling' do
 
         last_response.should be_client_error
         last_response.status.should == 410
+        last_response.body.should include '<title>410 - Page Archived</title>'
+        last_response.body.should include '<a href="https://www.gov.uk/government/organisations/department-of-health"><span>Department of Health</span></a>'
+        last_response.body.should include '<div class="organisation department-of-health">'
+        last_response.body.should include 'Visit the new Department of Health site at <a href="http://www.gov.uk/government/organisations/ministry-of-truth">www.gov.uk/dh</a>'
+        last_response.body.should include '<a href="http://webarchive.nationalarchives.gov.uk/20130107105354/http://www.dh.gov.uk/a/b/dh_digitalassets/c">This item has been archived</a>'
+        last_response.content_type.should == 'text/html'
       end
     end
 
