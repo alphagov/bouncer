@@ -189,12 +189,6 @@ describe 'HTTP request handling' do
     last_response.location.should == 'http://www.gov.uk/government/organisations/ministry-of-truth'
   end
 
-  specify 'visiting /healthcheck' do
-    get 'http://www.minitrue.gov.uk/healthcheck'
-    last_response.should be_ok
-    last_response.body.should match %r{^OK$}
-  end
-
   context 'when the host is not recognised' do
     specify 'visiting the homepage' do
       get 'http://www.minipax.gov.uk/'
@@ -206,6 +200,12 @@ describe 'HTTP request handling' do
       get 'http://www.minipax.gov.uk/an-unrecognised-page'
       last_response.should be_not_found
       last_response.body.should be_empty
+    end
+
+    specify 'visiting /healthcheck' do
+      get 'http://www.minipax.gov.uk/healthcheck'
+      last_response.should be_ok
+      last_response.body.should match %r{^OK$}
     end
   end
 

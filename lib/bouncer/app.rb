@@ -9,7 +9,12 @@ class Bouncer::App
     host = Host.find_by host: request.host
 
     if host.nil?
-      serve_unrecognised_host
+      case request.path
+      when '/healthcheck'
+        serve_healthcheck(request)
+      else
+        serve_unrecognised_host
+      end
     else
       site = host.site
       mappings = site.mappings
@@ -21,8 +26,6 @@ class Bouncer::App
         serve_sitemap(request, mappings)
       when '/robots.txt'
         serve_robots(request)
-      when '/healthcheck'
-        serve_healthcheck(request)
       else
         serve_status(host, mappings, request)
       end
