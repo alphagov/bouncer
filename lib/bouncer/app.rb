@@ -33,6 +33,7 @@ class Bouncer::App
   end
 
   def serve_status(host, mappings, request)
+    # Reminder: the hash is always calculated on the canonicalize!d request
     mapping = mappings.find_by path_hash: Digest::SHA1.hexdigest(request.fullpath)
     context = RenderingContext.new(context_attributes_from_request(host, request, mapping))
 

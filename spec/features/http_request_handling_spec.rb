@@ -226,5 +226,17 @@ describe 'HTTP request handling' do
 
       last_response.status.should == 410
     end
+
+    specify 'Non HTML-encoded querystrings do not get thrown away' do
+      path = '/an-archived-page?with&a&weird&querystring'
+      site.mappings.create \
+        path: path,
+        path_hash:    Digest::SHA1.hexdigest('/an-archived-page?a&querystring&weird&with'),
+        http_status:  '410'
+
+      get "http://www.minitrue.gov.uk#{path}"
+
+      last_response.status.should == 410
+    end
   end
 end
