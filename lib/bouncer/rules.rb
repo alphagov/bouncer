@@ -1,9 +1,7 @@
 module Bouncer
   class Rules
-    attr_accessor :app
-
     def initialize(app)
-      self.app = app
+      @app = app
       @renderer = StatusRenderer.new
     end
 
@@ -23,7 +21,7 @@ module Bouncer
       elsif request.host == 'cdn.hm-treasury.gov.uk' && request.path =~ %r{^/d/(.*)$}
         [301, { 'Location' => "http://www.hm-treasury.gov.uk/#{$1}" }, []]
       else
-        app.call(env)
+        @app.call(env)
       end
     end
   end
