@@ -1,10 +1,6 @@
 module Bouncer
   module Outcome
     class Status < Base
-      def renderer
-        options[:renderer]
-      end
-
       def serve
         case context.mapping.try(:http_status)
         when '301'
