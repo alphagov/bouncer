@@ -15,7 +15,7 @@ module Bouncer
         end
       else
         case context.request.path
-        when ''             then Outcome::Homepage
+        when ''             then Outcome::Homepage # after c14n, '' is equivalent to '/'
         when '/sitemap.xml' then Outcome::Sitemap
         when '/robots.txt'  then Outcome::Robots
         else
@@ -23,7 +23,7 @@ module Bouncer
         end
       end
 
-      outcome.new(context, renderer: @renderer).serve
+      outcome.new(context, @renderer).serve
     end
   end
 end
