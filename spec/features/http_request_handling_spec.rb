@@ -5,6 +5,14 @@ describe 'HTTP request handling' do
 
   let(:app) { Rack::Builder.parse_file('config.ru')[0] }
 
+  let(:department_of_health) do
+    Organisation.create \
+      homepage: 'https://www.gov.uk/government/organisations/department-of-health',
+      title: 'Department of Health',
+      css: 'department-of-health',
+      furl: 'www.gov.uk/doh'
+  end
+
   let(:organisation) do
     Organisation.create \
       homepage: 'http://www.gov.uk/government/organisations/ministry-of-truth',
@@ -252,6 +260,12 @@ describe 'HTTP request handling' do
 
     describe 'DH redirects' do
       specify 'visiting a /dh_digitalassets/ URL' do
+        department_of_health.sites.create(
+            tna_timestamp: '2012-10-26 06:52:14',
+            homepage: 'https://www.gov.uk/government/organisations/department-of-health').tap do |site|
+          site.hosts.create host: 'www.dh.gov.uk'
+        end
+
         get 'http://www.dh.gov.uk/a/b/dh_digitalassets/c'
 
         last_response.should be_client_error
@@ -259,8 +273,8 @@ describe 'HTTP request handling' do
         last_response.body.should include '<title>410 - Page Archived</title>'
         last_response.body.should include '<a href="https://www.gov.uk/government/organisations/department-of-health"><span>Department of Health</span></a>'
         last_response.body.should include '<div class="organisation department-of-health">'
-        last_response.body.should include 'Visit the new Department of Health site at <a href="http://www.gov.uk/government/organisations/ministry-of-truth">www.gov.uk/dh</a>'
-        last_response.body.should include '<a href="http://webarchive.nationalarchives.gov.uk/20130107105354/http://www.dh.gov.uk/a/b/dh_digitalassets/c">This item has been archived</a>'
+        last_response.body.should include 'Visit the new Department of Health site at <a href="https://www.gov.uk/government/organisations/department-of-health">www.gov.uk/doh</a>'
+        last_response.body.should include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.dh.gov.uk/a/b/dh_digitalassets/c">This item has been archived</a>'
         last_response.content_type.should == 'text/html'
       end
     end

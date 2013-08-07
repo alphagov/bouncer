@@ -5,8 +5,8 @@ module Bouncer
   class RequestContext
     attr_reader :request
 
-    def initialize(env)
-      @request = Rack::Request.new(env)
+    def initialize(env_or_request)
+      @request = env_or_request.is_a?(Rack::Request) ? env_or_request : Rack::Request.new(env_or_request)
     end
 
     def host
@@ -36,15 +36,15 @@ module Bouncer
       suggested_url = mapping.try(:suggested_url)
 
       {
-          homepage: organisation.try(:homepage),
-          title: organisation.try(:title),
-          css: organisation.try(:css),
-          furl: organisation.try(:furl),
-          host: host.try(:host),
-          tna_timestamp: site.try(:tna_timestamp).try(:strftime, '%Y%m%d%H%M%S'),
-          request_uri: request.fullpath,
-          suggested_link: suggested_url.nil? ? nil : %Q{<a href="#{suggested_url}">#{suggested_url.gsub(%r{\Ahttps?://|/\z}, '')}</a>},
-          archive_url: mapping.try(:archive_url)
+        homepage: organisation.try(:homepage),
+        title: organisation.try(:title),
+        css: organisation.try(:css),
+        furl: organisation.try(:furl),
+        host: host.try(:host),
+        tna_timestamp: site.try(:tna_timestamp).try(:strftime, '%Y%m%d%H%M%S'),
+        request_uri: request.fullpath,
+        suggested_link: suggested_url.nil? ? nil : %Q{<a href="#{suggested_url}">#{suggested_url.gsub(%r{\Ahttps?://|/\z}, '')}</a>},
+        archive_url: mapping.try(:archive_url)
       }
     end
 
