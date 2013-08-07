@@ -24,7 +24,8 @@ describe 'HTTP request handling' do
   let!(:site) do
     organisation.sites.create(
       tna_timestamp: '2012-10-26 06:52:14',
-      homepage: 'http://www.gov.uk/government/organisations/ministry-of-truth').tap do |site|
+      homepage: 'http://www.gov.uk/government/organisations/ministry-of-truth'
+    ).tap do |site|
       site.hosts.create host: 'www.minitrue.gov.uk'
     end
   end
@@ -262,7 +263,8 @@ describe 'HTTP request handling' do
       specify 'visiting a /dh_digitalassets/ URL' do
         department_of_health.sites.create(
             tna_timestamp: '2012-10-26 06:52:14',
-            homepage: 'https://www.gov.uk/government/organisations/department-of-health').tap do |site|
+            homepage: 'https://www.gov.uk/government/organisations/department-of-health'
+        ).tap do |site|
           site.hosts.create host: 'www.dh.gov.uk'
         end
 
