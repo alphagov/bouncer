@@ -4,14 +4,4 @@ ActiveRecord::Base.establish_connection(YAML.load(File.read(File.expand_path('..
 
 $LOAD_PATH.unshift File.expand_path('../lib', __FILE__)
 
-require 'digest/sha1'
-require 'erb'
-require 'nokogiri'
-require 'ostruct'
-require 'rack/request'
-require 'uri'
-require 'rendering_context'
-require 'status_renderer'
-require 'host'
-require 'optic14n'
 require 'bouncer'
