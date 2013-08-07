@@ -5,6 +5,14 @@ describe 'HTTP request handling' do
 
   let(:app) { Rack::Builder.parse_file('config.ru')[0] }
 
+  let(:department_of_health) do
+    Organisation.create \
+      homepage: 'https://www.gov.uk/government/organisations/department-of-health',
+      title: 'Department of Health',
+      css: 'department-of-health',
+      furl: 'www.gov.uk/doh'
+  end
+
   let(:organisation) do
     Organisation.create \
       homepage: 'http://www.gov.uk/government/organisations/ministry-of-truth',
@@ -16,7 +24,8 @@ describe 'HTTP request handling' do
   let!(:site) do
     organisation.sites.create(
       tna_timestamp: '2012-10-26 06:52:14',
-      homepage: 'http://www.gov.uk/government/organisations/ministry-of-truth').tap do |site|
+      homepage: 'http://www.gov.uk/government/organisations/ministry-of-truth'
+    ).tap do |site|
       site.hosts.create host: 'www.minitrue.gov.uk'
     end
   end
@@ -237,6 +246,80 @@ describe 'HTTP request handling' do
       get "http://www.minitrue.gov.uk#{path}"
 
       last_response.status.should == 410
+    end
+  end
+
+  describe 'rule-based redirects' do
+    describe 'DFID redirects' do
+      specify 'visiting a R4D URL' do
+        get 'http://www.dfid.gov.uk/r4d/Output/193679/Default.aspx'
+
+        last_response.should be_redirect
+        last_response.location.should == 'http://r4d.dfid.gov.uk/Output/193679/Default.aspx'
+      end
+    end
+
+    describe 'DH redirects' do
+      specify 'visiting a /dh_digitalassets/ URL' do
+        department_of_health.sites.create(
+            tna_timestamp: '2012-10-26 06:52:14',
+            homepage: 'https://www.gov.uk/government/organisations/department-of-health'
+        ).tap do |site|
+          site.hosts.create host: 'www.dh.gov.uk'
+        end
+
+        get 'http://www.dh.gov.uk/a/b/dh_digitalassets/c'
+
+        last_response.should be_client_error
+        last_response.status.should == 410
+        last_response.body.should include '<title>410 - Page Archived</title>'
+        last_response.body.should include '<a href="https://www.gov.uk/government/organisations/department-of-health"><span>Department of Health</span></a>'
+        last_response.body.should include '<div class="organisation department-of-health">'
+        last_response.body.should include 'Visit the new Department of Health site at <a href="https://www.gov.uk/government/organisations/department-of-health">www.gov.uk/doh</a>'
+        last_response.body.should include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.dh.gov.uk/a/b/dh_digitalassets/c">This item has been archived</a>'
+        last_response.content_type.should == 'text/html'
+      end
+    end
+
+    describe 'Directgov redirects' do
+      specify 'visiting a /en search URL' do
+        get 'http://www.direct.gov.uk/a/b/en/AdvancedSearch'
+
+        last_response.should be_redirect
+        last_response.location.should == 'https://www.gov.uk/search'
+      end
+
+      specify 'visiting a non-/en search URL' do
+        get 'http://www.direct.gov.uk/a/b/AdvancedSearch'
+
+        last_response.should be_redirect
+        last_response.location.should == 'https://www.gov.uk/search'
+      end
+
+      specify 'visiting a Fire Kills URL' do
+        get 'http://campaigns.direct.gov.uk/a/firekills/b'
+
+        last_response.should be_redirect
+        last_response.location.should == 'https://www.gov.uk/firekills'
+      end
+    end
+
+    describe 'Number 10 redirects' do
+      specify 'visiting a news URL' do
+        get 'http://www.number10.gov.uk/news/latest-news/2007/06/Brown-unveils-new-faces-12225'
+
+        last_response.should be_redirect
+        last_response.location.should == 'http://www.number10.gov.uk/news/Brown-unveils-new-faces'
+      end
+    end
+
+    describe 'Treasury redirects' do
+      specify 'visiting a CDN /d/* URL' do
+        get 'http://cdn.hm-treasury.gov.uk/d/dataset3.csv'
+
+        last_response.should be_redirect
+        last_response.location.should == 'http://www.hm-treasury.gov.uk/dataset3.csv'
+      end
     end
   end
 end
