@@ -8,10 +8,11 @@ module Bouncer
         when '410'
           [410, { 'Content-Type' => 'text/html' }, [renderer.render(context, 410)]]
         else
-          if context.request.path == '/410'
+          if request.path == '/410'
             [410, { 'Content-Type' => 'text/html' }, [renderer.render(context, 410)]]
           else
-            [404, { 'Content-Type' => 'text/html' }, [renderer.render(context, 404)]]
+            Bouncer::Rules.try(request, renderer) or
+              [404, { 'Content-Type' => 'text/html' }, [renderer.render(context, 404)]]
           end
         end
       end
