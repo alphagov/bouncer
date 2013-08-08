@@ -252,22 +252,26 @@ describe 'HTTP request handling' do
   describe 'rule-based redirects' do
     describe 'DFID redirects' do
       specify 'visiting a R4D URL' do
+        site.hosts.create host: 'www.dfid.gov.uk'
+
         get 'http://www.dfid.gov.uk/r4d/Output/193679/Default.aspx'
 
         last_response.should be_redirect
-        last_response.location.should == 'http://r4d.dfid.gov.uk/Output/193679/Default.aspx'
+        last_response.location.should == 'http://r4d.dfid.gov.uk/output/193679/default.aspx'
       end
     end
 
     describe 'DH redirects' do
-      specify 'visiting a /dh_digitalassets/ URL' do
+      let!(:dh_site) {
         department_of_health.sites.create(
             tna_timestamp: '2012-10-26 06:52:14',
             homepage: 'https://www.gov.uk/government/organisations/department-of-health'
         ).tap do |site|
           site.hosts.create host: 'www.dh.gov.uk'
         end
+      }
 
+      specify 'visiting a /dh_digitalassets/ URL' do
         get 'http://www.dh.gov.uk/a/b/dh_digitalassets/c'
 
         last_response.should be_client_error
@@ -279,9 +283,28 @@ describe 'HTTP request handling' do
         last_response.body.should include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.dh.gov.uk/a/b/dh_digitalassets/c">This item has been archived</a>'
         last_response.content_type.should == 'text/html'
       end
+
+      context 'When a mapping exists that would trump the regex' do
+        it 'lets the mapping go first' do
+          path = '/dh_digitalassets/really-special-asset'
+
+          dh_site.mappings.create \
+            path:         path,
+            path_hash:    Digest::SHA1.hexdigest(path),
+            http_status:  '301',
+            new_url:      'http://www.gov.uk/government/organisations/dh/really-special-asset'
+
+          get 'http://www.dh.gov.uk/dh_digitalassets/really-special-asset'
+
+          last_response.should be_redirect
+          last_response.location.should == 'http://www.gov.uk/government/organisations/dh/really-special-asset'
+        end
+      end
     end
 
     describe 'Directgov redirects' do
+      before { site.hosts.create host: 'www.direct.gov.uk' }
+
       specify 'visiting a /en search URL' do
         get 'http://www.direct.gov.uk/a/b/en/AdvancedSearch'
 
@@ -297,6 +320,8 @@ describe 'HTTP request handling' do
       end
 
       specify 'visiting a Fire Kills URL' do
+        site.hosts.create host: 'campaigns.direct.gov.uk'
+
         get 'http://campaigns.direct.gov.uk/a/firekills/b'
 
         last_response.should be_redirect
@@ -305,15 +330,19 @@ describe 'HTTP request handling' do
     end
 
     describe 'Number 10 redirects' do
+      before { site.hosts.create host: 'www.number10.gov.uk' }
+
       specify 'visiting a news URL' do
         get 'http://www.number10.gov.uk/news/latest-news/2007/06/Brown-unveils-new-faces-12225'
 
         last_response.should be_redirect
-        last_response.location.should == 'http://www.number10.gov.uk/news/Brown-unveils-new-faces'
+        last_response.location.should == 'http://www.number10.gov.uk/news/brown-unveils-new-faces'
       end
     end
 
     describe 'Treasury redirects' do
+      before { site.hosts.create host: 'cdn.hm-treasury.gov.uk' }
+
       specify 'visiting a CDN /d/* URL' do
         get 'http://cdn.hm-treasury.gov.uk/d/dataset3.csv'
 

@@ -10,7 +10,8 @@ module Bouncer
       outcome = if context.host.nil?
         case context.request.path
         when '/healthcheck' then Outcome::Healthcheck
-        else Outcome::UnrecognisedHost
+        else
+          Outcome::UnrecognisedHost
         end
       else
         case context.request.path
