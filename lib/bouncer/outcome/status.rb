@@ -4,11 +4,7 @@ module Bouncer
       def serve
         case context.mapping.try(:http_status)
         when '301'
-          if legal_redirect?(context.mapping.new_url)
-            [301, { 'Location' => context.mapping.new_url }, []]
-          else
-            render_illegal_redirect(context.mapping.new_url)
-          end
+          guarded_redirect(context.mapping.new_url)
         when '410'
           [410, { 'Content-Type' => 'text/html' }, [renderer.render(context, 410)]]
         else
