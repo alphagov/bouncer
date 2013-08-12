@@ -56,7 +56,7 @@ describe 'HTTP request handling' do
     last_response.location.should == 'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page'
   end
 
-  specify 'visiting a URL which has been redirected to a disallowed site' do
+  specify 'visiting a URL which has been redirected to a site not on the whitelist' do
     site.mappings.create \
       path:         '/a-redirected-page',
       path_hash:    Digest::SHA1.hexdigest('/a-redirected-page'),
@@ -211,7 +211,7 @@ describe 'HTTP request handling' do
     last_response.location.should == 'http://www.gov.uk/government/organisations/ministry-of-truth'
   end
 
-  specify 'visiting a homepage with a disallowed redirect' do
+  specify 'visiting a homepage with a redirect to a site not on the whitelist' do
     site.update_attribute(:homepage, "http://spam.net/gov.uk")
     get 'http://www.minitrue.gov.uk'
     last_response.should be_server_error
