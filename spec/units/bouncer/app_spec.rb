@@ -88,7 +88,7 @@ describe Bouncer::App do
 
       context 'when the URL has been redirected' do
         let(:status_code) { 301 }
-        let(:new_url) { "http://foo.gov.uk" }
+        let(:new_url) { "http://www.gov.uk" }
 
         before(:each) do
           mapping.stub new_url: new_url

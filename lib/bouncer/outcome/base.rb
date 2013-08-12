@@ -14,7 +14,17 @@ module Bouncer
     end
 
     def legal_redirect?(url)
-      URI.parse(url).host =~ /.*\.gov\.uk\z/
+      whitelist.include?(URI.parse(url).host)
+    end
+
+    def whitelist
+      # Cache the list for the lifetime of the process
+      @@whitelist ||= begin
+        filepath = "../../../config/whitelist.txt"
+        path = File.expand_path(filepath, File.dirname(__FILE__))
+        lines = File.open(path).map(&:chomp)
+        lines.reject { |line| line.start_with?('#') || line.empty? }
+      end
     end
   end
 end
