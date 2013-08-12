@@ -23,7 +23,9 @@ module Bouncer
         filepath = "../../../config/whitelist.txt"
         path = File.expand_path(filepath, File.dirname(__FILE__))
         lines = File.open(path).map(&:chomp)
-        lines.reject { |line| line.start_with?('#') || line.empty? }
+        usable_lines = lines.reject { |line| line.start_with?('#') || line.empty? }
+        # Set dedupes but also gives better lookup performance
+        Set.new(usable_lines)
       end
     end
   end
