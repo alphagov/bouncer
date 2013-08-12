@@ -73,6 +73,7 @@ describe 'HTTP request handling' do
     last_response.should be_server_error
     last_response.status.should == 500
     last_response.location.should == nil
+    last_response.headers.should_not include('Cache-Control')
   end
 
   specify 'visiting a URL which has been archived' do
@@ -226,7 +227,7 @@ describe 'HTTP request handling' do
     last_response.should be_server_error
     last_response.status.should == 500
     last_response.location.should == nil
-    last_response.headers['Cache-Control'].should == 'public, max-age=3600'
+    last_response.headers.should_not include('Cache-Control')
   end
 
   context 'when the host is not recognised' do

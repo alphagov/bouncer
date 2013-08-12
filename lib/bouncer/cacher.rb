@@ -7,8 +7,8 @@ module Bouncer
     end
 
     def call(env)
-      @app.call(env).tap do |response|
-        response [1]['Cache-Control'] = "public, max-age=3600" unless response[1]['Cache-Control']
+      @app.call(env).tap do |status, headers|
+        headers['Cache-Control'] ||= 'public, max-age=3600' unless status == 500
       end
     end
   end
