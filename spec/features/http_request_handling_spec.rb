@@ -211,6 +211,14 @@ describe 'HTTP request handling' do
     last_response.location.should == 'http://www.gov.uk/government/organisations/ministry-of-truth'
   end
 
+  specify 'visiting a homepage with a disallowed redirect' do
+    site.update_attribute(:homepage, "http://spam.net/gov.uk")
+    get 'http://www.minitrue.gov.uk'
+    last_response.should be_server_error
+    last_response.status.should == 500
+    last_response.location.should == nil
+  end
+
   context 'when the host is not recognised' do
     specify 'visiting the homepage' do
       get 'http://www.minipax.gov.uk/'
