@@ -56,6 +56,19 @@ describe 'HTTP request handling' do
     last_response.location.should == 'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page'
   end
 
+  specify 'visiting a URL which has been redirected to a disallowed site' do
+    site.mappings.create \
+      path:         '/a-redirected-page',
+      path_hash:    Digest::SHA1.hexdigest('/a-redirected-page'),
+      http_status:  '301',
+      new_url:      'http://spam.net/gov.uk'
+
+    get 'https://www.minitrue.gov.uk/a-redirected-page'
+    last_response.should be_server_error
+    last_response.status.should == 500
+    last_response.location.should == nil
+  end
+
   specify 'visiting a URL which has been archived' do
     site.mappings.create \
       path:         '/an-archived-page',
@@ -196,6 +209,14 @@ describe 'HTTP request handling' do
     last_response.should be_redirect
     last_response.status.should == 301
     last_response.location.should == 'http://www.gov.uk/government/organisations/ministry-of-truth'
+  end
+
+  specify 'visiting a homepage with a disallowed redirect' do
+    site.update_attribute(:homepage, "http://spam.net/gov.uk")
+    get 'http://www.minitrue.gov.uk'
+    last_response.should be_server_error
+    last_response.status.should == 500
+    last_response.location.should == nil
   end
 
   context 'when the host is not recognised' do
