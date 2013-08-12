@@ -4,7 +4,11 @@ module Bouncer
       def serve
         case context.mapping.try(:http_status)
         when '301'
-          [301, { 'Location' => context.mapping.new_url }, []]
+          if legal_redirect?(context.mapping.new_url)
+            [301, { 'Location' => context.mapping.new_url }, []]
+          else
+            [500, { 'Content-Type' => 'text/plain' }, "Refusing to redirect to non *.gov.uk domain: #{context.mapping.new_url}"]
+          end
         when '410'
           [410, { 'Content-Type' => 'text/html' }, [renderer.render(context, 410)]]
         else
@@ -15,6 +19,11 @@ module Bouncer
               [404, { 'Content-Type' => 'text/html' }, [renderer.render(context, 404)]]
           end
         end
+      end
+
+    private
+      def legal_redirect?(url)
+        URI.parse(url).host =~ /.*\.gov\.uk\z/
       end
     end
   end
