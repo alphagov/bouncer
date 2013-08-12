@@ -9,6 +9,7 @@ require 'status_renderer'
 require 'host'
 require 'optic14n'
 
+require 'bouncer/cacher'
 require 'bouncer/c14nizer'
 require 'bouncer/request_context'
 require 'bouncer/rules'
