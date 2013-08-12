@@ -20,9 +20,8 @@ module Bouncer
     def whitelist
       # Cache the list for the lifetime of the process
       @@whitelist ||= begin
-        filepath = "../../../config/whitelist.txt"
-        path = File.expand_path(filepath, File.dirname(__FILE__))
-        lines = File.open(path).map(&:chomp)
+        filepath = "config/whitelist.txt"
+        lines = File.open(filepath).map(&:chomp)
         usable_lines = lines.reject { |line| line.start_with?('#') || line.empty? }
         # Set dedupes but also gives better lookup performance
         Set.new(usable_lines)
