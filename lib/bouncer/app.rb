@@ -23,7 +23,10 @@ module Bouncer
         end
       end
 
-      outcome.new(context, @renderer).serve
+      response = outcome.new(context, @renderer).serve
+      # Set a blanket 1 hour Cache-Control value unless one is set
+      response [1]['Cache-Control'] = "public, max-age=3600"# unless response[1]['Cache-Control']
+      response
     end
   end
 end

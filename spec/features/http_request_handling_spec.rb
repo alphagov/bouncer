@@ -30,6 +30,12 @@ describe 'HTTP request handling' do
     end
   end
 
+  specify 'redirects get a cache header of 1 hour' do
+    get 'http://www.minitrue.gov.uk'
+    last_response.should be_redirect
+    last_response.headers['Cache-Control'].should == 'public, max-age=3600'
+  end
+
   specify 'visiting a URL which has been redirected (but not canonicalised)' do
     site.mappings.create \
       path:         '/a-redirected-page',
@@ -84,6 +90,7 @@ describe 'HTTP request handling' do
     last_response.body.should include 'Visit the new Ministry of Truth site at <a href="http://www.gov.uk/government/organisations/ministry-of-truth">www.gov.uk/mot</a>'
     last_response.body.should include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk/an-archived-page">This item has been archived</a>'
     last_response.content_type.should == 'text/html'
+    last_response.headers['Cache-Control'].should == 'public, max-age=3600'
   end
 
   specify 'visiting a URL which has been archived with a suggested URL' do
@@ -193,6 +200,7 @@ describe 'HTTP request handling' do
     last_response.body.should have_sitemap_entry_for 'http://www.minitrue.gov.uk/a-redirected-page?p=np'
     last_response.body.should have_sitemap_entry_for 'http://www.minitrue.gov.uk/an-archived-page'
     last_response.content_type.should == 'application/xml'
+    last_response.headers['Cache-Control'].should == 'public, max-age=3600'
   end
 
   specify 'visiting a /robots.txt URL' do
@@ -202,6 +210,7 @@ describe 'HTTP request handling' do
     last_response.body.should match %r{^Disallow:$}
     last_response.body.should match %r{^Sitemap: http://www.minitrue.gov.uk/sitemap.xml$}
     last_response.content_type.should == 'text/plain'
+    last_response.headers['Cache-Control'].should == 'public, max-age=3600'
   end
 
   specify 'visiting a homepage' do
@@ -217,6 +226,7 @@ describe 'HTTP request handling' do
     last_response.should be_server_error
     last_response.status.should == 500
     last_response.location.should == nil
+    last_response.headers['Cache-Control'].should == 'public, max-age=3600'
   end
 
   context 'when the host is not recognised' do
@@ -302,6 +312,7 @@ describe 'HTTP request handling' do
         last_response.body.should include '<div class="organisation department-of-health">'
         last_response.body.should include 'Visit the new Department of Health site at <a href="https://www.gov.uk/government/organisations/department-of-health">www.gov.uk/doh</a>'
         last_response.body.should include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.dh.gov.uk/a/b/dh_digitalassets/c">This item has been archived</a>'
+        last_response.headers['Cache-Control'].should == 'public, max-age=3600'
         last_response.content_type.should == 'text/html'
       end
 
