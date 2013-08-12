@@ -2,7 +2,7 @@ module Bouncer
   module Outcome
     class Homepage < Base
       def serve
-        [301, { 'Location' => context.site.homepage }, []]
+        guarded_redirect(context.site.homepage)
       end
     end
   end
