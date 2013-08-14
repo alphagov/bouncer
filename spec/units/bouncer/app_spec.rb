@@ -110,6 +110,16 @@ describe Bouncer::App do
           get url
           last_response.location.should == new_url
         end
+
+        context 'when the host is aka-' do
+          let(:hostname)           { 'aka-example.com'}
+          let(:rewritten_hostname) { 'example.com'}
+
+          it 'writes out the aka' do
+            Host.should_receive(:find_by).with(host: rewritten_hostname)
+            get url
+          end
+        end
       end
 
       context 'when the URL has been archived' do
