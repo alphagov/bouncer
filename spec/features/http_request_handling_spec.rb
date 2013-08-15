@@ -93,10 +93,39 @@ describe 'HTTP request handling' do
         path_hash:    Digest::SHA1.hexdigest('/a-redirected-page?a=1&b=2'),
         http_status:  '301',
         new_url:      'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page'
-  
+
       get 'https://www.MINITRUE.gov.uk/a-redirected-page?b=2&a=1'
     end
-    
+
+    it_behaves_like 'a redirect'
+    its(:location) { should == 'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page' }
+  end
+
+  describe 'visiting a redirected aka URL' do
+    before do
+      site.mappings.create \
+        path:         '/a-redirected-page',
+        path_hash:    Digest::SHA1.hexdigest('/a-redirected-page'),
+        http_status:  '301',
+        new_url:      'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page'
+
+      get 'http://aka-www.minitrue.gov.uk/a-redirected-page///'
+    end
+
+    it_behaves_like 'a redirect'
+    its(:location) { should == 'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page' }
+  end
+
+  describe 'visiting a URL with query parameters which has been redirected' do
+    before do
+      site.mappings.create \
+        path:         '/a-redirected-page?a=1&b=2',
+        path_hash:    Digest::SHA1.hexdigest('/a-redirected-page?a=1&b=2'),
+        http_status:  '301',
+        new_url:      'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page'
+      get 'https://www.MINITRUE.gov.uk/a-redirected-page?b=2&a=1'
+    end
+
     it_behaves_like 'a redirect'
     its(:location) { should == 'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page' }
   end
@@ -108,9 +137,9 @@ describe 'HTTP request handling' do
         path_hash:    Digest::SHA1.hexdigest('/a-redirected-page'),
         http_status:  '301',
         new_url:      'http://spam.net/gov.uk'
-  
-      get 'https://www.minitrue.gov.uk/a-redirected-page'  
-    end    
+
+      get 'https://www.minitrue.gov.uk/a-redirected-page'
+    end
 
     it_behaves_like 'a server error'
   end
