@@ -265,6 +265,15 @@ describe 'HTTP request handling' do
     its(:body) { should include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk/410">This item has been archived</a>' }
   end
 
+  describe 'visiting a /410 URL with no furl' do
+    before do
+      organisation.update_attribute(:furl, nil)
+      get 'http://www.minitrue.gov.uk/410'
+    end
+
+    its(:body) { should include 'Visit the new Ministry of Truth site at <a href="http://www.gov.uk/government/organisations/ministry-of-truth">http://www.gov.uk/government/organisations/ministry-of-truth</a>' }
+  end
+
   describe 'visiting a /sitemap.xml URL' do
     before do
       site.mappings.create \
