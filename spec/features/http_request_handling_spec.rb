@@ -141,7 +141,8 @@ describe 'HTTP request handling' do
       get 'https://www.minitrue.gov.uk/a-redirected-page'
     end
 
-    it_behaves_like 'a server error'
+    its(:status) { should == 501 }
+    its(:location) { should == nil }
   end
 
   describe 'visiting a URL which has been archived' do
@@ -323,7 +324,10 @@ describe 'HTTP request handling' do
       get 'http://www.minitrue.gov.uk'
     end
 
-    it_behaves_like 'a server error'
+    its(:status) { should == 501 }
+    its(:body) { should match %r{non\-whitelisted}}
+    its(:body) { should match %r{spam.net} }
+    its(:location) { should == nil }
   end
 
   context 'when the host is not recognised' do

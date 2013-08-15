@@ -9,7 +9,7 @@ module Bouncer
       if legal_redirect?(url)
         [301, { 'Location' => url }, []]
       else
-        [500, { 'Content-Type' => 'text/plain' }, "Refusing to redirect to non *.gov.uk domain: #{url}"]
+        [501, { 'Content-Type' => 'text/plain' }, "Refusing to redirect to non-whitelisted domain: #{url}"]
       end
     end
 
