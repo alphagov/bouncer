@@ -69,7 +69,6 @@ CREATE TABLE `sites` (
   `query_params` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `tna_timestamp` datetime DEFAULT NULL,
   `homepage` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `furl` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
