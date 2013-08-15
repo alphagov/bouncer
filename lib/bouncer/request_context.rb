@@ -10,7 +10,7 @@ module Bouncer
     end
 
     def host
-      @host ||= Host.find_by host: request.host
+      @host ||= Host.find_by host: request.host.sub(/^aka-/, '')
     end
 
     def mapping
