@@ -8,7 +8,7 @@ module Bouncer
       def build_sitemap
         Nokogiri::XML::Builder.new do |xml|
           xml.urlset xmlns: 'http://www.sitemaps.org/schemas/sitemap/0.9' do
-            context.mappings.each do |mapping|
+            context.mappings.where("http_status like '3%'").each do |mapping|
               url = URI.parse(mapping.path).tap do |uri|
                 uri.scheme = 'http'
                 uri.host   = context.request.host

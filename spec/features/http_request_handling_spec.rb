@@ -287,10 +287,14 @@ describe 'HTTP request handling' do
         http_status:  '301',
         new_url:      'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page'
       site.mappings.create \
+        path:         '/a-deleted-page',
+        path_hash:    Digest::SHA1.hexdigest('/a-deleted-page'),
+        http_status:  '404'
+      site.mappings.create \
         path:         '/an-archived-page',
         path_hash:    Digest::SHA1.hexdigest('/an-archived-page'),
         http_status:  '410'
-  
+
       get 'http://www.minitrue.gov.uk/sitemap.xml'
     end
 
@@ -300,7 +304,8 @@ describe 'HTTP request handling' do
     its(:body) { should be_valid_sitemap }
     its(:body) { should have_sitemap_entry_for 'http://www.minitrue.gov.uk/a-redirected-page' }
     its(:body) { should have_sitemap_entry_for 'http://www.minitrue.gov.uk/a-redirected-page?p=np' }
-    its(:body) { should have_sitemap_entry_for 'http://www.minitrue.gov.uk/an-archived-page' }
+    its(:body) { should_not have_sitemap_entry_for 'http://www.minitrue.gov.uk/a-deleted-page' }
+    its(:body) { should_not have_sitemap_entry_for 'http://www.minitrue.gov.uk/an-archived-page' }
     its(:content_type) { should == 'application/xml' }
   end
 
