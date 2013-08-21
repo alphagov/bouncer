@@ -1,4 +1,4 @@
 #!/bin/bash
 
 bundle install
-bundle exec rackup -o '0.0.0.0' -p 3049
+bundle exec mr-sparkle --force-polling -- -p 3049

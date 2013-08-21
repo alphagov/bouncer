@@ -11,6 +11,10 @@ group :production do
   gem 'unicorn', '4.6.3'
 end
 
+group :development do
+  gem "mr-sparkle", "0.2.0"
+end
+
 group :test do
   gem 'database_cleaner'
   gem 'rack-test'
