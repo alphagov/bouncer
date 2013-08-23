@@ -5,7 +5,7 @@ gem 'activerecord', '4.0.0' # This is a mismatch for Transition, which has 3.2.1
 gem 'mysql2', '0.3.11'
 gem 'nokogiri', '1.6.0'
 gem 'rack', '1.5.2'
-gem 'optic14n', '1.0.0' # Ideally version should be synced with bouncer
+gem 'optic14n', '1.0.0' # Ideally version should be synced with Transition
 
 group :production do
   gem 'unicorn', '4.6.3'
