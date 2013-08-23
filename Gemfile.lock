@@ -73,14 +73,14 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activerecord
-  database_cleaner
+  activerecord (= 4.0.0)
+  database_cleaner (= 1.0.1)
   mr-sparkle (= 0.2.0)
-  mysql2
-  nokogiri
-  optic14n (>= 1.0.0)
-  rack
-  rack-test
-  rake
-  rspec
+  mysql2 (= 0.3.11)
+  nokogiri (= 1.6.0)
+  optic14n (= 1.0.0)
+  rack (= 1.5.2)
+  rack-test (= 0.6.2)
+  rake (= 10.1.0)
+  rspec (= 2.13.0)
   unicorn (= 4.6.3)
