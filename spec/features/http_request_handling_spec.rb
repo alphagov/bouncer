@@ -88,6 +88,7 @@ describe 'HTTP request handling' do
 
   describe 'visiting a URL with query parameters which has been redirected' do
     before do
+      site.update_attribute(:query_params, "a:b")
       site.mappings.create \
         path:         '/a-redirected-page?a=1&b=2',
         path_hash:    Digest::SHA1.hexdigest('/a-redirected-page?a=1&b=2'),
@@ -407,9 +408,10 @@ describe 'HTTP request handling' do
       it_behaves_like 'a 410'
     end
 
-    describe 'Non HTML-encoded querystrings do not get thrown away' do
+    describe 'parameters without values do not get thrown away' do
       before do
         path = '/an-archived-page?with&a&weird&querystring'
+        site.update_attribute(:query_params, "with:a:weird:querystring")
         site.mappings.create \
           path: path,
           path_hash:    Digest::SHA1.hexdigest('/an-archived-page?a&querystring&weird&with'),

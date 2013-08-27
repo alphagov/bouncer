@@ -11,13 +11,11 @@ module Bouncer
         # Note: this is recreated (and the queries repeated) in app.rb, though
         # it will use the canonicalised path/query.
         context = RequestContext.new(env)
+        options = {}
         if context.host && context.host.site.query_params
-          query_params = context.host.site.query_params.split(":")
-        else
-          # Default to including all query params. This may be wrong.
-          query_params = :all
+          options[:allow_query] = context.host.site.query_params.split(":")
         end
-        bluri.canonicalize!(allow_query: query_params)
+        bluri.canonicalize!(options)
         env['PATH_INFO'] = bluri.path
         env['QUERY_STRING'] = bluri.query || ''
       end
