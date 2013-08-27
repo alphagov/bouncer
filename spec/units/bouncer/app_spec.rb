@@ -43,6 +43,7 @@ describe Bouncer::App do
       Digest::SHA1.stub hexdigest: path_hash
       host.stub site: site
       site.stub mappings: mappings
+      site.stub query_params: nil
       mappings.stub find_by: mapping
     end
 

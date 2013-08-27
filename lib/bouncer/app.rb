@@ -5,7 +5,7 @@ module Bouncer
     end
 
     def call(env)
-      context = RequestContext.new(env)
+      context = RequestContext.new(CanonicalizedRequest.new(env))
 
       outcome = if context.host.nil?
         case context.request.path
