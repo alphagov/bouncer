@@ -116,6 +116,34 @@ describe 'HTTP request handling' do
     its(:location) { should == 'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page' }
   end
 
+  describe 'visiting a URL with significant query parameters' do
+    before do
+      site.update_attribute(:query_params, "itemid:style")
+    end
+
+    context 'site has significant query parameters' do
+      before do
+        site.mappings.create \
+          path:         '/page?itemid=2&style=1',
+          path_hash:    Digest::SHA1.hexdigest('/page?itemid=2&style=1'),
+          http_status:  '301',
+          new_url:      'http://www.gov.uk/foo'
+      end
+
+      it 'retains only the significant query parameters when finding the mapping' do
+        # has the two important params and an irrelevant param
+        get 'https://www.MINITRUE.gov.uk/page?itemid=2&irrelevant=x&style=1'
+        last_response.location.should == 'http://www.gov.uk/foo'
+      end
+
+      it 'reorders the significant query parameters when finding the mapping' do
+        # has the two params in wrong order
+        get 'https://www.MINITRUE.gov.uk/page?style=1&itemid=2'
+        last_response.location.should == 'http://www.gov.uk/foo'
+      end
+    end
+  end
+
   describe 'visiting a URL which has been redirected to a site not on the whitelist' do
     before do
       site.mappings.create \
