@@ -88,6 +88,7 @@ describe 'HTTP request handling' do
 
   describe 'visiting a URL with query parameters which has been redirected' do
     before do
+      site.update_attribute(:query_params, "a:b")
       site.mappings.create \
         path:         '/a-redirected-page?a=1&b=2',
         path_hash:    Digest::SHA1.hexdigest('/a-redirected-page?a=1&b=2'),
@@ -114,6 +115,50 @@ describe 'HTTP request handling' do
 
     it_behaves_like 'a redirect'
     its(:location) { should == 'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page' }
+  end
+
+  describe 'visiting a URL with significant query parameters' do
+    before do
+      site.update_attribute(:query_params, "itemid:style")
+    end
+
+    context 'site has significant query parameters' do
+      before do
+        site.mappings.create \
+          path:         '/page?itemid=2&style=1',
+          path_hash:    Digest::SHA1.hexdigest('/page?itemid=2&style=1'),
+          http_status:  '301',
+          new_url:      'http://www.gov.uk/foo'
+      end
+
+      it 'retains only the significant query parameters when finding the mapping' do
+        # has the two important params and an irrelevant param
+        get 'https://www.MINITRUE.gov.uk/page?itemid=2&irrelevant=x&style=1'
+        last_response.location.should == 'http://www.gov.uk/foo'
+      end
+
+      it 'reorders the significant query parameters when finding the mapping' do
+        # has the two params in wrong order
+        get 'https://www.MINITRUE.gov.uk/page?style=1&itemid=2'
+        last_response.location.should == 'http://www.gov.uk/foo'
+      end
+    end
+  end
+
+  context "visiting a URL where the site has blank string for query_params" do
+    before do
+      site.update_attribute(:query_params, "")
+      site.mappings.create \
+          path:         '/page',
+          path_hash:    Digest::SHA1.hexdigest('/page'),
+          http_status:  '301',
+          new_url:      'http://www.gov.uk/foo'
+    end
+
+    it 'throw away all query params' do
+      get 'https://www.MINITRUE.gov.uk/page?ignore=1&me=2'
+      last_response.location.should == 'http://www.gov.uk/foo'
+    end
   end
 
   describe 'visiting a URL which has been redirected to a site not on the whitelist' do
@@ -379,9 +424,10 @@ describe 'HTTP request handling' do
       it_behaves_like 'a 410'
     end
 
-    describe 'Non HTML-encoded querystrings do not get thrown away' do
+    describe 'parameters without values do not get thrown away' do
       before do
         path = '/an-archived-page?with&a&weird&querystring'
+        site.update_attribute(:query_params, "with:a:weird:querystring")
         site.mappings.create \
           path: path,
           path_hash:    Digest::SHA1.hexdigest('/an-archived-page?a&querystring&weird&with'),
