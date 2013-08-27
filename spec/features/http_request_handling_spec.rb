@@ -145,6 +145,22 @@ describe 'HTTP request handling' do
     end
   end
 
+  context "visiting a URL where the site has blank string for query_params" do
+    before do
+      site.update_attribute(:query_params, "")
+      site.mappings.create \
+          path:         '/page',
+          path_hash:    Digest::SHA1.hexdigest('/page'),
+          http_status:  '301',
+          new_url:      'http://www.gov.uk/foo'
+    end
+
+    it 'throw away all query params' do
+      get 'https://www.MINITRUE.gov.uk/page?ignore=1&me=2'
+      last_response.location.should == 'http://www.gov.uk/foo'
+    end
+  end
+
   describe 'visiting a URL which has been redirected to a site not on the whitelist' do
     before do
       site.mappings.create \
