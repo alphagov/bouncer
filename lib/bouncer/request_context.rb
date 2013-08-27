@@ -5,12 +5,12 @@ module Bouncer
   class RequestContext
     attr_reader :request
 
-    def initialize(env_or_request)
-      @request = env_or_request.is_a?(Rack::Request) ? env_or_request : Rack::Request.new(env_or_request)
+    def initialize(canonicalized_request)
+      @request = canonicalized_request
     end
 
     def host
-      @host ||= Host.find_by host: request.host.sub(/^aka-/, '')
+      @_host ||= Host.find_by(host: @request.host)
     end
 
     def mapping
