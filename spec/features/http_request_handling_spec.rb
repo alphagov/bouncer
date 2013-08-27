@@ -116,20 +116,6 @@ describe 'HTTP request handling' do
     its(:location) { should == 'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page' }
   end
 
-  describe 'visiting a URL with query parameters which has been redirected' do
-    before do
-      site.mappings.create \
-        path:         '/a-redirected-page?a=1&b=2',
-        path_hash:    Digest::SHA1.hexdigest('/a-redirected-page?a=1&b=2'),
-        http_status:  '301',
-        new_url:      'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page'
-      get 'https://www.MINITRUE.gov.uk/a-redirected-page?b=2&a=1'
-    end
-
-    it_behaves_like 'a redirect'
-    its(:location) { should == 'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page' }
-  end
-
   describe 'visiting a URL which has been redirected to a site not on the whitelist' do
     before do
       site.mappings.create \
