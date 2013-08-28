@@ -10,7 +10,7 @@ require 'host'
 require 'optic14n'
 
 require 'bouncer/cacher'
-require 'bouncer/c14nizer'
+require 'bouncer/canonicalized_request'
 require 'bouncer/request_context'
 require 'bouncer/rules'
 
