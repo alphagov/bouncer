@@ -182,7 +182,7 @@ describe 'HTTP request handling' do
         path:         '/an-archived-page',
         path_hash:    Digest::SHA1.hexdigest('/an-archived-page'),
         http_status:  '410'
-      get 'http://www.minitrue.gov.uk/an-archived-page'
+      get 'http://www.minitrue.gov.uk/an-archived-page?non-canonical-param=1'
     end
 
     it_behaves_like 'a 410'
@@ -191,7 +191,7 @@ describe 'HTTP request handling' do
     its(:body) { should include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>' }
     its(:body) { should include '<div class="organisation ministry-of-truth">' }
     its(:body) { should include 'Visit the new Ministry of Truth site at <a href="http://www.gov.uk/government/organisations/ministry-of-truth">www.gov.uk/mot</a>' }
-    its(:body) { should include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk/an-archived-page">This item has been archived</a>' }
+    its(:body) { should include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk/an-archived-page?non-canonical-param=1">This item has been archived</a>' }
   end
 
   describe 'visiting a URL which has been archived with a suggested URL' do

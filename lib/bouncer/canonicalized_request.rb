@@ -4,6 +4,10 @@ module Bouncer
       @request = Rack::Request.new(env_or_request)
     end
 
+    def non_canonicalised_fullpath
+      @request.fullpath
+    end
+
     def fullpath
       if bluri.query.nil? || bluri.query.empty?
         bluri.path
