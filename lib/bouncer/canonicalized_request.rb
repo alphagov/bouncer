@@ -1,7 +1,7 @@
 module Bouncer
   class CanonicalizedRequest
     def initialize(env_or_request)
-      @request = env_or_request.is_a?(Rack::Request) ? env_or_request : Rack::Request.new(env_or_request)
+      @request = Rack::Request.new(env_or_request)
     end
 
     def fullpath
