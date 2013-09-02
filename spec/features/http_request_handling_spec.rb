@@ -109,12 +109,24 @@ describe 'HTTP request handling' do
         path_hash:    Digest::SHA1.hexdigest('/a-redirected-page'),
         http_status:  '301',
         new_url:      'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page'
-
-      get 'http://aka-www.minitrue.gov.uk/a-redirected-page///'
     end
 
-    it_behaves_like 'a redirect'
-    its(:location) { should == 'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page' }
+    context "aka-hostname style" do
+      before do
+        site.hosts.first.update_attribute(:host, "minitrue.gov.uk")
+        get 'http://aka-minitrue.gov.uk/a-redirected-page'
+      end
+      it_behaves_like 'a redirect'
+      its(:location) { should == 'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page' }
+    end
+
+    context "aka.hostname style" do
+      before do
+        get 'http://aka.minitrue.gov.uk/a-redirected-page'
+      end
+      it_behaves_like 'a redirect'
+      its(:location) { should == 'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page' }
+    end
   end
 
   describe 'visiting a URL with significant query parameters' do
