@@ -71,6 +71,8 @@ CREATE TABLE `sites` (
   `homepage` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
+  `global_http_status` varchar(3) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `global_new_url` text COLLATE utf8_unicode_ci,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_sites_on_site` (`site`),
   KEY `index_sites_on_organisation_id` (`organisation_id`)
