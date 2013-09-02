@@ -2,6 +2,13 @@ require './boot'
 require 'rack/static'
 
 use Bouncer::Cacher
-use Rack::Static, urls: %w(/favicon.ico /images /stylesheets), root: 'public'
+
+# We need compatibility with redirector which serves its assets from '/''.
+# This is useful because then we can run redirector's tests unmodified against
+# Bouncer.
+#
+# Turn public/foo.css into /foo.css
+urls = ["/favicon.ico"] + Dir["public/*.css", "public/*.png"].map { |path| path.gsub("public", "") }
+use Rack::Static, urls: urls, root: 'public'
 use ActiveRecord::ConnectionAdapters::ConnectionManagement
 run Bouncer::App.new
