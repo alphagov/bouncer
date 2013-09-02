@@ -21,7 +21,19 @@ module Bouncer
     end
 
     def host
-      @request.host.sub(/^aka-/, '')
+      # This behaviour is based on a reading of
+      # https://github.com/alphagov/redirector/blob/b7713cf5bb175a4a31b47e4aa191399c294da11b/templates/nginx.erb#L16
+      #
+      # When deciding on aka hostnames to use, we use the following logic:
+      #
+      #   If it does not start with www., we add aka- to the hostname:
+      #     foo.com => aka-foo.com
+      #
+      #   If it starts with www. we replace www with aka.:
+      #     www.bar.com => aka.bar.com
+      #
+      # Therefore, to canonicalise it, we need to reverse that transformation:
+      @request.host.sub(/^aka-/, '').sub(/^aka\./, 'www.')
     end
 
   private
