@@ -578,13 +578,13 @@ describe 'HTTP request handling' do
     describe 'Treasury redirects' do
       before { site.hosts.create host: 'cdn.hm-treasury.gov.uk' }
 
-      describe 'visiting a CDN /d/* URL' do
+      describe 'visiting a CDN /* URL' do
         before do
-          get 'http://cdn.hm-treasury.gov.uk/d/dataset3.csv'
+          get 'http://cdn.hm-treasury.gov.uk/budget2013_complete.pdf'
         end
 
         it_behaves_like 'a redirect'
-        its(:location) { should == 'http://www.hm-treasury.gov.uk/dataset3.csv' }
+        its(:location) { should == 'http://www.hm-treasury.gov.uk/budget2013_complete.pdf' }
       end
     end
   end

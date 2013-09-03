@@ -14,7 +14,7 @@ module Bouncer
         [301, { 'Location' => 'https://www.gov.uk/firekills' }, []]
       elsif request.host == 'www.number10.gov.uk' && request.path =~ %r{^/news/?([_0-9a-zA-Z-]+)?/([0-9]+)/([0-9]+)/(.*)-([0-9]+)$}
         [301, { 'Location' => "http://www.number10.gov.uk/news/#{$4}" }, []]
-      elsif request.host == 'cdn.hm-treasury.gov.uk' && request.path =~ %r{^/d/(.*)$}
+      elsif request.host == 'cdn.hm-treasury.gov.uk' && request.path =~ %r{^/(.*)$}
         [301, { 'Location' => "http://www.hm-treasury.gov.uk/#{$1}" }, []]
       end
     end
