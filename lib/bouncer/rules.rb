@@ -5,7 +5,8 @@ module Bouncer
     def self.try(context, renderer)
       request = context.request
       if request.host == 'www.dfid.gov.uk' && request.path =~ %r{^/r4d/(.*)$}
-        [301, { 'Location' => "http://r4d.dfid.gov.uk/#{$1}" }, []]
+        new_path = request.non_canonicalised_path.gsub(%r{^/r4d/}, "")
+        [301, { 'Location' => "http://r4d.dfid.gov.uk/#{new_path}" }, []]
       elsif request.host == 'www.dh.gov.uk' && request.path =~ %r{/dh_digitalassets/}
         [410, { 'Content-Type' => 'text/html' }, [renderer.render(context, '410')]]
       elsif request.host == 'www.direct.gov.uk' && request.path =~ %r{/(en/)?AdvancedSearch}i

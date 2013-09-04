@@ -482,7 +482,7 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a redirect'
-        its(:location) { should == 'http://r4d.dfid.gov.uk/output/193679/default.aspx' }
+        its(:location) { should == 'http://r4d.dfid.gov.uk/Output/193679/Default.aspx' }
       end
     end
 

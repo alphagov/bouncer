@@ -16,6 +16,10 @@ module Bouncer
       end
     end
 
+    def non_canonicalised_path
+      @request.path
+    end
+
     def path
       bluri.path
     end
