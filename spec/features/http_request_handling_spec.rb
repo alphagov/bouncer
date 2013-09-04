@@ -279,24 +279,26 @@ describe 'HTTP request handling' do
     its(:body) { should include '<a href="http://webarchive.nationalarchives.gov.uk/20130724103251/http://www.miniluv.gov.uk">UK Government Web Archive</a>' }
   end
 
-  describe 'visiting a URL on a site with a global redirect' do
-    before do
-      site.update_attribute(:global_http_status, '301')
-      site.update_attribute(:global_new_url, 'http://www.gov.uk/global-new')
-      get 'http://www.minitrue.gov.uk/any-page'
+  describe 'sites with global_http_statuses' do
+    describe 'visiting a URL on a site with a global redirect' do
+      before do
+        site.update_attribute(:global_http_status, '301')
+        site.update_attribute(:global_new_url, 'http://www.gov.uk/global-new')
+        get 'http://www.minitrue.gov.uk/any-page'
+      end
+
+      it_behaves_like 'a redirect'
+      its(:location) { should == 'http://www.gov.uk/global-new' }
     end
 
-    it_behaves_like 'a redirect'
-    its(:location) { should == 'http://www.gov.uk/global-new' }
-  end
+    describe 'visiting a URL on a site with a global 410' do
+      before do
+        site.update_attribute(:global_http_status, '410')
+        get 'http://www.minitrue.gov.uk/any-page'
+      end
 
-  describe 'visiting a URL on a site with a global 410' do
-    before do
-      site.update_attribute(:global_http_status, '410')
-      get 'http://www.minitrue.gov.uk/any-page'
+      it_behaves_like 'a 410'
     end
-
-    it_behaves_like 'a 410'
   end
 
   describe 'visiting a /404 URL' do
