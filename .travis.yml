@@ -5,7 +5,7 @@ bundler_args: --without development
 script:
   - bundle exec rake
 before_install:
-  - test_database_setup.sh
+  - ./test_database_setup.sh
   - cp config/database.travis.yml config/database.yml
 branches:
   except:
