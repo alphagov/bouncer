@@ -357,6 +357,15 @@ describe 'HTTP request handling' do
         it_behaves_like 'a 410'
       end
     end
+
+    describe 'sites with an unexpected global status' do
+      before do
+        site.update_attribute(:global_http_status, '999')
+        get 'http://www.minitrue.gov.uk'
+      end
+
+      it_behaves_like 'a server error'
+    end
   end
 
   describe 'visiting a /404 URL' do
