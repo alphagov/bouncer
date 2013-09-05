@@ -13,6 +13,10 @@ module Bouncer
         else
           Outcome::UnrecognisedHost
         end
+      elsif ['/404', '/410'].include?(context.request.path)
+        Outcome::TestThe4xxPages
+      elsif context.site.global_http_status
+        Outcome::GlobalHTTPStatus
       else
         case context.request.path
         when ''             then Outcome::Homepage # after c14n, '' is equivalent to '/'

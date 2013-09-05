@@ -15,11 +15,13 @@ require 'bouncer/request_context'
 require 'bouncer/rules'
 
 require 'bouncer/outcome/base'
+require 'bouncer/outcome/global_http_status'
 require 'bouncer/outcome/healthcheck'
 require 'bouncer/outcome/unrecognised_host'
 require 'bouncer/outcome/robots'
 require 'bouncer/outcome/sitemap'
 require 'bouncer/outcome/status'
+require 'bouncer/outcome/test_the_4xx_pages'
 require 'bouncer/outcome/homepage'
 
 require 'bouncer/app'

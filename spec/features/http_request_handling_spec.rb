@@ -286,6 +286,14 @@ describe 'HTTP request handling' do
         site.update_attribute(:global_new_url, 'http://www.gov.uk/global-new')
       end
 
+      describe 'visiting the homepage' do
+        before do
+          get 'http://www.minitrue.gov.uk'
+        end
+
+        its(:location) { should == 'http://www.gov.uk/global-new' }
+      end
+
       describe 'visiting a URL' do
         before do
           get 'http://www.minitrue.gov.uk/any-page'
@@ -315,6 +323,14 @@ describe 'HTTP request handling' do
     describe 'sites with global 410' do
       before do
         site.update_attribute(:global_http_status, '410')
+      end
+
+      describe 'visiting the homepage' do
+        before do
+          get 'http://www.minitrue.gov.uk'
+        end
+
+        it_behaves_like 'a 410'
       end
 
       describe 'visiting a URL' do
