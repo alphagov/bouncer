@@ -280,62 +280,66 @@ describe 'HTTP request handling' do
   end
 
   describe 'sites with global_http_statuses' do
-    describe 'visiting a URL on a site with a global redirect' do
+    describe 'sites with global redirects' do
       before do
         site.update_attribute(:global_http_status, '301')
         site.update_attribute(:global_new_url, 'http://www.gov.uk/global-new')
-        get 'http://www.minitrue.gov.uk/any-page'
       end
 
-      it_behaves_like 'a redirect'
-      its(:location) { should == 'http://www.gov.uk/global-new' }
-    end
+      describe 'visiting a URL' do
+        before do
+          get 'http://www.minitrue.gov.uk/any-page'
+        end
 
-    describe 'visiting a /404 URL on a site with a global redirect' do
-      before do
-        site.update_attribute(:global_http_status, '301')
-        site.update_attribute(:global_new_url, 'http://www.gov.uk/global-new')
-        get 'http://www.minitrue.gov.uk/404'
+        it_behaves_like 'a redirect'
+        its(:location) { should == 'http://www.gov.uk/global-new' }
       end
 
-      it_behaves_like 'a 404'
-    end
+      describe 'visiting a /404 URL' do
+        before do
+          get 'http://www.minitrue.gov.uk/404'
+        end
 
-    describe 'visiting a /410 URL on a site with a global redirect' do
-      before do
-        site.update_attribute(:global_http_status, '301')
-        site.update_attribute(:global_new_url, 'http://www.gov.uk/global-new')
-        get 'http://www.minitrue.gov.uk/410'
+        it_behaves_like 'a 404'
       end
 
-      it_behaves_like 'a 410'
-    end
+      describe 'visiting a /410 URL' do
+        before do
+          get 'http://www.minitrue.gov.uk/410'
+        end
 
-    describe 'visiting a URL on a site with a global 410' do
-      before do
-        site.update_attribute(:global_http_status, '410')
-        get 'http://www.minitrue.gov.uk/any-page'
+        it_behaves_like 'a 410'
       end
-
-      it_behaves_like 'a 410'
     end
 
-    describe 'visiting a /404 URL on a site with a global 410' do
+    describe 'sites with global 410' do
       before do
         site.update_attribute(:global_http_status, '410')
-        get 'http://www.minitrue.gov.uk/404'
       end
 
-      it_behaves_like 'a 404'
-    end
+      describe 'visiting a URL' do
+        before do
+          get 'http://www.minitrue.gov.uk/any-page'
+        end
 
-    describe 'visiting a /410 URL on a site with a global 410' do
-      before do
-        site.update_attribute(:global_http_status, '410')
-        get 'http://www.minitrue.gov.uk/410'
+        it_behaves_like 'a 410'
       end
 
-      it_behaves_like 'a 410'
+      describe 'visiting a /404 URL' do
+        before do
+          get 'http://www.minitrue.gov.uk/404'
+        end
+
+        it_behaves_like 'a 404'
+      end
+
+      describe 'visiting a /410 URL' do
+        before do
+          get 'http://www.minitrue.gov.uk/410'
+        end
+
+        it_behaves_like 'a 410'
+      end
     end
   end
 
