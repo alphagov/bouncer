@@ -1,5 +1,0 @@
-aws_secrets = { access_key_id: "", secret_access_key: "" }
-use ExceptionMailer, aws_secrets,
-    to: ['govuk-exceptions+preview@digital.cabinet-office.gov.uk'],
-    from: '"Winston Smith-Churchill" <winston@alphagov.co.uk>',
-    subject: "[Bouncer (preview)]"

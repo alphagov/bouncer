@@ -1,9 +1,5 @@
 require './boot'
 require 'rack/static'
-require 'exception_mailer'
-
-initializers_path = File.expand_path('config/initializers/*.rb', File.dirname(__FILE__))
-Dir[initializers_path].each { |f| require f }
 
 use Bouncer::Cacher
 
