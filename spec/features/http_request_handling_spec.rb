@@ -318,6 +318,35 @@ describe 'HTTP request handling' do
 
         it_behaves_like 'a 410'
       end
+
+      describe 'visiting /sitemap.xml' do
+        before do
+          site.mappings.create \
+            path:         '/a-dummy-page',
+            path_hash:    Digest::SHA1.hexdigest('/a-dummy-page'),
+            http_status:  '301',
+            new_url:      'http://www.gov.uk/new-page'
+          get 'http://www.minitrue.gov.uk/sitemap.xml'
+        end
+
+        it_behaves_like 'a 200'
+
+        its(:body) { should be_valid_xml }
+        its(:body) { should be_valid_sitemap }
+      end
+
+      describe 'visiting /robots.txt' do
+        before do
+          get 'http://www.minitrue.gov.uk/robots.txt'
+        end
+
+        it_behaves_like 'a 200'
+
+        its(:content_type) { should == 'text/plain' }
+        its(:body) { should match %r{^User-agent: \*$} }
+        its(:body) { should match %r{^Disallow:$} }
+        its(:body) { should match %r{^Sitemap: http://www.minitrue.gov.uk/sitemap.xml$} }
+      end
     end
 
     describe 'sites with global 410' do
