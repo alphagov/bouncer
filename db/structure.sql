@@ -1,29 +1,14 @@
-CREATE TABLE `hits` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `host_id` int(11) NOT NULL,
-  `path` varchar(1024) COLLATE utf8_bin NOT NULL,
-  `path_hash` varchar(40) COLLATE utf8_bin NOT NULL,
-  `http_status` varchar(3) COLLATE utf8_bin NOT NULL,
-  `count` int(11) NOT NULL,
-  `hit_on` date NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `index_hits_on_host_id_and_path_hash_and_hit_on_and_http_status` (`host_id`,`path_hash`,`hit_on`,`http_status`),
-  KEY `index_hits_on_host_id` (`host_id`),
-  KEY `index_hits_on_host_id_and_hit_on` (`host_id`,`hit_on`),
-  KEY `index_hits_on_host_id_and_http_status` (`host_id`,`http_status`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
 CREATE TABLE `hosts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `site_id` int(11) DEFAULT NULL,
-  `host` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `hostname` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `ttl` int(11) DEFAULT NULL,
   `cname` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `live_cname` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `index_hosts_on_host` (`host`),
+  UNIQUE KEY `index_hosts_on_host` (`hostname`),
   KEY `index_hosts_on_site_id` (`site_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=543 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -65,7 +50,7 @@ CREATE TABLE `schema_migrations` (
 CREATE TABLE `sites` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `organisation_id` int(11) DEFAULT NULL,
-  `site` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `abbr` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `query_params` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `tna_timestamp` datetime DEFAULT NULL,
   `homepage` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -74,42 +59,9 @@ CREATE TABLE `sites` (
   `global_http_status` varchar(3) COLLATE utf8_unicode_ci DEFAULT NULL,
   `global_new_url` text COLLATE utf8_unicode_ci,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `index_sites_on_site` (`site`),
+  UNIQUE KEY `index_sites_on_site` (`abbr`),
   KEY `index_sites_on_organisation_id` (`organisation_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=214 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-CREATE TABLE `totals` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `host_id` int(11) NOT NULL,
-  `http_status` varchar(3) COLLATE utf8_unicode_ci NOT NULL,
-  `count` int(11) NOT NULL,
-  `total_on` date NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `index_totals_on_host_id_and_total_on_and_http_status` (`host_id`,`total_on`,`http_status`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-CREATE TABLE `urls` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `url` varchar(2048) COLLATE utf8_unicode_ci NOT NULL,
-  `site_id` int(11) NOT NULL,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
-  `workflow_state` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'new',
-  PRIMARY KEY (`id`),
-  KEY `index_urls_on_site_id` (`site_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=116 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-CREATE TABLE `users` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `email` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `uid` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `permissions` text COLLATE utf8_unicode_ci,
-  `remotely_signed_out` tinyint(1) DEFAULT '0',
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO schema_migrations (version) VALUES ('20130416185911');
 

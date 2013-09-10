@@ -32,7 +32,7 @@ describe 'HTTP request handling' do
       tna_timestamp: '2012-10-26 06:52:14',
       homepage: 'http://www.gov.uk/government/organisations/ministry-of-truth'
     ).tap do |site|
-      site.hosts.create host: 'www.minitrue.gov.uk'
+      site.hosts.create hostname: 'www.minitrue.gov.uk'
     end
   end
 
@@ -113,7 +113,7 @@ describe 'HTTP request handling' do
 
     context "aka-hostname style" do
       before do
-        site.hosts.first.update_attribute(:host, "minitrue.gov.uk")
+        site.hosts.first.update_attribute(:hostname, "minitrue.gov.uk")
         get 'http://aka-minitrue.gov.uk/a-redirected-page'
       end
       it_behaves_like 'a redirect'
@@ -264,7 +264,7 @@ describe 'HTTP request handling' do
     before do
       Organisation.create(homepage: 'http://www.gov.uk/government/organisations/ministry-of-love', title: 'Ministry of Love', css: 'ministry-of-love').
         sites.create(tna_timestamp: '2013-07-24 10:32:51').
-        hosts.create host: 'www.miniluv.gov.uk'
+        hosts.create hostname: 'www.miniluv.gov.uk'
 
       get 'http://www.miniluv.gov.uk/an-unrecognised-page'
     end
@@ -574,7 +574,7 @@ describe 'HTTP request handling' do
     describe 'DFID redirects' do
       describe 'visiting a R4D URL' do
         before do
-          site.hosts.create host: 'www.dfid.gov.uk'
+          site.hosts.create hostname: 'www.dfid.gov.uk'
   
           get 'http://www.dfid.gov.uk/r4d/Output/193679/Default.aspx'
         end
@@ -590,7 +590,7 @@ describe 'HTTP request handling' do
             tna_timestamp: '2012-10-26 06:52:14',
             homepage: 'https://www.gov.uk/government/organisations/department-of-health'
         ).tap do |site|
-          site.hosts.create host: 'www.dh.gov.uk'
+          site.hosts.create hostname: 'www.dh.gov.uk'
         end
       }
 
@@ -628,7 +628,7 @@ describe 'HTTP request handling' do
     end
 
     describe 'Directgov redirects' do
-      before { site.hosts.create host: 'www.direct.gov.uk' }
+      before { site.hosts.create hostname: 'www.direct.gov.uk' }
 
       describe 'visiting a /en search URL' do
         before do
@@ -650,7 +650,7 @@ describe 'HTTP request handling' do
 
       describe 'visiting a Fire Kills URL' do
         before do
-          site.hosts.create host: 'campaigns.direct.gov.uk'
+          site.hosts.create hostname: 'campaigns.direct.gov.uk'
   
           get 'http://campaigns.direct.gov.uk/a/firekills/b'
         end
@@ -661,7 +661,7 @@ describe 'HTTP request handling' do
     end
 
     describe 'Number 10 redirects' do
-      before { site.hosts.create host: 'www.number10.gov.uk' }
+      before { site.hosts.create hostname: 'www.number10.gov.uk' }
 
       describe 'visiting a news URL' do
         before do
@@ -674,7 +674,7 @@ describe 'HTTP request handling' do
     end
 
     describe 'Treasury redirects' do
-      before { site.hosts.create host: 'cdn.hm-treasury.gov.uk' }
+      before { site.hosts.create hostname: 'cdn.hm-treasury.gov.uk' }
 
       describe 'visiting a CDN /* URL' do
         before do

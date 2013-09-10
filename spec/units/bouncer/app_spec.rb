@@ -23,7 +23,7 @@ describe Bouncer::App do
     end
 
     it 'should try to find the right host' do
-      Host.should_receive(:find_by).with(host: hostname)
+      Host.should_receive(:find_by).with(hostname: hostname)
       get url
     end
 
@@ -118,7 +118,7 @@ describe Bouncer::App do
           let(:rewritten_hostname) { 'example.com'}
 
           it 'writes out the aka' do
-            Host.should_receive(:find_by).with(host: rewritten_hostname)
+            Host.should_receive(:find_by).with(hostname: rewritten_hostname)
             get url
           end
         end

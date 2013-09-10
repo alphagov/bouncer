@@ -10,7 +10,7 @@ module Bouncer
     end
 
     def host
-      @_host ||= Host.find_by(host: @request.host)
+      @_host ||= Host.find_by(hostname: @request.host)
     end
 
     def mapping
@@ -40,7 +40,7 @@ module Bouncer
         title: organisation.try(:title),
         css: organisation.try(:css),
         furl: organisation.try(:furl),
-        host: host.try(:host),
+        host: host.try(:hostname),
         tna_timestamp: site.try(:tna_timestamp).try(:strftime, '%Y%m%d%H%M%S'),
         request_uri: request.non_canonicalised_fullpath,
         suggested_link: suggested_url.nil? ? nil : %Q{<a href="#{suggested_url}">#{suggested_url.gsub(%r{\Ahttps?://|/\z}, '')}</a>},

@@ -8,7 +8,7 @@ module Bouncer
         when '410'
           [410, { 'Content-Type' => 'text/html' }, [renderer.render(context, 410)]]
         else
-          message = "Can't serve unexpected global_http_status: #{context.site.global_http_status} for #{context.site.site}"
+          message = "Can't serve unexpected global_http_status: #{context.site.global_http_status} for #{context.site.abbr}"
           [500, { 'Content-Type' => 'text/plain'}, [message]]
         end
       end

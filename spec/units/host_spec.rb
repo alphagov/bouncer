@@ -21,11 +21,11 @@ describe Host do
     let(:site) { Site.new }
     let(:hostname) { double 'hostname' }
 
-    subject { Host.new site: site, host: hostname }
+    subject { Host.new site: site, hostname: hostname }
 
     it { should be_a Host }
     its(:site) { should == site }
-    its(:host) { should == hostname }
+    its(:hostname) { should == hostname }
   end
 
   describe '.find_by' do
@@ -33,10 +33,10 @@ describe Host do
     let(:other_hostname) { 'www.minipax.gov.uk' }
 
     before(:each) do
-      Host.create host: other_hostname
-      @host = Host.create host: hostname
+      Host.create hostname: other_hostname
+      @host = Host.create hostname: hostname
     end
 
-    specify { Host.find_by(host: hostname).should == @host }
+    specify { Host.find_by(hostname: hostname).should == @host }
   end
 end

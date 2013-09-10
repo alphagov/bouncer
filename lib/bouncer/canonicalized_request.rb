@@ -50,7 +50,7 @@ module Bouncer
 
     def significant_query_params
       # We must use the canonicalized_host, not @request.host
-      host_record = Host.find_by(host: self.host)
+      host_record = Host.find_by(hostname: self.host)
       # It would be nice to reuse this variable in RequestContext to avoid
       # duplicate queries. If we had ActionController's query cache this would
       # happen by magic. It seems messy to expose it directly.
