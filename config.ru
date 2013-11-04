@@ -1,7 +1,6 @@
 require './boot'
 require 'rack/static'
 
-use Bouncer::Cacher
 require 'exception_mailer'
 
 if ENV['RACK_ENV'] == 'production'
@@ -14,6 +13,8 @@ if ENV['RACK_ENV'] == 'production'
     raise "Missing configuration file: cannot send exception notifications"
   end
 end
+
+use Bouncer::Cacher
 
 # We need compatibility with redirector which serves its assets from '/''.
 # This is useful because then we can run redirector's tests unmodified against
