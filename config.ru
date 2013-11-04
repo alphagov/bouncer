@@ -2,6 +2,7 @@ require './boot'
 require 'rack/static'
 
 use Bouncer::Cacher
+require 'exception_mailer'
 
 if ENV['RACK_ENV'] == 'production'
   aws_secrets           = File.expand_path('config/aws_secrets.yml', File.dirname(__FILE__))
