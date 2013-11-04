@@ -1,5 +1,5 @@
 # Overwritten at deploy-time
 ---
-:to: ["govuk-exceptions+development@digital.cabinet-office.gov.uk"],
-:from: '"Winston Smith-Churchill" <winston@alphagov.co.uk>',
+:to: ["govuk-exceptions+development@digital.cabinet-office.gov.uk"]
+:from: '"Winston Smith-Churchill" <winston@alphagov.co.uk>'
 :subject: "[Bouncer (development)]"
