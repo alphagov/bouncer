@@ -33,7 +33,6 @@ module Bouncer
     def attributes_for_render
       site = host.try(:site)
       organisation = site.try(:organisation)
-      suggested_url = mapping.try(:suggested_url)
 
       {
         homepage: organisation.try(:homepage),
@@ -43,7 +42,7 @@ module Bouncer
         host: host.try(:hostname),
         tna_timestamp: site.try(:tna_timestamp).try(:strftime, '%Y%m%d%H%M%S'),
         request_uri: request.non_canonicalised_fullpath,
-        suggested_link: suggested_url.nil? ? nil : %Q{<a href="#{suggested_url}">#{suggested_url.gsub(%r{\Ahttps?://|/\z}, '')}</a>},
+        suggested_url: mapping.try(:suggested_url),
         archive_url: mapping.try(:archive_url)
       }
     end
