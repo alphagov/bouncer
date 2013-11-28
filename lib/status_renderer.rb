@@ -11,7 +11,7 @@ class StatusRenderer
   ##
   # Get the ERB instance for this status
   def [](status)
-    @templates[status.to_s] ||= (template_str = template_content(status)) && Erubis::Eruby.new(template_str)
+    @templates[status.to_s] ||= (template_str = template_content(status)) && Erubis::EscapedEruby.new(template_str)
   end
 
   def render(context, status)
