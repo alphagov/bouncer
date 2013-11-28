@@ -4,8 +4,8 @@ describe StatusRenderer do
   subject(:renderer) { StatusRenderer.new }
 
   describe 'template storage' do
-    its([404]) { should be_an(ERB) }
-    its([410]) { should be_an(ERB) }
+    its([404]) { should be_an(Erubis::Eruby) }
+    its([410]) { should be_an(Erubis::Eruby) }
     its([301]) { should be_nil }
 
     it 'reuses its templates' do
