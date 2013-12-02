@@ -412,6 +412,15 @@ describe 'HTTP request handling' do
     its(:body) { should include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk">UK Government Web Archive</a>' }
   end
 
+  describe 'escaping Database content in the 404 page' do
+    before do
+      organisation.update_attribute(:title, '<script>alert("xss");</script>Ministry of Truth')
+      get 'http://www.minitrue.gov.uk/404'
+    end
+
+    its(:body) { should include '&lt;script&gt;alert(&quot;xss&quot;);&lt;/script&gt;Ministry of Truth'}
+  end
+
   describe 'visiting a /410 URL' do
     before do
       get 'http://www.minitrue.gov.uk/410'

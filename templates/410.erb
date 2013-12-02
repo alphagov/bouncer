@@ -32,9 +32,9 @@
             <p class="call-to-action"><a href="<%= archive_link %>">View the item you were looking for</a> in the UK Government Web Archive</p>
             <p class="either-or">or</p>
             <p class="call-to-action">Visit the new <%= title %> site at <a href="<%= homepage %>"><%= furl || homepage %></a></p>
-            <% if suggested_link %>
+            <% if suggested_url %>
               <p class="either-or">or</p>
-              <p class="call-to-action">Visit <%= suggested_link %> for more information on this topic.</p>
+              <p class="call-to-action">Visit <a href="<%= suggested_url %>"><%= suggested_url.gsub(%r{\Ahttps?://|/\z}, '') %></a> for more information on this topic.</p>
             <% end %>
           </div>
           <div id="footer">

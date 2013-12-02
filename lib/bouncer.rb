@@ -1,5 +1,5 @@
 require 'digest/sha1'
-require 'erb'
+require 'erubis'
 require 'nokogiri'
 require 'ostruct'
 require 'rack/request'
