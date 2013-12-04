@@ -1,7 +1,7 @@
 source 'https://rubygems.org/'
 source 'https://BnrJb6FZyzspBboNJzYZ@gem.fury.io/govuk/'
 
-gem 'activerecord', '4.0.0' # This is a mismatch for Transition, which has 3.2.13
+gem 'activerecord', '4.0.2' # This is a mismatch for Transition, which has 3.2.x
 gem 'aws-ses', '0.5.0'
 gem 'mysql2', '0.3.11'
 gem 'nokogiri', '1.6.0'
