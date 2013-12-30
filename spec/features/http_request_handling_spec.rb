@@ -29,6 +29,7 @@ describe 'HTTP request handling' do
 
   let!(:site) do
     organisation.sites.create(
+      abbr: 'minit',
       tna_timestamp: '2012-10-26 06:52:14',
       homepage: 'http://www.gov.uk/government/organisations/ministry-of-truth'
     ).tap do |site|
@@ -263,7 +264,7 @@ describe 'HTTP request handling' do
   describe 'visiting an unrecognised path on a different recognised host' do
     before do
       Organisation.create(homepage: 'http://www.gov.uk/government/organisations/ministry-of-love', title: 'Ministry of Love', css: 'ministry-of-love').
-        sites.create(tna_timestamp: '2013-07-24 10:32:51').
+        sites.create(tna_timestamp: '2013-07-24 10:32:51', abbr: 'minil').
         hosts.create hostname: 'www.miniluv.gov.uk'
 
       get 'http://www.miniluv.gov.uk/an-unrecognised-page'
@@ -584,7 +585,7 @@ describe 'HTTP request handling' do
       describe 'visiting a R4D URL' do
         before do
           site.hosts.create hostname: 'www.dfid.gov.uk'
-  
+
           get 'http://www.dfid.gov.uk/r4d/Output/193679/Default.aspx'
         end
 
@@ -596,6 +597,7 @@ describe 'HTTP request handling' do
     describe 'DH redirects' do
       let!(:dh_site) {
         department_of_health.sites.create(
+            abbr: 'dh',
             tna_timestamp: '2012-10-26 06:52:14',
             homepage: 'https://www.gov.uk/government/organisations/department-of-health'
         ).tap do |site|

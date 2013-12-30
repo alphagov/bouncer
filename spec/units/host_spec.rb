@@ -33,8 +33,8 @@ describe Host do
     let(:other_hostname) { 'www.minipax.gov.uk' }
 
     before(:each) do
-      Host.create hostname: other_hostname
-      @host = Host.create hostname: hostname
+      Host.create hostname: other_hostname, site_id: 123
+      @host = Host.create hostname: hostname, site_id: 321
     end
 
     specify { Host.find_by(hostname: hostname).should == @host }
