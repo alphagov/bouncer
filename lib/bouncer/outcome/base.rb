@@ -14,7 +14,8 @@ module Bouncer
     end
 
     def legal_redirect?(url)
-      whitelist.include?(URI.parse(url).host)
+      host = URI.parse(url).host
+      host.end_with?('.gov.uk') || whitelist.include?(host)
     end
 
     def whitelist

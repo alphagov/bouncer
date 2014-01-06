@@ -189,6 +189,21 @@ describe 'HTTP request handling' do
     its(:location) { should == nil }
   end
 
+  describe 'visiting a URL which redirects to anything on *.gov.uk' do
+    before do
+      site.mappings.create \
+        path:         '/a-redirected-page',
+        path_hash:    Digest::SHA1.hexdigest('/a-redirected-page'),
+        http_status:  '301',
+        new_url:      'http://anything-at-all.gov.uk'
+
+      get 'https://www.minitrue.gov.uk/a-redirected-page'
+    end
+
+    its(:status) { should == 301 }
+    its(:location) { should == 'http://anything-at-all.gov.uk' }
+  end
+
   describe 'visiting a URL which has been archived' do
     before do
       site.mappings.create \
