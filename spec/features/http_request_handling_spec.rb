@@ -711,5 +711,18 @@ describe 'HTTP request handling' do
         its(:location) { should == 'http://www.hm-treasury.gov.uk/budget2013_complete.pdf' }
       end
     end
+
+    describe 'GDS blog redirects' do
+      before { site.hosts.create hostname: 'digital.cabinetoffice.gov.uk' }
+
+      describe 'visiting a /* URL' do
+        before do
+          get 'http://digital.cabinetoffice.gov.uk/tag/david-mann'
+        end
+
+        it_behaves_like 'a redirect'
+        its(:location) { should == 'https://gds.blog.gov.uk/tag/david-mann' }
+      end
+    end
   end
 end
