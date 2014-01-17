@@ -572,7 +572,7 @@ describe 'HTTP request handling' do
           path: path,
           path_hash:    Digest::SHA1.hexdigest(path),
           http_status:  '410'
-  
+
         get "http://www.minitrue.gov.uk#{path}"
       end
 
@@ -587,7 +587,7 @@ describe 'HTTP request handling' do
           path: path,
           path_hash:    Digest::SHA1.hexdigest('/an-archived-page?a&querystring&weird&with'),
           http_status:  '410'
-  
+
         get "http://www.minitrue.gov.uk#{path}"
       end
 
@@ -660,7 +660,7 @@ describe 'HTTP request handling' do
         before do
           get 'http://www.direct.gov.uk/a/b/en/AdvancedSearch'
         end
-        
+
         it_behaves_like 'a redirect'
         its(:location) { should == 'https://www.gov.uk/search' }
       end
@@ -677,7 +677,7 @@ describe 'HTTP request handling' do
       describe 'visiting a Fire Kills URL' do
         before do
           site.hosts.create hostname: 'campaigns.direct.gov.uk'
-  
+
           get 'http://campaigns.direct.gov.uk/a/firekills/b'
         end
 
