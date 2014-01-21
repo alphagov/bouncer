@@ -3,6 +3,8 @@ army.mod.uk
 foodanddrink.nsacademy.co.uk
 mps-academy.co.uk
 nsa-ccskills.co.uk
+public.govdelivery.com
+service.govdelivery.com
 services.parliament.uk
 skillsmart.nsaforretail.com
 wsr.pearsonvue.com
@@ -22,6 +24,7 @@ www.electoralcommission.org.uk
 www.esd.org.uk
 www.getsafeonline.org
 www.greendealorb.co.uk
+www.highwaysefficiency.org.uk
 www.iaea.org
 www.itskillsacademy.ac.uk
 www.maa.mod.uk
