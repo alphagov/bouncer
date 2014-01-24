@@ -19,6 +19,32 @@ module Bouncer
         [301, { 'Location' => "http://www.hm-treasury.gov.uk/#{$1}" }, []]
       elsif request.host == 'digital.cabinetoffice.gov.uk' && request.path =~ %r{^/(.*)$}
         [301, { 'Location' => "https://gds.blog.gov.uk/#{$1}" }, []]
+      elsif request.host == 'www.dft.gov.uk'
+      	if request.path =~ %r{^/actonco2/?(.*)$}
+        	[301, { 'Location' => "http://actonco2.direct.gov.uk/#{$1}" }, []]
+        elsif request.path =~ %r{^/think/[dont]?drugdrive(.*)$}
+        	[301, { 'Location' => "http://drugdrive.direct.gov.uk/#{$1}" }, []]
+        elsif request.path =~ %r{^/thinkmotorcycleacademy(.*)$}
+          [410, { 'Content-Type' => 'text/html' }, [renderer.render(context, '410')]]
+        elsif request.path =~ %r{^/think/(.*)$}
+        	[301, { 'Location' => "http://think.direct.gov.uk/#{$1}" }, []]
+        elsif request.path =~ %r{^/transportforyou/roadsafety(.*)$}
+        	[301, { 'Location' => "http://think.direct.gov.uk/#{$1}" }, []]
+        elsif request.path =~ %r{^/transportforyou/tfytalesoftheroad(.*)$}
+        	[301, { 'Location' => "http://think.direct.gov.uk/#{$1}" }, []]
+        elsif request.path =~ %r{^/press/releases/pressarchive(.*)$}
+          [410, { 'Content-Type' => 'text/html' }, [renderer.render(context, '410')]]
+        elsif request.path =~ %r{^/press/releases/sra(.*)$}
+          [410, { 'Content-Type' => 'text/html' }, [renderer.render(context, '410')]]
+        elsif request.path =~ %r{^/rhc(.*)$}
+          [410, { 'Content-Type' => 'text/html' }, [renderer.render(context, '410')]]
+        elsif request.path =~ %r{^/hmep(.*)$}
+        	[301, { 'Location' => "http://www.highwaysefficiency.org.uk" }, []]
+        elsif request.path =~ %r{^/matrix/?(.*)$}
+        	[301, { 'Location' => "http://www.dft.gov.uk/traffic-counts/#{$1}" }, []]
+        elsif request.path =~ %r{^/dsa/atozdtcinfo(.*)$}
+        	[301, { 'Location' => "http://www.dft.gov.uk/fyn/practical.php" }, []]
+        end
       end
     end
   end
