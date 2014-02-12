@@ -1,7 +1,7 @@
 module Bouncer
   ##
   # Regex rules to try after mappings but just before we 404
-  class Rules
+  class FallbackRules
     def self.redirect(location)
       [301, { 'Location' => location }, []]
     end

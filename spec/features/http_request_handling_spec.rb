@@ -595,7 +595,7 @@ describe 'HTTP request handling' do
     end
   end
 
-  describe 'rule-based redirects' do
+  describe 'rules' do
     describe 'DFID redirects' do
       describe 'visiting a R4D URL' do
         before do
@@ -683,6 +683,30 @@ describe 'HTTP request handling' do
 
         it_behaves_like 'a redirect'
         its(:location) { should == 'https://www.gov.uk/firekills' }
+      end
+    end
+
+    describe 'Environment Agency' do
+      before { site.hosts.create hostname: 'www.environment-agency.gov.uk' }
+
+      describe 'Flood Warnings redirects' do
+        before do
+          get 'http://www.environment-agency.gov.uk/homeandleisure/floods/34678.aspx?type=Region&term=Anglian'
+        end
+
+        it_behaves_like 'a redirect'
+        its(:location) { should == 'http://flood.environment-agency.gov.uk/homeandleisure/floods/34678.aspx?type=Region&term=Anglian' }
+      end
+
+      describe 'overrides any mapping (PreemptiveRules)' do
+        before do
+          path = '/homeandleisure/floods/34678.aspx?page=1'
+          site.mappings.create(path: path, path_hash: Digest::SHA1.hexdigest(path), http_status: 410)
+          get "http://www.environment-agency.gov.uk#{path}"
+        end
+
+        it_behaves_like 'a redirect'
+        its(:location) { should == 'http://flood.environment-agency.gov.uk/homeandleisure/floods/34678.aspx?page=1'}
       end
     end
 

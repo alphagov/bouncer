@@ -24,6 +24,14 @@ module Bouncer
       bluri.path
     end
 
+    def non_canonicalised_query
+      @request.query_string
+    end
+
+    def query
+      bluri.query
+    end
+
     def host
       # This behaviour is based on a reading of
       # https://github.com/alphagov/redirector/blob/b7713cf5bb175a4a31b47e4aa191399c294da11b/templates/nginx.erb#L16
