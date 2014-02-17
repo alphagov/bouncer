@@ -1,5 +1,6 @@
 # whitelist of domains which may be used in a New Url, in addition to anything on *.gov.uk
 army.mod.uk
+byot.dasa.mod.uk
 foodanddrink.nsacademy.co.uk
 mps-academy.co.uk
 nsa-ccskills.co.uk
