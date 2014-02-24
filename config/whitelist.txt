@@ -1,7 +1,6 @@
 # whitelist of domains which may be used in a New Url, in addition to anything on *.gov.uk
 admin.business-events.org.uk
 army.mod.uk
-byot.dasa.mod.uk
 dh.firstactuarial.co.uk
 foodanddrink.nsacademy.co.uk
 mps-academy.co.uk
@@ -10,6 +9,7 @@ public.govdelivery.com
 service.govdelivery.com
 services.parliament.uk
 skillsmart.nsaforretail.com
+tools.mod.uk
 wsr.pearsonvue.com
 www.aboutmyvote.co.uk
 www.armysecure.mod.uk
