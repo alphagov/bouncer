@@ -1,6 +1,7 @@
 # whitelist of domains which may be used in a New Url, in addition to anything on *.gov.uk
+admin.business-events.org.uk
 army.mod.uk
-byot.dasa.mod.uk
+dh.firstactuarial.co.uk
 foodanddrink.nsacademy.co.uk
 mps-academy.co.uk
 nsa-ccskills.co.uk
@@ -8,6 +9,7 @@ public.govdelivery.com
 service.govdelivery.com
 services.parliament.uk
 skillsmart.nsaforretail.com
+tools.mod.uk
 wsr.pearsonvue.com
 www.aboutmyvote.co.uk
 www.armysecure.mod.uk
@@ -16,9 +18,11 @@ www.britishcouncil.org
 www.businesslink.innovateuk.org
 www.capt.org.uk
 www.chevening.org
+www.chooseandbook.nhs.uk
 www.cnpa.police.uk
-www.cskills.org
 www.csfp-online.org
+www.cskills.org
+www.dignityincare.org.uk
 www.eblex.org.uk
 www.educationuk.org
 www.electoralcommission.org.uk
@@ -57,7 +61,3 @@ www.veterans-uk.info
 www.visitbritain.com
 www.visitbritain.org
 www.youtube.com
-www.dignityincare.org.uk
-www.chooseandbook.nhs.uk
-dh.firstactuarial.co.uk
-admin.business-events.org.uk
