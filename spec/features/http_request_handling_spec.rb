@@ -707,6 +707,24 @@ describe 'HTTP request handling' do
         its(:location) { should  == 'http://flood.environment-agency.gov.uk/homeandleisure/floods/cy/34678.aspx?type=Region&term=Wales&Severity=1' }
       end
 
+      describe 'River Levels redirects' do
+        before do
+          get 'http://www.environment-agency.gov.uk/homeandleisure/floods/riverlevels/120691.aspx?foo=bar'
+        end
+
+        it_behaves_like 'a redirect'
+        its(:location) { should == 'http://flood.environment-agency.gov.uk/homeandleisure/floods/riverlevels/120691.aspx?foo=bar'}
+      end
+
+      describe 'River Levels redirects (Welsh)' do
+        before do
+          get 'http://www.environment-agency.gov.uk/homeandleisure/floods/riverlevels/cy/120691.aspx?foo=bar'
+        end
+
+        it_behaves_like 'a redirect'
+        its(:location) { should == 'http://flood.environment-agency.gov.uk/homeandleisure/floods/riverlevels/cy/120691.aspx?foo=bar' }
+      end
+
       describe 'overrides any mapping (PreemptiveRules)' do
         before do
           path = '/homeandleisure/floods/34678.aspx?page=1'
