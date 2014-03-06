@@ -5,6 +5,7 @@ dh.firstactuarial.co.uk
 foodanddrink.nsacademy.co.uk
 mps-academy.co.uk
 nsa-ccskills.co.uk
+parliamentarystandards.org.uk
 public.govdelivery.com
 service.govdelivery.com
 services.parliament.uk
@@ -12,6 +13,7 @@ skillsmart.nsaforretail.com
 tools.mod.uk
 wsr.pearsonvue.com
 www.aboutmyvote.co.uk
+www.apprenticeships.org.uk
 www.armysecure.mod.uk
 www.bigsocietyawards.org
 www.britishcouncil.org
@@ -33,10 +35,12 @@ www.highwaysefficiency.org.uk
 www.iaea.org
 www.itskillsacademy.ac.uk
 www.legalombudsman.org.uk
+www.lgbce.org.uk
 www.lituktestbooking.co.uk
 www.maa.mod.uk
 www.mod.uk
 www.moneyadviceservice.org.uk
+www.nao.org.uk
 www.ncsyes.co.uk
 www.nhs.uk
 www.nibusinessinfo.co.uk
