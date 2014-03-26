@@ -8,6 +8,7 @@ require 'rendering_context'
 require 'status_renderer'
 require 'host'
 require 'optic14n'
+require 'airbrake'
 
 require 'bouncer/cacher'
 require 'bouncer/canonicalized_request'

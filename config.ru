@@ -4,13 +4,17 @@ require 'rack/static'
 require 'exception_mailer'
 
 if ENV['RACK_ENV'] == 'production'
-  aws_secrets           = File.expand_path('config/aws_secrets.yml', File.dirname(__FILE__))
-  exception_mail_config = File.expand_path('config/exception_mail_config.yml', File.dirname(__FILE__))
+  airbrake_config = File.expand_path('config/airbrake.yml', File.dirname(__FILE__))
 
-  if File.exist?(aws_secrets) && File.exist?(exception_mail_config)
-    use ExceptionMailer, YAML.load_file(aws_secrets), YAML.load_file(exception_mail_config)
-  else
-    raise "Missing configuration file: cannot send exception notifications"
+  if File.exist?(airbrake_config)
+    env_config = YAML.load_file(airbrake_config)
+    Airbrake.configure do |config|
+      config.api_key = env_config[:api_key]
+      config.secure = env_config[:secure]
+      config.host = env_config[:host]
+      config.environment_name = env_config[:environment_name]
+    end
+    use Airbrake::Rack
   end
 end
 

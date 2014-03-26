@@ -8,6 +8,7 @@ gem 'nokogiri', '1.6.0'
 gem 'rack', '1.5.2'
 gem 'optic14n', '1.0.0' # Ideally version should be synced with Transition
 gem 'erubis', '2.7.0'
+gem 'airbrake', '3.1.15'
 
 group :production do
   gem 'unicorn', '4.6.3'
