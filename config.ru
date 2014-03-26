@@ -4,7 +4,7 @@ require 'rack/static'
 require 'exception_mailer'
 
 if ENV['RACK_ENV'] == 'production'
-  airbrake_config = File.expand_path('config/airbrake_production.yml', File.dirname(__FILE__))
+  airbrake_config = File.expand_path('config/airbrake.yml', File.dirname(__FILE__))
 
   if File.exist?(airbrake_config)
     env_config = YAML.load_file(airbrake_config)
