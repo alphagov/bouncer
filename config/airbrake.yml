@@ -1,6 +1,0 @@
-# Overwritten at deploy-time
----
-:api_key: "REDACTED"
-:host: "REDACTED"
-:secure: true
-:environment_name: "REDACTED"
