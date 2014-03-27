@@ -1,21 +1,9 @@
 require './boot'
 require 'rack/static'
 
-require 'exception_mailer'
-
 if ENV['RACK_ENV'] == 'production'
-  airbrake_config = File.expand_path('config/airbrake.yml', File.dirname(__FILE__))
-
-  if File.exist?(airbrake_config)
-    env_config = YAML.load_file(airbrake_config)
-    Airbrake.configure do |config|
-      config.api_key = env_config[:api_key]
-      config.secure = env_config[:secure]
-      config.host = env_config[:host]
-      config.environment_name = env_config[:environment_name]
-    end
-    use Airbrake::Rack
-  end
+  require './config/airbrake'
+  use Airbrake::Rack
 end
 
 use Bouncer::Cacher
