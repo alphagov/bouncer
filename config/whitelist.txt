@@ -1,7 +1,7 @@
-# whitelist of domains which may be used in a New Url.
-# In addition to anything on:
-# *.gov.uk
-# *.mod.uk
+# Contains whitelist of domains which may be used in a New Url. 
+# In addition, New Url can include anything on:
+## *.gov.uk
+## *.mod.uk
 admin.business-events.org.uk
 dh.firstactuarial.co.uk
 foodanddrink.nsacademy.co.uk
