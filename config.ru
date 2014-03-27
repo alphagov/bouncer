@@ -1,8 +1,6 @@
 require './boot'
 require 'rack/static'
 
-require 'exception_mailer'
-
 if ENV['RACK_ENV'] == 'production'
   airbrake_config = File.expand_path('config/airbrake.yml', File.dirname(__FILE__))
 
