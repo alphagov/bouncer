@@ -17,8 +17,8 @@ AFAICT it only tells you about the failures, but that's enough to get started
 
 ## Testing in a browser in development
 
-These instructions assume you use the Dev VM, and that you have some data in
-your Transition/Bouncer database.
+These instructions assume you use the Dev VM, that Bouncer is running,
+and that you have some data in your Transition/Bouncer database.
 
 Let's say you want to test `bis.gov.uk`.
 
@@ -33,7 +33,7 @@ Then, add to hosts file on your Mac:
 
 Then on your VM, as root, add this file:
 
-    dev$ cat /etc/nginx/sites-enabled/bis.gov.uk
+    dev$ cat /etc/nginx/sites-available/bis.gov.uk
     server {
       server_name dev.bis.gov.uk;
       listen 80;
