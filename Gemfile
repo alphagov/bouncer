@@ -1,5 +1,4 @@
 source 'https://rubygems.org/'
-source 'https://BnrJb6FZyzspBboNJzYZ@gem.fury.io/govuk/'
 
 gem 'activerecord', '4.0.2' # This is a mismatch for Transition, which has 3.2.x
 gem 'mysql2', '0.3.11'
