@@ -710,7 +710,7 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a redirect'
-        its(:location) { should == 'http://flood.environment-agency.gov.uk/homeandleisure/floods/34678.aspx?type=Region&term=Anglian' }
+        its(:location) { should == 'http://apps.environment-agency.gov.uk/flood/34678.aspx?type=Region&term=Anglian' }
       end
 
       describe 'Flood Warnings redirects (Welsh)' do
@@ -719,7 +719,7 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a redirect'
-        its(:location) { should  == 'http://flood.environment-agency.gov.uk/homeandleisure/floods/cy/34678.aspx?type=Region&term=Wales&Severity=1' }
+        its(:location) { should  == 'http://apps.environment-agency.gov.uk/flood/cy/34678.aspx?type=Region&term=Wales&Severity=1' }
       end
 
       describe 'River Levels redirects' do
@@ -728,7 +728,7 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a redirect'
-        its(:location) { should == 'http://flood.environment-agency.gov.uk/homeandleisure/floods/riverlevels/120691.aspx?foo=bar'}
+        its(:location) { should == 'http://apps.environment-agency.gov.uk/river-and-sea-levels/120691.aspx?foo=bar'}
       end
 
       describe 'River Levels redirects (Welsh)' do
@@ -737,7 +737,7 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a redirect'
-        its(:location) { should == 'http://flood.environment-agency.gov.uk/homeandleisure/floods/riverlevels/cy/120691.aspx?foo=bar' }
+        its(:location) { should == 'http://apps.environment-agency.gov.uk/river-and-sea-levels/cy/120691.aspx?foo=bar' }
       end
 
       describe 'overrides any mapping (PreemptiveRules)' do
@@ -748,7 +748,16 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a redirect'
-        its(:location) { should == 'http://flood.environment-agency.gov.uk/homeandleisure/floods/34678.aspx?page=1'}
+        its(:location) { should == 'http://apps.environment-agency.gov.uk/flood/34678.aspx?page=1'}
+      end
+
+      describe 'URL that shouldn\'t match' do
+        before do
+          get('http://www.environment-agency.gov.uk/homeandleisure/floods/31632.aspx')
+        end
+
+        it_behaves_like 'a 404'
+        its(:location) { should == nil }
       end
     end
 
