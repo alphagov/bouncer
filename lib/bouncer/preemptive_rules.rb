@@ -12,7 +12,7 @@ module Bouncer
       if request.host == 'www.environment-agency.gov.uk'
         if request.non_canonicalised_fullpath =~ %r{^/homeandleisure/floods/riverlevels/(.*)$}
           redirect("http://apps.environment-agency.gov.uk/river-and-sea-levels/#{$1}")
-        elsif request.non_canonicalised_fullpath =~ %r{^/homeandleisure/floods/(.*(34678|34681|147053).*)$}
+        elsif request.non_canonicalised_fullpath =~ %r{^/homeandleisure/floods/((cy/)?(34678|34681|147053)\.aspx(\?.*)?)$}
           redirect("http://apps.environment-agency.gov.uk/flood/#{$1}")
         end
       end
