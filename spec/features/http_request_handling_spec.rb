@@ -740,6 +740,26 @@ describe 'HTTP request handling' do
         its(:location) { should == 'http://apps.environment-agency.gov.uk/river-and-sea-levels/cy/120691.aspx?foo=bar' }
       end
 
+      describe 'river levels homepage' do
+        describe 'with trailing slash' do
+          before do
+            get 'http://www.environment-agency.gov.uk/homeandleisure/floods/riverlevels/'
+          end
+
+          it_behaves_like 'a redirect'
+          its(:location) { should == 'http://apps.environment-agency.gov.uk/river-and-sea-levels/' }
+        end
+
+        describe 'without trailing slash' do
+          before do
+            get 'http://www.environment-agency.gov.uk/homeandleisure/floods/riverlevels'
+          end
+
+          it_behaves_like 'a redirect'
+          its(:location) { should == 'http://apps.environment-agency.gov.uk/river-and-sea-levels' }
+        end
+      end
+
       describe 'overrides any mapping (PreemptiveRules)' do
         before do
           path = '/homeandleisure/floods/34678.aspx?page=1'
