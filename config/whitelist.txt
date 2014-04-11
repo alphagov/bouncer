@@ -1,4 +1,4 @@
-# Contains whitelist of domains which may be used in a New Url. 
+# Contains whitelist of domains which may be used in a New Url.
 # In addition, New Url can include anything on:
 ## *.gov.uk
 ## *.mod.uk
