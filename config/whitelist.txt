@@ -1,4 +1,4 @@
-# Contains whitelist of domains which may be used in a New Url. 
+# Contains whitelist of domains which may be used in a New Url.
 # In addition, New Url can include anything on:
 ## *.gov.uk
 ## *.mod.uk
@@ -20,6 +20,7 @@ www.bigsocietyawards.org
 www.britishcouncil.org
 www.businesslink.innovateuk.org
 www.capt.org.uk
+www.ceh.ac.uk
 www.chevening.org
 www.chooseandbook.nhs.uk
 www.cnpa.police.uk
