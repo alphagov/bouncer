@@ -15,7 +15,7 @@ module Bouncer
       end
 
       def legal_redirect?(url)
-        host = URI.parse(url).host
+        host = URI.parse(url.gsub('[','%5B').gsub(']','%5D')).host
         host.end_with?('.gov.uk') || host.end_with?('.mod.uk') || whitelist.include?(host)
       end
 
