@@ -16,17 +16,7 @@ module Bouncer
 
       def legal_redirect?(url)
         host = Addressable::URI.parse(url).host
-        host.end_with?('.gov.uk') || host.end_with?('.mod.uk') || whitelist.include?(host)
-      end
-
-      def whitelist
-        # Cache the list for the lifetime of the process
-        @@whitelist ||= begin
-          lines        = File.open('config/whitelist.txt').map(&:chomp)
-          usable_lines = lines.reject { |line| line.start_with?('#') || line.empty? }
-          # Set dedupes but also gives better lookup performance
-          Set.new(usable_lines)
-        end
+        host.end_with?('.gov.uk') || host.end_with?('.mod.uk') || WhitelistedHost.exists?(hostname: host)
       end
     end
   end
