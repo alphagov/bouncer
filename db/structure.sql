@@ -16,11 +16,15 @@ CREATE TABLE `hits` (
   `http_status` varchar(3) COLLATE utf8_bin NOT NULL,
   `count` int(11) NOT NULL,
   `hit_on` date NOT NULL,
+  `mapping_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_hits_on_host_id_and_path_hash_and_hit_on_and_http_status` (`host_id`,`path_hash`,`hit_on`,`http_status`),
   KEY `index_hits_on_host_id` (`host_id`),
   KEY `index_hits_on_host_id_and_hit_on` (`host_id`,`hit_on`),
-  KEY `index_hits_on_host_id_and_http_status` (`host_id`,`http_status`)
+  KEY `index_hits_on_host_id_and_http_status` (`host_id`,`http_status`),
+  KEY `index_hits_on_mapping_id` (`mapping_id`),
+  KEY `index_hits_on_path_hash` (`path_hash`),
+  KEY `index_hits_on_host_id_and_path_hash` (`host_id`,`path_hash`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 CREATE TABLE `hits_staging` (
@@ -31,6 +35,19 @@ CREATE TABLE `hits_staging` (
   `hit_on` date DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+CREATE TABLE `host_paths` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `path` varchar(2048) COLLATE utf8_bin DEFAULT NULL,
+  `path_hash` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `c14n_path_hash` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `host_id` int(11) DEFAULT NULL,
+  `mapping_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_host_paths_on_host_id_and_path_hash` (`host_id`,`path_hash`),
+  KEY `index_host_paths_on_c14n_path_hash` (`c14n_path_hash`),
+  KEY `index_host_paths_on_mapping_id` (`mapping_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
 CREATE TABLE `hosts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `site_id` int(11) NOT NULL,
@@ -40,9 +57,12 @@ CREATE TABLE `hosts` (
   `live_cname` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
+  `ip_address` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `canonical_host_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_hosts_on_host` (`hostname`),
-  KEY `index_hosts_on_site_id` (`site_id`)
+  KEY `index_hosts_on_site_id` (`site_id`),
+  KEY `index_hosts_on_canonical_host_id` (`canonical_host_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE `mappings` (
@@ -59,6 +79,32 @@ CREATE TABLE `mappings` (
   UNIQUE KEY `index_mappings_on_site_id_and_path_hash` (`site_id`,`path_hash`),
   KEY `index_mappings_on_site_id_and_http_status` (`site_id`,`http_status`),
   KEY `index_mappings_on_site_id` (`site_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `mappings_batch_entries` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `path` varchar(2048) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `mappings_batch_id` int(11) DEFAULT NULL,
+  `mapping_id` int(11) DEFAULT NULL,
+  `processed` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `index_mappings_batch_entries_on_mappings_batch_id` (`mappings_batch_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `mappings_batches` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `tag_list` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `http_status` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `new_url` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `update_existing` tinyint(1) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `site_id` int(11) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `state` varchar(255) COLLATE utf8_unicode_ci DEFAULT 'unqueued',
+  `seen_outcome` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `index_mappings_batches_on_user_id_and_site_id` (`user_id`,`site_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE `mappings_staging` (
@@ -98,9 +144,26 @@ CREATE TABLE `organisations` (
   KEY `index_organisations_on_title` (`title`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+CREATE TABLE `organisations_sites` (
+  `site_id` int(11) NOT NULL,
+  `organisation_id` int(11) NOT NULL,
+  UNIQUE KEY `index_organisations_sites_on_site_id_and_organisation_id` (`site_id`,`organisation_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 CREATE TABLE `schema_migrations` (
   `version` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   UNIQUE KEY `unique_schema_migrations` (`version`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `sessions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `session_id` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `data` text COLLATE utf8_unicode_ci,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index_sessions_on_session_id` (`session_id`),
+  KEY `index_sessions_on_updated_at` (`updated_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE `sites` (
@@ -116,9 +179,30 @@ CREATE TABLE `sites` (
   `global_new_url` text COLLATE utf8_unicode_ci,
   `managed_by_transition` tinyint(1) NOT NULL DEFAULT '1',
   `launch_date` date DEFAULT NULL,
+  `special_redirect_strategy` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_sites_on_site` (`abbr`),
   KEY `index_sites_on_organisation_id` (`organisation_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `taggings` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `tag_id` int(11) DEFAULT NULL,
+  `taggable_id` int(11) DEFAULT NULL,
+  `taggable_type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `tagger_id` int(11) DEFAULT NULL,
+  `tagger_type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `context` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `taggings_idx` (`tag_id`,`taggable_id`,`taggable_type`,`context`,`tagger_id`,`tagger_type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `tags` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_tags_on_name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE `users` (
@@ -200,3 +284,35 @@ INSERT INTO schema_migrations (version) VALUES ('20131202174921');
 INSERT INTO schema_migrations (version) VALUES ('20131203102650');
 
 INSERT INTO schema_migrations (version) VALUES ('20131203115518');
+
+INSERT INTO schema_migrations (version) VALUES ('20131231133153');
+
+INSERT INTO schema_migrations (version) VALUES ('20140127151418');
+
+INSERT INTO schema_migrations (version) VALUES ('20140127151419');
+
+INSERT INTO schema_migrations (version) VALUES ('20140225152616');
+
+INSERT INTO schema_migrations (version) VALUES ('20140225161453');
+
+INSERT INTO schema_migrations (version) VALUES ('20140225175741');
+
+INSERT INTO schema_migrations (version) VALUES ('20140227154306');
+
+INSERT INTO schema_migrations (version) VALUES ('20140227154752');
+
+INSERT INTO schema_migrations (version) VALUES ('20140228173250');
+
+INSERT INTO schema_migrations (version) VALUES ('20140228174448');
+
+INSERT INTO schema_migrations (version) VALUES ('20140331115315');
+
+INSERT INTO schema_migrations (version) VALUES ('20140331121029');
+
+INSERT INTO schema_migrations (version) VALUES ('20140404112839');
+
+INSERT INTO schema_migrations (version) VALUES ('20140417100412');
+
+INSERT INTO schema_migrations (version) VALUES ('20140422160500');
+
+INSERT INTO schema_migrations (version) VALUES ('20140422184036');
