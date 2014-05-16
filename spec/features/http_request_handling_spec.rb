@@ -334,6 +334,16 @@ describe 'HTTP request handling' do
         its(:location) { should == 'http://www.gov.uk/global-new' }
       end
 
+      describe 'sites where we append the original path' do
+        before do
+          site.update_attribute(:global_redirect_append_path, true)
+          get 'http://www.minitrue.gov.uk/my-page'
+        end
+
+        it_behaves_like 'a redirect'
+        its(:location) { should == 'http://www.gov.uk/global-new/my-page' }
+      end
+
       describe 'visiting a /404 URL' do
         before do
           get 'http://www.minitrue.gov.uk/404'

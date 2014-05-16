@@ -4,7 +4,13 @@ module Bouncer
       def serve
         case context.site.global_http_status
         when '301'
-          guarded_redirect(context.site.global_new_url)
+          new_url = if context.site.global_redirect_append_path
+            File.join(context.site.global_new_url,
+                      context.request.non_canonicalised_fullpath)
+          else
+            context.site.global_new_url
+          end
+          guarded_redirect(new_url)
         when '410'
           [410, { 'Content-Type' => 'text/html' }, [renderer.render(context, 410)]]
         else
