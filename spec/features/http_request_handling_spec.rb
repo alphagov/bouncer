@@ -50,7 +50,6 @@ describe 'HTTP request handling' do
 
   shared_examples 'a redirect' do
     its(:status) { should == 301 }
-    its(:type)   { should == 'redirect' }
     specify      { last_response.headers['Cache-Control'].should == 'public, max-age=3600' }
   end
 

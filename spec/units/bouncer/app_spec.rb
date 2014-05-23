@@ -76,14 +76,14 @@ describe Bouncer::App do
       let(:mapping) { double 'mapping' }
 
       before(:each) do
-        mapping.stub type: type, http_status: status_code.to_s
+        mapping.stub type: type
       end
 
       shared_examples 'a redirector which recognises the host and path' do
         it_should_behave_like 'a redirector which recognises the host'
 
-        it 'should get the mapping\'s status code' do
-          mapping.should_receive(:http_status).with(no_args)
+        it 'should get the mapping\'s type' do
+          mapping.should_receive(:type).with(no_args)
           get url
         end
       end
