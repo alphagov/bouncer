@@ -48,12 +48,12 @@ describe 'HTTP request handling' do
     specify        { last_response.headers['Cache-Control'].should == 'public, max-age=3600' }
   end
 
-  shared_examples 'a redirect' do
+  shared_examples 'a 301' do
     its(:status) { should == 301 }
     specify      { last_response.headers['Cache-Control'].should == 'public, max-age=3600' }
   end
 
-  shared_examples 'an archive' do
+  shared_examples 'a 410' do
     its(:status) { should == 410 }
     its(:content_type) { should == 'text/html' }
     specify      { last_response.headers['Cache-Control'].should == 'public, max-age=3600' }
@@ -69,7 +69,7 @@ describe 'HTTP request handling' do
       get 'http://www.minitrue.gov.uk'
     end
 
-    it_behaves_like 'a redirect'
+    it_behaves_like 'a 301'
   end
 
   describe 'visiting a URL which has been redirected (but not canonicalised)' do
@@ -84,7 +84,7 @@ describe 'HTTP request handling' do
       get 'http://www.minitrue.gov.uk/a-redirected-page///'
     end
 
-    it_behaves_like 'a redirect'
+    it_behaves_like 'a 301'
     its(:location) { should == 'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page' }
   end
 
@@ -101,7 +101,7 @@ describe 'HTTP request handling' do
       get 'https://www.MINITRUE.gov.uk/a-redirected-page?b=2&a=1'
     end
 
-    it_behaves_like 'a redirect'
+    it_behaves_like 'a 301'
     its(:location) { should == 'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page' }
   end
 
@@ -120,7 +120,7 @@ describe 'HTTP request handling' do
         site.hosts.first.update_attribute(:hostname, "minitrue.gov.uk")
         get 'http://aka-minitrue.gov.uk/a-redirected-page'
       end
-      it_behaves_like 'a redirect'
+      it_behaves_like 'a 301'
       its(:location) { should == 'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page' }
     end
 
@@ -128,7 +128,7 @@ describe 'HTTP request handling' do
       before do
         get 'http://aka.minitrue.gov.uk/a-redirected-page'
       end
-      it_behaves_like 'a redirect'
+      it_behaves_like 'a 301'
       its(:location) { should == 'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page' }
     end
   end
@@ -237,7 +237,7 @@ describe 'HTTP request handling' do
       get 'http://www.minitrue.gov.uk/an-archived-page?non-canonical-param=1'
     end
 
-    it_behaves_like 'an archive'
+    it_behaves_like 'a 410'
 
     its(:body) { should include '<title>410 - Page Archived</title>' }
     its(:body) { should include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>' }
@@ -257,7 +257,7 @@ describe 'HTTP request handling' do
       get 'http://www.minitrue.gov.uk/an-archived-page'
     end
 
-    it_behaves_like 'an archive'
+    it_behaves_like 'a 410'
 
     its(:body) { should include '<title>410 - Page Archived</title>' }
     its(:body) { should include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>' }
@@ -278,7 +278,7 @@ describe 'HTTP request handling' do
       get 'http://www.minitrue.gov.uk/an-archived-page'
     end
 
-    it_behaves_like 'an archive'
+    it_behaves_like 'a 410'
 
     its(:body) { should include '<title>410 - Page Archived</title>' }
     its(:body) { should include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>' }
@@ -341,7 +341,7 @@ describe 'HTTP request handling' do
           get 'http://www.minitrue.gov.uk/any-page'
         end
 
-        it_behaves_like 'a redirect'
+        it_behaves_like 'a 301'
         its(:location) { should == 'http://www.gov.uk/global-new' }
       end
 
@@ -351,7 +351,7 @@ describe 'HTTP request handling' do
           get 'http://www.minitrue.gov.uk/my-page'
         end
 
-        it_behaves_like 'a redirect'
+        it_behaves_like 'a 301'
         its(:location) { should == 'http://www.gov.uk/global-new/my-page' }
       end
 
@@ -368,7 +368,7 @@ describe 'HTTP request handling' do
           get 'http://www.minitrue.gov.uk/410'
         end
 
-        it_behaves_like 'an archive'
+        it_behaves_like 'a 410'
       end
 
       describe 'visiting /sitemap.xml' do
@@ -412,7 +412,7 @@ describe 'HTTP request handling' do
           get 'http://www.minitrue.gov.uk'
         end
 
-        it_behaves_like 'an archive'
+        it_behaves_like 'a 410'
       end
 
       describe 'visiting a URL' do
@@ -420,7 +420,7 @@ describe 'HTTP request handling' do
           get 'http://www.minitrue.gov.uk/any-page'
         end
 
-        it_behaves_like 'an archive'
+        it_behaves_like 'a 410'
       end
 
       describe 'visiting a /404 URL' do
@@ -436,7 +436,7 @@ describe 'HTTP request handling' do
           get 'http://www.minitrue.gov.uk/410'
         end
 
-        it_behaves_like 'an archive'
+        it_behaves_like 'a 410'
       end
     end
 
@@ -479,7 +479,7 @@ describe 'HTTP request handling' do
       get 'http://www.minitrue.gov.uk/410'
     end
 
-    it_behaves_like 'an archive'
+    it_behaves_like 'a 410'
 
     its(:body) { should include '<title>410 - Page Archived</title>' }
     its(:body) { should include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>' }
@@ -554,7 +554,7 @@ describe 'HTTP request handling' do
       get 'http://www.minitrue.gov.uk'
     end
 
-    it_behaves_like 'a redirect'
+    it_behaves_like 'a 301'
 
     its(:location) { should == 'http://www.gov.uk/government/organisations/ministry-of-truth' }
   end
@@ -618,7 +618,7 @@ describe 'HTTP request handling' do
         get "http://www.minitrue.gov.uk#{path}"
       end
 
-      it_behaves_like 'an archive'
+      it_behaves_like 'a 410'
     end
 
     describe 'parameters without values do not get thrown away' do
@@ -634,7 +634,7 @@ describe 'HTTP request handling' do
         get "http://www.minitrue.gov.uk#{path}"
       end
 
-      it_behaves_like 'an archive'
+      it_behaves_like 'a 410'
     end
   end
 
@@ -647,7 +647,7 @@ describe 'HTTP request handling' do
           get 'http://www.dfid.gov.uk/r4d/Output/193679/Default.aspx'
         end
 
-        it_behaves_like 'a redirect'
+        it_behaves_like 'a 301'
         its(:location) { should == 'http://r4d.dfid.gov.uk/Output/193679/Default.aspx' }
       end
     end
@@ -668,7 +668,7 @@ describe 'HTTP request handling' do
           get 'http://www.dh.gov.uk/a/b/dh_digitalassets/c'
         end
 
-        it_behaves_like 'an archive'
+        it_behaves_like 'a 410'
 
         its(:content_type) { should == 'text/html' }
         its(:body) { should include '<title>410 - Page Archived</title>' }
@@ -692,7 +692,7 @@ describe 'HTTP request handling' do
           get 'http://www.dh.gov.uk/dh_digitalassets/really-special-asset'
         end
 
-        it_behaves_like 'a redirect'
+        it_behaves_like 'a 301'
         its(:location) { should == 'http://www.gov.uk/government/organisations/dh/really-special-asset' }
       end
     end
@@ -705,7 +705,7 @@ describe 'HTTP request handling' do
           get 'http://www.direct.gov.uk/a/b/en/AdvancedSearch'
         end
 
-        it_behaves_like 'a redirect'
+        it_behaves_like 'a 301'
         its(:location) { should == 'https://www.gov.uk/search' }
       end
 
@@ -714,7 +714,7 @@ describe 'HTTP request handling' do
           get 'http://www.direct.gov.uk/a/b/AdvancedSearch'
         end
 
-        it_behaves_like 'a redirect'
+        it_behaves_like 'a 301'
         its(:location) { should == 'https://www.gov.uk/search' }
       end
 
@@ -725,7 +725,7 @@ describe 'HTTP request handling' do
           get 'http://campaigns.direct.gov.uk/a/firekills/b'
         end
 
-        it_behaves_like 'a redirect'
+        it_behaves_like 'a 301'
         its(:location) { should == 'https://www.gov.uk/firekills' }
       end
     end
@@ -738,7 +738,7 @@ describe 'HTTP request handling' do
           get 'http://www.environment-agency.gov.uk/homeandleisure/floods/34678.aspx?type=Region&term=Anglian'
         end
 
-        it_behaves_like 'a redirect'
+        it_behaves_like 'a 301'
         its(:location) { should == 'http://apps.environment-agency.gov.uk/flood/34678.aspx?type=Region&term=Anglian' }
       end
 
@@ -747,7 +747,7 @@ describe 'HTTP request handling' do
           get 'http://www.environment-agency.gov.uk/homeandleisure/floods/cy/34678.aspx?type=Region&term=Wales&Severity=1'
         end
 
-        it_behaves_like 'a redirect'
+        it_behaves_like 'a 301'
         its(:location) { should  == 'http://apps.environment-agency.gov.uk/flood/cy/34678.aspx?type=Region&term=Wales&Severity=1' }
       end
 
@@ -756,7 +756,7 @@ describe 'HTTP request handling' do
           get 'http://www.environment-agency.gov.uk/homeandleisure/floods/riverlevels/120691.aspx?foo=bar'
         end
 
-        it_behaves_like 'a redirect'
+        it_behaves_like 'a 301'
         its(:location) { should == 'http://apps.environment-agency.gov.uk/river-and-sea-levels/120691.aspx?foo=bar'}
       end
 
@@ -765,7 +765,7 @@ describe 'HTTP request handling' do
           get 'http://www.environment-agency.gov.uk/homeandleisure/floods/riverlevels/cy/120691.aspx?foo=bar'
         end
 
-        it_behaves_like 'a redirect'
+        it_behaves_like 'a 301'
         its(:location) { should == 'http://apps.environment-agency.gov.uk/river-and-sea-levels/cy/120691.aspx?foo=bar' }
       end
 
@@ -775,7 +775,7 @@ describe 'HTTP request handling' do
             get 'http://www.environment-agency.gov.uk/homeandleisure/floods/riverlevels/'
           end
 
-          it_behaves_like 'a redirect'
+          it_behaves_like 'a 301'
           its(:location) { should == 'http://apps.environment-agency.gov.uk/river-and-sea-levels/' }
         end
 
@@ -784,7 +784,7 @@ describe 'HTTP request handling' do
             get 'http://www.environment-agency.gov.uk/homeandleisure/floods/riverlevels'
           end
 
-          it_behaves_like 'a redirect'
+          it_behaves_like 'a 301'
           its(:location) { should == 'http://apps.environment-agency.gov.uk/river-and-sea-levels' }
         end
       end
@@ -796,7 +796,7 @@ describe 'HTTP request handling' do
           get "http://www.environment-agency.gov.uk#{path}"
         end
 
-        it_behaves_like 'a redirect'
+        it_behaves_like 'a 301'
         its(:location) { should == 'http://apps.environment-agency.gov.uk/flood/34678.aspx?page=1'}
       end
 
@@ -818,7 +818,7 @@ describe 'HTTP request handling' do
           get 'http://www.number10.gov.uk/news/latest-news/2007/06/Brown-unveils-new-faces-12225'
         end
 
-        it_behaves_like 'a redirect'
+        it_behaves_like 'a 301'
         its(:location) { should == 'http://www.number10.gov.uk/news/brown-unveils-new-faces' }
       end
     end
@@ -831,7 +831,7 @@ describe 'HTTP request handling' do
           get 'http://cdn.hm-treasury.gov.uk/budget2013_complete.pdf'
         end
 
-        it_behaves_like 'a redirect'
+        it_behaves_like 'a 301'
         its(:location) { should == 'http://www.hm-treasury.gov.uk/budget2013_complete.pdf' }
       end
     end
@@ -844,7 +844,7 @@ describe 'HTTP request handling' do
           get 'http://digital.cabinetoffice.gov.uk/tag/david-mann'
         end
 
-        it_behaves_like 'a redirect'
+        it_behaves_like 'a 301'
         its(:location) { should == 'https://gds.blog.gov.uk/tag/david-mann' }
       end
     end
