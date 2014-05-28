@@ -6,6 +6,7 @@ admin.business-events.org.uk
 apps.nationalcollege.org.uk
 britishbusinesssummit.com
 confirmsubscription.com
+createsend.com
 dh.firstactuarial.co.uk
 foodanddrink.nsacademy.co.uk
 londonpressservice.org.uk
@@ -22,6 +23,7 @@ wsr.pearsonvue.com
 www.aboutmyvote.co.uk
 www.apprenticeships.org.uk
 www.bigsocietyawards.org
+www.brighttalk.com
 www.britishbusinesssummit.com
 www.britishcouncil.org
 www.businesslink.innovateuk.org
@@ -36,6 +38,7 @@ www.darwininitiative.org.uk
 www.dignityincare.org.uk
 www.eblex.org.uk
 www.educationuk.org
+www.eventbrite.co.uk
 www.electoralcommission.org.uk
 www.esd.org.uk
 www.flytippingactionwales.org
@@ -47,6 +50,7 @@ www.iaea.org
 www.independentreviewmechanism.org.uk
 www.ioe.ac.uk
 www.itskillsacademy.ac.uk
+www.joinmonitor.com
 www.legalombudsman.org.uk
 www.lgbce.org.uk
 www.lituktestbooking.co.uk
