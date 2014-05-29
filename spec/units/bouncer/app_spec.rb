@@ -76,21 +76,22 @@ describe Bouncer::App do
       let(:mapping) { double 'mapping' }
 
       before(:each) do
-        mapping.stub http_status: status_code.to_s
+        mapping.stub type: type
       end
 
       shared_examples 'a redirector which recognises the host and path' do
         it_should_behave_like 'a redirector which recognises the host'
 
-        it 'should get the mapping\'s status code' do
-          mapping.should_receive(:http_status).with(no_args)
+        it 'should get the mapping\'s type' do
+          mapping.should_receive(:type).with(no_args)
           get url
         end
       end
 
       context 'when the URL has been redirected' do
+        let(:type)        { 'redirect' }
         let(:status_code) { 301 }
-        let(:new_url) { "http://www.gov.uk" }
+        let(:new_url)     { "http://www.gov.uk" }
 
         before(:each) do
           mapping.stub new_url: new_url
@@ -125,6 +126,7 @@ describe Bouncer::App do
       end
 
       context 'when the URL has been archived' do
+        let(:type)        { 'archive' }
         let(:status_code) { 410 }
 
         it_should_behave_like 'a redirector which recognises the host and path'
@@ -137,7 +139,8 @@ describe Bouncer::App do
     end
 
     context 'when the path is not recognised' do
-      let(:mapping) { nil }
+      let(:mapping)     { nil }
+      let(:type)        { 'never used' }
       let(:status_code) { 404 }
 
       it_should_behave_like 'a redirector which recognises the host'
@@ -150,7 +153,8 @@ describe Bouncer::App do
   end
 
   context 'when the host is not recognised' do
-    let(:host) { nil }
+    let(:host)        { nil }
+    let(:type)        { 'never used' }
     let(:status_code) { 404 }
 
     it_should_behave_like 'a redirector'

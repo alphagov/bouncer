@@ -10,10 +10,10 @@ module Bouncer
 
       def mapping
         if context.mapping
-          case context.mapping.try(:http_status)
-          when '301'
+          case context.mapping.try(:type)
+          when 'redirect'
             guarded_redirect(context.mapping.new_url)
-          when '410'
+          when 'archive'
             [410, { 'Content-Type' => 'text/html' }, [renderer.render(context, 410)]]
           end
         end
