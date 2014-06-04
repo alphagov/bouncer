@@ -18,8 +18,8 @@ module Bouncer
                   Outcome::Sitemap
                 when context.request.path == '/robots.txt'
                   Outcome::Robots
-                when context.site.global_http_status
-                  Outcome::GlobalHTTPStatus
+                when context.site.global_type
+                  Outcome::GlobalType
                 when context.request.path == '' # after c14n, '' is equivalent to '/'
                   Outcome::Homepage
                 else
