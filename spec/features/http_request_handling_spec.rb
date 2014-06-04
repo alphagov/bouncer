@@ -219,6 +219,21 @@ describe 'HTTP request handling' do
     its(:location) { should == 'http://anything-at-all.mod.uk' }
   end
 
+  describe 'visiting a URL which redirects to a URL including square brackets' do
+    before do
+      site.mappings.create \
+        path:         '/a-redirected-page',
+        path_hash:    Digest::SHA1.hexdigest('/a-redirected-page'),
+        type:         'redirect',
+        new_url:      'http://www.gov.uk/[0]'
+
+      get 'http://www.minitrue.gov.uk/a-redirected-page'
+    end
+
+    it_behaves_like 'a 301'
+    its(:location) { should == 'http://www.gov.uk/[0]' }
+  end
+
   describe 'visiting a URL which has been archived' do
     before do
       site.mappings.create \

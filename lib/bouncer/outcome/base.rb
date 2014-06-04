@@ -15,7 +15,7 @@ module Bouncer
       end
 
       def legal_redirect?(url)
-        host = URI.parse(url).host
+        host = Addressable::URI.parse(url).host
         host.end_with?('.gov.uk') || host.end_with?('.mod.uk') || whitelist.include?(host)
       end
 

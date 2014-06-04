@@ -9,7 +9,7 @@ module Bouncer
         Nokogiri::XML::Builder.new do |xml|
           xml.urlset xmlns: 'http://www.sitemaps.org/schemas/sitemap/0.9' do
             context.mappings.where(type: 'redirect').each do |mapping|
-              url = URI.parse(mapping.path).tap do |uri|
+              url = Addressable::URI.parse(mapping.path).tap do |uri|
                 uri.scheme = 'http'
                 uri.host   = context.request.host
               end
