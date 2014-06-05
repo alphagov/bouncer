@@ -7,6 +7,7 @@ require 'uri'
 require 'rendering_context'
 require 'status_renderer'
 require 'host'
+require 'whitelisted_host'
 require 'optic14n'
 require 'airbrake'
 
