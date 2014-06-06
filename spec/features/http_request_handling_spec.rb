@@ -325,10 +325,10 @@ describe 'HTTP request handling' do
     its(:body) { should include '<a href="http://webarchive.nationalarchives.gov.uk/20130724103251/http://www.miniluv.gov.uk">UK Government Web Archive</a>' }
   end
 
-  describe 'sites with global_http_statuses' do
+  describe 'sites with global types' do
     describe 'sites with global redirects' do
       before do
-        site.update_attribute(:global_http_status, '301')
+        site.update_attribute(:global_type, 'redirect')
         site.update_attribute(:global_new_url, 'http://www.gov.uk/global-new')
       end
 
@@ -405,9 +405,9 @@ describe 'HTTP request handling' do
       end
     end
 
-    describe 'sites with global 410' do
+    describe 'sites with global archive' do
       before do
-        site.update_attribute(:global_http_status, '410')
+        site.update_attribute(:global_type, 'archive')
       end
 
       describe 'visiting the homepage' do
@@ -443,9 +443,9 @@ describe 'HTTP request handling' do
       end
     end
 
-    describe 'sites with an unexpected global status' do
+    describe 'sites with an unexpected global type' do
       before do
-        site.update_attribute(:global_http_status, '999')
+        site.update_attribute(:global_type, 'nonsense')
         get 'http://www.minitrue.gov.uk'
       end
 

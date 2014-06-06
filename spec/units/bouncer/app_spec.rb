@@ -44,7 +44,7 @@ describe Bouncer::App do
       host.stub site: site
       site.stub mappings: mappings
       site.stub query_params: nil
-      site.stub global_http_status: nil
+      site.stub global_type: nil
       mappings.stub find_by: mapping
     end
 
