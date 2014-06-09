@@ -13,7 +13,7 @@ module Bouncer
           case context.mapping.try(:type)
           when 'redirect'
             guarded_redirect(context.mapping.new_url)
-          when 'archive'
+          when 'unresolved', 'archive'
             [410, { 'Content-Type' => 'text/html' }, [renderer.render(context, 410)]]
           end
         end
