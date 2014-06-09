@@ -272,6 +272,18 @@ describe 'HTTP request handling' do
     its(:body) { should include 'Visit <a href="http://www.truthiness.co.uk/">www.truthiness.co.uk</a> for more information on this topic.' }
   end
 
+  describe 'visiting a URL about which no decision has been made' do
+    before do
+      site.mappings.create \
+        path:           '/an-unresolved-page',
+        path_hash:      Digest::SHA1.hexdigest('/an-unresolved-page'),
+        type:           'unresolved'
+      get 'http://www.minitrue.gov.uk/an-unresolved-page'
+    end
+
+    it_behaves_like 'a 410'
+  end
+
   describe 'visiting a URL which has been archived with an archive URL' do
     before do
       site.mappings.create \
