@@ -738,6 +738,37 @@ describe 'HTTP request handling' do
       end
     end
 
+    describe 'Businesslink redirects' do
+      before { site.hosts.create hostname: 'www.businesslink.gov.uk' }
+
+      describe 'visiting a former businesslink site for Wales' do
+        before do
+          get 'http://www.businesslink.gov.uk/bdotg/action/ercsectorsdetails?r.lc=en&itemid=1077111298&site=230'
+        end
+
+        it_behaves_like 'a 301'
+        its(:location) { should == 'http://business.wales.gov.uk/bdotg/action/ercsectorsdetails?r.lc=en&itemid=1077111298&site=230' }
+      end
+
+      describe 'visiting a former businesslink site for Northern Ireland' do
+        before do
+          get 'http://www.businesslink.gov.uk/bdotg/action/layer?topicId=1073935899&site=191'
+        end
+
+        it_behaves_like 'a 301'
+        its(:location) { should == 'http://www.nibusinessinfo.co.uk/bdotg/action/layer?topicId=1073935899&site=191' }
+      end
+
+      describe 'Businesslink URL that shouldn\'t match' do
+        before do
+          get('http://www.businesslink.gov.uk/bdotg/action/piplink?agency_id=875&service_id=15200011401&site=2000')
+        end
+
+        it_behaves_like 'a 404'
+        its(:location) { should == nil }
+      end
+    end
+
     describe 'Environment Agency' do
       before { site.hosts.create hostname: 'www.environment-agency.gov.uk' }
 

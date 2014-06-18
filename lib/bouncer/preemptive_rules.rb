@@ -15,6 +15,12 @@ module Bouncer
         elsif request.non_canonicalised_fullpath =~ %r{^/homeandleisure/floods/((cy/)?(34678|34681|147053)\.aspx(\?.*)?)$}i
           redirect("http://apps.environment-agency.gov.uk/flood/#{$1}")
         end
+      elsif request.host == 'www.businesslink.gov.uk'
+        if request.non_canonicalised_fullpath =%r{^(.*site=230.*)$}i
+          redirect("http://business.wales.gov.uk#{$1}")
+        elsif request.non_canonicalised_fullpath =%r{^(.*site=191.*)$}i
+          redirect("http://www.nibusinessinfo.co.uk#{$1}")
+        end
       end
     end
   end
