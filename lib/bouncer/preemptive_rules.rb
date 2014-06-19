@@ -9,8 +9,8 @@ module Bouncer
 
     def self.try(context, renderer)
       request = context.request
-      case request.host
 
+      case request.host
       when 'www.environment-agency.gov.uk'
         case request.non_canonicalised_fullpath
         when %r{^/homeandleisure/floods/riverlevels(/.*)?$}i
