@@ -42,7 +42,7 @@ module Bouncer
         homepage: site.try(:homepage),
         title: organisation_main_site? ? "#{organisation.try(:title)} " : nil,
         css: organisation.try(:css),
-        furl: organisation_main_site? ? organisation.try(:furl) : site.try(:homepage),
+        furl: organisation_main_site? ? organisation.try(:furl) : nil,
         host: host.try(:hostname),
         tna_timestamp: site.try(:tna_timestamp).try(:strftime, '%Y%m%d%H%M%S'),
         request_uri: request.non_canonicalised_fullpath,
