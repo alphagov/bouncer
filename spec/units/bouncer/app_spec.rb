@@ -37,14 +37,18 @@ describe Bouncer::App do
     let(:host) { double 'host' }
     let(:path_hash) { double 'path hash' }
     let(:site) { double 'site' }
+    let(:organisation) { double 'organisation' }
     let(:mappings) { double 'mappings' }
 
     before(:each) do
       Digest::SHA1.stub hexdigest: path_hash
       host.stub site: site
+      organisation.stub homepage: 'http://www.gov.uk/dept'
       site.stub mappings: mappings
       site.stub query_params: nil
       site.stub global_type: nil
+      site.stub homepage: 'http://www.gov.uk/dept'
+      site.stub organisation: organisation
       mappings.stub find_by: mapping
     end
 

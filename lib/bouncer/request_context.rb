@@ -30,15 +30,19 @@ module Bouncer
       site.organisation
     end
 
+    def organisation_main_site?
+      organisation.homepage == site.homepage
+    end
+
     def attributes_for_render
       site = host.try(:site)
       organisation = site.try(:organisation)
 
       {
-        homepage: organisation.try(:homepage),
-        title: organisation.try(:title),
+        homepage: site.try(:homepage),
+        title: organisation_main_site? ? "#{organisation.try(:title)} " : nil,
         css: organisation.try(:css),
-        furl: organisation.try(:furl),
+        furl: organisation_main_site? ? organisation.try(:furl) : site.try(:homepage),
         host: host.try(:hostname),
         tna_timestamp: site.try(:tna_timestamp).try(:strftime, '%Y%m%d%H%M%S'),
         request_uri: request.non_canonicalised_fullpath,
