@@ -35,10 +35,10 @@ module Bouncer
       organisation = site.organisation
 
       {
-        homepage: organisation.homepage,
-        title: organisation.title,
+        homepage: site.homepage,
+        title: site.homepage_title || organisation.title,
         css: organisation.css,
-        furl: organisation.furl,
+        furl: site.homepage_furl,
         host: host.hostname,
         tna_timestamp: site.tna_timestamp.try(:strftime, '%Y%m%d%H%M%S'),
         request_uri: request.non_canonicalised_fullpath,

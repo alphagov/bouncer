@@ -13,25 +13,22 @@ describe 'HTTP request handling' do
 
   let(:department_of_health) do
     Organisation.create \
-      homepage: 'https://www.gov.uk/government/organisations/department-of-health',
       title: 'Department of Health',
-      css: 'department-of-health',
-      furl: 'www.gov.uk/doh'
+      css: 'department-of-health'
   end
 
   let(:organisation) do
     Organisation.create \
-      homepage: 'http://www.gov.uk/government/organisations/ministry-of-truth',
       title: 'Ministry of Truth',
-      css: 'ministry-of-truth',
-      furl: 'www.gov.uk/mot'
+      css: 'ministry-of-truth'
   end
 
   let!(:site) do
     organisation.sites.create(
       abbr: 'minit',
       tna_timestamp: '2012-10-26 06:52:14',
-      homepage: 'http://www.gov.uk/government/organisations/ministry-of-truth'
+      homepage: 'http://www.gov.uk/government/organisations/ministry-of-truth',
+      homepage_furl: 'www.gov.uk/mot'
     ).tap do |site|
       site.hosts.create hostname: 'www.minitrue.gov.uk'
     end
@@ -303,6 +300,21 @@ describe 'HTTP request handling' do
     its(:body) { should include '<a href="http://webarchive.nationalarchives.gov.uk/20130101000000/http://www.minitrue.gov.uk/an-archived-page/the_actual_page.php">This item has been archived</a>' }
   end
 
+  describe 'visiting a URL which has been archived on a site with a custom title' do
+    before do
+      site.update_attribute(:homepage_title, 'Custom Title')
+      site.mappings.create \
+        path:         '/an-archived-page',
+        path_hash:    Digest::SHA1.hexdigest('/an-archived-page'),
+        type:         'archive'
+      get 'http://www.minitrue.gov.uk/an-archived-page'
+    end
+
+    it_behaves_like 'a 410'
+
+    its(:body) { should include 'Visit the new Custom Title site at <a href="http://www.gov.uk/government/organisations/ministry-of-truth">www.gov.uk/mot</a>' }
+  end
+
   describe 'visiting an unrecognised path on a recognised host' do
     before do
       get 'http://www.minitrue.gov.uk/an-unrecognised-page'
@@ -320,8 +332,8 @@ describe 'HTTP request handling' do
 
   describe 'visiting an unrecognised path on a different recognised host' do
     before do
-      Organisation.create(homepage: 'http://www.gov.uk/government/organisations/ministry-of-love', title: 'Ministry of Love', css: 'ministry-of-love').
-        sites.create(tna_timestamp: '2013-07-24 10:32:51', abbr: 'minil').
+      Organisation.create(css: 'ministry-of-love', title: 'Ministry of Love').
+        sites.create(tna_timestamp: '2013-07-24 10:32:51', abbr: 'minil', homepage: 'http://www.gov.uk/government/organisations/ministry-of-love').
         hosts.create hostname: 'www.miniluv.gov.uk'
 
       get 'http://www.miniluv.gov.uk/an-unrecognised-page'
@@ -505,7 +517,7 @@ describe 'HTTP request handling' do
 
   describe 'visiting a /410 URL with no furl' do
     before do
-      organisation.update_attribute(:furl, nil)
+      site.update_attribute(:homepage_furl, nil)
       get 'http://www.minitrue.gov.uk/410'
     end
 
@@ -666,7 +678,8 @@ describe 'HTTP request handling' do
         department_of_health.sites.create(
             abbr: 'dh',
             tna_timestamp: '2012-10-26 06:52:14',
-            homepage: 'https://www.gov.uk/government/organisations/department-of-health'
+            homepage: 'https://www.gov.uk/government/organisations/department-of-health',
+            homepage_furl: 'www.gov.uk/doh'
         ).tap do |site|
           site.hosts.create hostname: 'www.dh.gov.uk'
         end
