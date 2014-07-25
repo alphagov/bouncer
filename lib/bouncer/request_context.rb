@@ -31,16 +31,16 @@ module Bouncer
     end
 
     def attributes_for_render
-      site = host.try(:site)
-      organisation = site.try(:organisation)
+      site = host.site
+      organisation = site.organisation
 
       {
-        homepage: organisation.try(:homepage),
-        title: organisation.try(:title),
-        css: organisation.try(:css),
-        furl: organisation.try(:furl),
-        host: host.try(:hostname),
-        tna_timestamp: site.try(:tna_timestamp).try(:strftime, '%Y%m%d%H%M%S'),
+        homepage: organisation.homepage,
+        title: organisation.title,
+        css: organisation.css,
+        furl: organisation.furl,
+        host: host.hostname,
+        tna_timestamp: site.tna_timestamp.try(:strftime, '%Y%m%d%H%M%S'),
         request_uri: request.non_canonicalised_fullpath,
         suggested_url: mapping.try(:suggested_url),
         archive_url: mapping.try(:archive_url)

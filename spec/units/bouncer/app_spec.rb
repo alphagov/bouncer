@@ -34,17 +34,20 @@ describe Bouncer::App do
   end
 
   context 'when the host is recognised' do
-    let(:host) { double 'host' }
-    let(:path_hash) { double 'path hash' }
-    let(:site) { double 'site' }
-    let(:mappings) { double 'mappings' }
+    let(:host)         { double('host').as_null_object }
+    let(:path_hash)    { double 'path hash' }
+    let(:organisation) { double('organisation').as_null_object }
+    let(:site)         { double 'site' }
+    let(:mappings)     { double 'mappings' }
 
     before(:each) do
       Digest::SHA1.stub hexdigest: path_hash
       host.stub site: site
-      site.stub mappings: mappings
-      site.stub query_params: nil
-      site.stub global_type: nil
+      site.stub mappings: mappings,
+                query_params: nil,
+                global_type: nil,
+                organisation: organisation,
+                tna_timestamp: nil
       mappings.stub find_by: mapping
     end
 
