@@ -315,7 +315,7 @@ describe 'HTTP request handling' do
     its(:body) { should include '<title>404 - Not Found</title>' }
     its(:body) { should include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>' }
     its(:body) { should include '<div class="organisation ministry-of-truth">' }
-    its(:body) { should include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk">UK Government Web Archive</a>' }
+    its(:body) { should include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk/an-unrecognised-page">UK Government Web Archive</a>' }
   end
 
   describe 'visiting an unrecognised path on a different recognised host' do
@@ -334,7 +334,7 @@ describe 'HTTP request handling' do
     its(:body) { should include '<title>404 - Not Found</title>' }
     its(:body) { should include '<a href="http://www.gov.uk/government/organisations/ministry-of-love"><span>Ministry of Love</span></a>' }
     its(:body) { should include '<div class="organisation ministry-of-love">' }
-    its(:body) { should include '<a href="http://webarchive.nationalarchives.gov.uk/20130724103251/http://www.miniluv.gov.uk">UK Government Web Archive</a>' }
+    its(:body) { should include '<a href="http://webarchive.nationalarchives.gov.uk/20130724103251/http://www.miniluv.gov.uk/an-unrecognised-page">UK Government Web Archive</a>' }
   end
 
   describe 'sites with global types' do
@@ -477,7 +477,7 @@ describe 'HTTP request handling' do
     its(:body) { should include '<title>404 - Not Found</title>' }
     its(:body) { should include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>' }
     its(:body) { should include '<div class="organisation ministry-of-truth">' }
-    its(:body) { should include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk">UK Government Web Archive</a>' }
+    its(:body) { should include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk/404">UK Government Web Archive</a>' }
   end
 
   describe 'escaping Database content in the 404 page' do
