@@ -246,7 +246,7 @@ describe 'HTTP request handling' do
     it_behaves_like 'a 410'
 
     its(:body) { should include '<title>410 - Page Archived</title>' }
-    its(:body) { should include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>' }
+    its(:body) { should include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth </span></a>' }
     its(:body) { should include '<div class="organisation ministry-of-truth">' }
     its(:body) { should include 'Visit the new Ministry of Truth site at <a href="http://www.gov.uk/government/organisations/ministry-of-truth">www.gov.uk/mot</a>' }
     its(:body) { should include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk/an-archived-page?non-canonical-param=1">This item has been archived</a>' }
@@ -265,7 +265,7 @@ describe 'HTTP request handling' do
     it_behaves_like 'a 410'
 
     its(:body) { should include '<title>410 - Page Archived</title>' }
-    its(:body) { should include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>' }
+    its(:body) { should include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth </span></a>' }
     its(:body) { should include '<div class="organisation ministry-of-truth">' }
     its(:body) { should include 'Visit the new Ministry of Truth site at <a href="http://www.gov.uk/government/organisations/ministry-of-truth">www.gov.uk/mot</a>' }
     its(:body) { should include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk/an-archived-page">This item has been archived</a>' }
@@ -297,7 +297,7 @@ describe 'HTTP request handling' do
     it_behaves_like 'a 410'
 
     its(:body) { should include '<title>410 - Page Archived</title>' }
-    its(:body) { should include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>' }
+    its(:body) { should include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth </span></a>' }
     its(:body) { should include '<div class="organisation ministry-of-truth">' }
     its(:body) { should include 'Visit the new Ministry of Truth site at <a href="http://www.gov.uk/government/organisations/ministry-of-truth">www.gov.uk/mot</a>' }
     its(:body) { should include '<a href="http://webarchive.nationalarchives.gov.uk/20130101000000/http://www.minitrue.gov.uk/an-archived-page/the_actual_page.php">This item has been archived</a>' }
@@ -313,7 +313,7 @@ describe 'HTTP request handling' do
     its(:content_type) { should == 'text/html' }
 
     its(:body) { should include '<title>404 - Not Found</title>' }
-    its(:body) { should include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>' }
+    its(:body) { should include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth </span></a>' }
     its(:body) { should include '<div class="organisation ministry-of-truth">' }
     its(:body) { should include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk">UK Government Web Archive</a>' }
   end
@@ -321,7 +321,7 @@ describe 'HTTP request handling' do
   describe 'visiting an unrecognised path on a different recognised host' do
     before do
       Organisation.create(homepage: 'http://www.gov.uk/government/organisations/ministry-of-love', title: 'Ministry of Love', css: 'ministry-of-love').
-        sites.create(tna_timestamp: '2013-07-24 10:32:51', abbr: 'minil').
+        sites.create(tna_timestamp: '2013-07-24 10:32:51', abbr: 'minil', homepage: 'http://www.gov.uk/government/organisations/ministry-of-love').
         hosts.create hostname: 'www.miniluv.gov.uk'
 
       get 'http://www.miniluv.gov.uk/an-unrecognised-page'
@@ -332,7 +332,7 @@ describe 'HTTP request handling' do
     its(:content_type) { should == 'text/html' }
 
     its(:body) { should include '<title>404 - Not Found</title>' }
-    its(:body) { should include '<a href="http://www.gov.uk/government/organisations/ministry-of-love"><span>Ministry of Love</span></a>' }
+    its(:body) { should include '<a href="http://www.gov.uk/government/organisations/ministry-of-love"><span>Ministry of Love </span></a>' }
     its(:body) { should include '<div class="organisation ministry-of-love">' }
     its(:body) { should include '<a href="http://webarchive.nationalarchives.gov.uk/20130724103251/http://www.miniluv.gov.uk">UK Government Web Archive</a>' }
   end
@@ -475,7 +475,7 @@ describe 'HTTP request handling' do
     its(:content_type) { should == 'text/html' }
 
     its(:body) { should include '<title>404 - Not Found</title>' }
-    its(:body) { should include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>' }
+    its(:body) { should include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth </span></a>' }
     its(:body) { should include '<div class="organisation ministry-of-truth">' }
     its(:body) { should include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk">UK Government Web Archive</a>' }
   end
@@ -497,7 +497,7 @@ describe 'HTTP request handling' do
     it_behaves_like 'a 410'
 
     its(:body) { should include '<title>410 - Page Archived</title>' }
-    its(:body) { should include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>' }
+    its(:body) { should include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth </span></a>' }
     its(:body) { should include '<div class="organisation ministry-of-truth">' }
     its(:body) { should include 'Visit the new Ministry of Truth site at <a href="http://www.gov.uk/government/organisations/ministry-of-truth">www.gov.uk/mot</a>' }
     its(:body) { should include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk/410">This item has been archived</a>' }
@@ -510,6 +510,44 @@ describe 'HTTP request handling' do
     end
 
     its(:body) { should include 'Visit the new Ministry of Truth site at <a href="http://www.gov.uk/government/organisations/ministry-of-truth">http://www.gov.uk/government/organisations/ministry-of-truth</a>' }
+  end
+
+  describe 'visiting a /410 URL for a site with a different homepage to its parent' do
+    before do
+      get 'http://www.falsehood-committee.gov.uk/410'
+    end
+
+    let(:html) { last_response.body }
+
+    let!(:site) do
+      organisation.sites.create(
+        abbr: 'comfalse',
+        tna_timestamp: '2012-10-26 06:52:14',
+        homepage: 'http://www.gov.uk/government/organisations/committee-for-falsehood'
+      ).tap do |site|
+        site.hosts.create hostname: 'www.falsehood-committee.gov.uk'
+      end
+    end
+
+    it_behaves_like 'a 410'
+
+    it "has the child site's homepage" do
+      html.should include(
+        '<a href="http://www.gov.uk/government/organisations/committee-for-falsehood">http://www.gov.uk/government/organisations/committee-for-falsehood</a>'
+      )
+    end
+
+    it "does not have the parent organisation's homepage" do
+      html.should_not include('http://www.gov.uk/government/organisations/ministry-of-truth')
+    end
+
+    it "has a generic 'visit the new site' message" do
+      html.should include('Visit the new site')
+    end
+
+    it "does not show the parent organisation's furl" do
+      html.should_not include('www.gov.uk/mot')
+    end
   end
 
   describe 'visiting a /sitemap.xml URL' do
@@ -681,7 +719,7 @@ describe 'HTTP request handling' do
 
         its(:content_type) { should == 'text/html' }
         its(:body) { should include '<title>410 - Page Archived</title>' }
-        its(:body) { should include '<a href="https://www.gov.uk/government/organisations/department-of-health"><span>Department of Health</span></a>' }
+        its(:body) { should include '<a href="https://www.gov.uk/government/organisations/department-of-health"><span>Department of Health </span></a>' }
         its(:body) { should include '<div class="organisation department-of-health">' }
         its(:body) { should include 'Visit the new Department of Health site at <a href="https://www.gov.uk/government/organisations/department-of-health">www.gov.uk/doh</a>' }
         its(:body) { should include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.dh.gov.uk/a/b/dh_digitalassets/c">This item has been archived</a>' }
