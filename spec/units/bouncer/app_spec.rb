@@ -37,7 +37,7 @@ describe Bouncer::App do
     let(:host)         { double('host').as_null_object }
     let(:path_hash)    { double 'path hash' }
     let(:organisation) { double('organisation').as_null_object }
-    let(:site)         { double 'site' }
+    let(:site)         { double('site').as_null_object }
     let(:mappings)     { double 'mappings' }
 
     before(:each) do
