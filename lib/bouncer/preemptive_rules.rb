@@ -26,8 +26,12 @@ module Bouncer
         when %r{^(.*site=191.*)$}i
           redirect("http://www.nibusinessinfo.co.uk#{$1}")
         end
-      end
 
+      when 'www.hpa.org.uk' || 'hpa.org.uk'
+        if request.non_canonicalised_fullpath =~ %r{^(/servlet/Satellite\?.*form-to-process=HPUSearch.*)$}i
+          redirect("http://legacytools.hpa.org.uk#{$1}")
+        end
+      end
     end
   end
 end
