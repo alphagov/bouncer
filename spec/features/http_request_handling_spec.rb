@@ -900,5 +900,44 @@ describe 'HTTP request handling' do
         its(:location) { should == 'https://gds.blog.gov.uk/tag/david-mann' }
       end
     end
+
+    describe 'HPA redirects' do
+      before { site.hosts.create hostname: 'www.hpa.org.uk' }
+
+      describe 'visiting a Health Protection Team search results URL' do
+        before do
+          get 'http://www.hpa.org.uk/servlet/Satellite?pagename=HPAwebWrapper&form-to-process=HPUSearch&postcode=SK4+2ED'
+        end
+
+        it_behaves_like 'a 301'
+        its(:location) { should == 'http://legacytools.hpa.org.uk/servlet/Satellite?pagename=HPAwebWrapper&form-to-process=HPUSearch&postcode=SK4+2ED' }
+      end
+
+      describe 'visiting other types of page with the same path' do
+        describe '(Infectious Diseases index page' do
+          before do
+            get 'http://www.hpa.org.uk/servlet/Satellite?p=1197382228184&goButton=Go&packedargs=null&childpagename=HPAweb%2FPage%2FHPAwebAutoListName&pagename=HPAwebWrapper&c=Page&cid=1190280169369'
+          end
+
+          it_behaves_like 'a 404'
+        end
+
+        describe 'visiting a document URL' do
+          before do
+            get 'http://www.hpa.org.uk/servlet/Satellite?c=HPAweb_C&cid=1194947343018&pagename=HPAwebFile'
+          end
+
+          it_behaves_like 'a 404'
+        end
+
+        describe 'general search URL' do
+          before do
+            get 'http://www.hpa.org.uk/servlet/Satellite?c=Page&childpagename=HPAweb%2FPage%2FHPAwebAutoListName&cid=1153999752025&p=1153999752025&pagename=HPAwebWrapper&searchmode=simple&searchterm=radiation+regulation&go=Search'
+          end
+
+          it_behaves_like 'a 404'
+        end
+      end
+    end
   end
 end
