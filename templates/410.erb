@@ -1,4 +1,3 @@
-<% archive_link = archive_url || "http://webarchive.nationalarchives.gov.uk/#{tna_timestamp}/http://#{host}#{request_uri}" %>
 <!DOCTYPE html>
 <html class="no-branding">
   <head>
@@ -26,10 +25,10 @@
               <div class="organisation <%= css || "no-organisation" %>">
                 <a href="<%= homepage %>"><span><%= title %></span></a>
               </div>
-              <a href="<%= archive_link %>">This item has been archived</a>
+              <a href="<%= archive_url %>">This item has been archived</a>
             </h2>
             <p class="either-or">You can either</p>
-            <p class="call-to-action"><a href="<%= archive_link %>">View the item you were looking for</a> in the UK Government Web Archive</p>
+            <p class="call-to-action"><a href="<%= archive_url %>">View the item you were looking for</a> in the UK Government Web Archive</p>
             <p class="either-or">or</p>
             <p class="call-to-action">Visit the new <%= title %> site at <a href="<%= homepage %>"><%= furl || homepage %></a></p>
             <% if suggested_url %>

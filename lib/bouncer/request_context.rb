@@ -31,24 +31,24 @@ module Bouncer
     end
 
     def attributes_for_render
-      site = host.site
-      organisation = site.organisation
-
       {
         homepage: site.homepage,
         title: site.homepage_title || organisation.title,
         css: organisation.css,
         furl: site.homepage_furl,
         host: host.hostname,
-        tna_timestamp: site.tna_timestamp.try(:strftime, '%Y%m%d%H%M%S'),
-        request_uri: request.non_canonicalised_fullpath,
         suggested_url: mapping.try(:suggested_url),
-        archive_url: mapping.try(:archive_url)
+        archive_url: mapping.try(:archive_url) || default_archive_url
       }
     end
 
     def render_binding
       RenderingContext.new(attributes_for_render).render_binding
+    end
+
+    def default_archive_url
+      tna_timestamp = site.tna_timestamp.try(:strftime, '%Y%m%d%H%M%S')
+      "http://webarchive.nationalarchives.gov.uk/#{tna_timestamp}/http://#{host.hostname}#{request.non_canonicalised_fullpath}"
     end
   end
 end
