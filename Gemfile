@@ -1,7 +1,7 @@
 source 'https://rubygems.org/'
 
-gem 'activerecord', '4.0.2' # This is a mismatch for Transition, which has 3.2.x
-gem 'mysql2', '0.3.11'
+gem 'activerecord', '4.1.5' # Ideally version should be synced with Transition
+gem 'mysql2', '0.3.16'
 gem 'nokogiri', '1.6.0'
 gem 'rack', '1.5.2'
 gem 'optic14n', '2.0.0' # Ideally version should be synced with Transition
