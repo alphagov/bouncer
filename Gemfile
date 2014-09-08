@@ -14,7 +14,7 @@ group :production do
 end
 
 group :development do
-  gem "mr-sparkle", '0.2.0'
+  gem 'mr-sparkle', '0.2.0'
 end
 
 group :test do
