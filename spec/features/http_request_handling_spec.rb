@@ -862,6 +862,38 @@ describe 'HTTP request handling' do
       end
     end
 
+    describe 'Marine Coastguard Agency' do
+      before { site.hosts.create hostname: 'www.mcga.gov.uk' }
+
+      describe '/c4mca/ redirects' do
+        before do
+          get 'http://www.mcga.gov.uk/c4mca/mcga07-home/shipsandcargoes/mcga-shipsregsandguidance.htm'
+        end
+
+        it_behaves_like 'a 301'
+        its(:location) { should == 'http://www.dft.gov.uk/mca/mcga07-home/shipsandcargoes/mcga-shipsregsandguidance.htm' }
+      end
+
+      describe '/mca/ redirects' do
+        before do
+          get 'http://www.mcga.gov.uk/mca/msn1693.pdf'
+        end
+
+        it_behaves_like 'a 301'
+        its(:location) { should == 'http://www.dft.gov.uk/mca/msn1693.pdf' }
+      end
+
+      describe 'other paths use mappings' do
+        before do
+          path = '/hydrography'
+          site.mappings.create(path: path, path_hash: Digest::SHA1.hexdigest(path), type: 'archive')
+          get "http://www.mcga.gov.uk#{path}"
+        end
+
+        it_behaves_like 'a 410'
+      end
+    end
+
     describe 'Number 10 redirects' do
       before { site.hosts.create hostname: 'www.number10.gov.uk' }
 
