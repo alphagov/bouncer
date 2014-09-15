@@ -29,10 +29,10 @@ module Bouncer
 
       when 'www.mcga.gov.uk'
         case request.non_canonicalised_fullpath
-        when %r{^/c4mca(.*)$}
-          redirect("http://www.dft.gov.uk/mca#{$1}")
-        when %r{^/mca(.*)$}
-          redirect("http://www.dft.gov.uk/mca#{$1}")
+        when %r{^/c4mca/(.*)$}
+          redirect("http://www.dft.gov.uk/mca/#{$1}")
+        when %r{^/mca/(.*)$}
+          redirect("http://www.dft.gov.uk/mca/#{$1}")
         end
       end
 
