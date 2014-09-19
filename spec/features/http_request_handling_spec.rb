@@ -865,7 +865,7 @@ describe 'HTTP request handling' do
     describe 'Marine Coastguard Agency' do
       before { site.hosts.create hostname: 'www.mcga.gov.uk' }
 
-      describe '/c4mca/ redirects' do
+      describe 'paths beginning with /c4mca/' do
         before do
           get 'http://www.mcga.gov.uk/c4mca/mcga07-home/shipsandcargoes/mcga-shipsregsandguidance.htm'
         end
@@ -874,7 +874,7 @@ describe 'HTTP request handling' do
         its(:location) { should == 'http://www.dft.gov.uk/mca/mcga07-home/shipsandcargoes/mcga-shipsregsandguidance.htm' }
       end
 
-      describe '/mca/ redirects' do
+      describe 'paths beginning with /mca/' do
         before do
           get 'http://www.mcga.gov.uk/mca/msn1693.pdf'
         end
@@ -883,14 +883,13 @@ describe 'HTTP request handling' do
         its(:location) { should == 'http://www.dft.gov.uk/mca/msn1693.pdf' }
       end
 
-      describe 'other paths use mappings' do
+      describe 'all other paths' do
         before do
-          path = '/hydrography'
-          site.mappings.create(path: path, path_hash: Digest::SHA1.hexdigest(path), type: 'archive')
-          get "http://www.mcga.gov.uk#{path}"
+          get 'http://www.mcga.gov.uk/hydrography'
         end
 
-        it_behaves_like 'a 410'
+        it_behaves_like 'a 301'
+        its(:location) { should == 'http://www.dft.gov.uk/mca/hydrography' }
       end
     end
 

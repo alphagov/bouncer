@@ -33,6 +33,8 @@ module Bouncer
           redirect("http://www.dft.gov.uk/mca/#{$1}")
         when %r{^/mca/(.*)$}
           redirect("http://www.dft.gov.uk/mca/#{$1}")
+        when %r{^/(.*)$}
+          redirect("http://www.dft.gov.uk/mca/#{$1}")
         end
       end
 
