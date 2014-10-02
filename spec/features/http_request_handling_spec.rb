@@ -601,7 +601,7 @@ describe 'HTTP request handling' do
       end
 
       it_behaves_like 'a 404'
-      its(:body) { should be_empty }
+      its(:body) { should eql('This host is not configured in Transition') }
     end
 
     describe 'visiting another page' do
@@ -610,7 +610,7 @@ describe 'HTTP request handling' do
       end
 
       it_behaves_like 'a 404'
-      its(:body) { should be_empty }
+      its(:body) { should eql('This host is not configured in Transition') }
     end
 
     describe 'visiting /healthcheck' do
