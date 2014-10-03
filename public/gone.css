@@ -52,8 +52,8 @@ h1 a {
 h1 a img {
   position: relative;
   display: block;
-  height: 30px;
-  width: 192px;
+  height: 25px;
+  width: auto;
   text-indent: -5000%;
   overflow: hidden;
 }
