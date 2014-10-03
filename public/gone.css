@@ -45,21 +45,15 @@ h1 a {
   position: relative;
   display: block;
   height: 30px;
-  width: 166px;
+  width: 192px;
   overflow: hidden;
 }
 
 h1 a img {
-  position: absolute;
-  left: -166px;
-  top: 0;
-  border: none;
-  width: 200%;
-  height: 300%;
-}
-
-h1 a:hover img {
-  top: -30px;
+  position: relative;
+  display: block;
+  height: 25px;
+  width: auto;
 }
 
 .inner {
