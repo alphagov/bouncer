@@ -27,6 +27,8 @@ module Bouncer
         redirect("http://www.hm-treasury.gov.uk/#{$1}")
       elsif request.host == 'digital.cabinetoffice.gov.uk' && request.path =~ %r{^/(.*)$}
         redirect("https://gds.blog.gov.uk/#{$1}")
+      elsif request.host == 'govstore.service.gov.uk' && request.path =~ %r{^/cloudstore/supplier/}
+        redirect("https://www.gov.uk/digital-marketplace")
       end
     end
   end

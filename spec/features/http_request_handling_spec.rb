@@ -931,5 +931,18 @@ describe 'HTTP request handling' do
         its(:location) { should == 'https://gds.blog.gov.uk/tag/david-mann' }
       end
     end
+
+    describe 'GovStore redirects' do
+      before { site.hosts.create hostname: 'govstore.service.gov.uk' }
+
+      describe 'visiting a /cloudstore/supplier/* URL' do
+        before do
+          get 'http://govstore.service.gov.uk/cloudstore/supplier/a_supplier'
+        end
+
+        it_behaves_like 'a 301'
+        its(:location) { should == 'https://www.gov.uk/digital-marketplace' }
+      end
+    end
   end
 end
