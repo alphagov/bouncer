@@ -935,15 +935,6 @@ describe 'HTTP request handling' do
     describe 'GovStore/CloudStore fallback rules' do
       before { site.hosts.create hostname: 'govstore.service.gov.uk' }
 
-      context 'visiting a /cloudstore/supplier/* URL' do
-        before do
-          get 'http://govstore.service.gov.uk/cloudstore/supplier/a_supplier'
-        end
-
-        it_behaves_like 'a 301'
-        its(:location) { should == 'https://www.gov.uk/digital-marketplace' }
-      end
-
       context 'visiting a /cloudstore/service-id URL' do
         before do
           get 'http://govstore.service.gov.uk/cloudstore/5-g5-0722-028'
@@ -978,6 +969,15 @@ describe 'HTTP request handling' do
 
         it_behaves_like 'a 301'
         its(:location) { should == 'http://www.digitalmarketplace.service.gov.uk/service/5-g5-0722-028' }
+      end
+
+      context 'visiting a GovStore URL that isn\'t for a supplier in a category or within /cloudstore' do
+        before do
+          get 'http://govstore.service.gov.uk/a'
+        end
+
+        it_behaves_like 'a 301'
+        its(:location) { should == 'https://www.gov.uk/digital-marketplace' }
       end
     end
   end
