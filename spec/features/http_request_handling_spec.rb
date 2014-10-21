@@ -931,5 +931,54 @@ describe 'HTTP request handling' do
         its(:location) { should == 'https://gds.blog.gov.uk/tag/david-mann' }
       end
     end
+
+    describe 'GovStore/CloudStore fallback rules' do
+      before { site.hosts.create hostname: 'govstore.service.gov.uk' }
+
+      context 'visiting a /cloudstore/supplier/* URL' do
+        before do
+          get 'http://govstore.service.gov.uk/cloudstore/supplier/a_supplier'
+        end
+
+        it_behaves_like 'a 301'
+        its(:location) { should == 'https://www.gov.uk/digital-marketplace' }
+      end
+
+      context 'visiting a /cloudstore/service-id URL' do
+        before do
+          get 'http://govstore.service.gov.uk/cloudstore/5-g5-0722-028'
+        end
+
+        it_behaves_like 'a 301'
+        its(:location) { should == 'http://www.digitalmarketplace.service.gov.uk/service/5-g5-0722-028' }
+      end
+
+      context 'visiting a /cloudstore/category/service-id URL' do
+        before do
+          get 'http://govstore.service.gov.uk/cloudstore/scs/5-g5-0722-028'
+        end
+
+        it_behaves_like 'a 301'
+        its(:location) { should == 'http://www.digitalmarketplace.service.gov.uk/service/5-g5-0722-028' }
+      end
+
+      context 'visiting a /cloudstore/category/sub-category/service-id URL' do
+        before do
+          get 'http://govstore.service.gov.uk/cloudstore/iaas/sub-category/5-g5-0722-028'
+        end
+
+        it_behaves_like 'a 301'
+        its(:location) { should == 'http://www.digitalmarketplace.service.gov.uk/service/5-g5-0722-028' }
+      end
+
+      context 'visiting a /cloudstore/category/sub-category/sub-sub-category/service-id URL' do
+        before do
+          get 'http://govstore.service.gov.uk/cloudstore/iaas/sub-category/sub-sub-category/5-g5-0722-028'
+        end
+
+        it_behaves_like 'a 301'
+        its(:location) { should == 'http://www.digitalmarketplace.service.gov.uk/service/5-g5-0722-028' }
+      end
+    end
   end
 end
