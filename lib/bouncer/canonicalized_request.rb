@@ -44,8 +44,11 @@ module Bouncer
       #   If it starts with www. we replace www with aka.:
       #     www.bar.com => aka.bar.com
       #
-      # Therefore, to canonicalise it, we need to reverse that transformation:
-      @request.host.sub(/^aka-/, '').sub(/^aka\./, 'www.')
+      # Therefore, to canonicalise it, we need to reverse that transformation.
+      #
+      # We need to downcase because PostgreSQL is case-sensitive when querying,
+      # and canonicalization doesn't handle this for the host.
+      @request.host.sub(/^aka-/, '').sub(/^aka\./, 'www.').downcase
     end
 
   private

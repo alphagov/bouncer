@@ -1,462 +1,1178 @@
--- MySQL dump 10.13  Distrib 5.5.37, for debian-linux-gnu (x86_64)
 --
--- Host: localhost    Database: transition_development
--- ------------------------------------------------------
--- Server version	5.5.37-0ubuntu0.12.04.1-log
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
---
--- Table structure for table `daily_hit_totals`
+-- PostgreSQL database dump
 --
 
-DROP TABLE IF EXISTS `daily_hit_totals`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `daily_hit_totals` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `host_id` int(11) NOT NULL,
-  `http_status` varchar(3) COLLATE utf8_unicode_ci NOT NULL,
-  `count` int(11) NOT NULL,
-  `total_on` date NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `index_daily_hit_totals_on_host_id_and_total_on_and_http_status` (`host_id`,`total_on`,`http_status`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
 
 --
--- Table structure for table `hits`
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
 --
 
-DROP TABLE IF EXISTS `hits`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `hits` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `host_id` int(11) NOT NULL,
-  `path` varchar(1024) COLLATE utf8_bin NOT NULL,
-  `path_hash` varchar(40) COLLATE utf8_bin NOT NULL,
-  `http_status` varchar(3) COLLATE utf8_bin NOT NULL,
-  `count` int(11) NOT NULL,
-  `hit_on` date NOT NULL,
-  `mapping_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `index_hits_on_host_id_and_path_hash_and_hit_on_and_http_status` (`host_id`,`path_hash`,`hit_on`,`http_status`),
-  KEY `index_hits_on_host_id` (`host_id`),
-  KEY `index_hits_on_host_id_and_hit_on` (`host_id`,`hit_on`),
-  KEY `index_hits_on_host_id_and_http_status` (`host_id`,`http_status`),
-  KEY `index_hits_on_mapping_id` (`mapping_id`),
-  KEY `index_hits_on_path_hash` (`path_hash`),
-  KEY `index_hits_on_host_id_and_path_hash` (`host_id`,`path_hash`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
 
 --
--- Table structure for table `hits_staging`
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
 --
 
-DROP TABLE IF EXISTS `hits_staging`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `hits_staging` (
-  `hostname` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `path` varchar(1024) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `http_status` varchar(3) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `count` int(11) DEFAULT NULL,
-  `hit_on` date DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
 
 --
--- Table structure for table `host_paths`
+-- Name: pgcrypto; Type: EXTENSION; Schema: -; Owner: -
 --
 
-DROP TABLE IF EXISTS `host_paths`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `host_paths` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `path` varchar(2048) COLLATE utf8_bin DEFAULT NULL,
-  `path_hash` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `c14n_path_hash` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `host_id` int(11) DEFAULT NULL,
-  `mapping_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `index_host_paths_on_host_id_and_path_hash` (`host_id`,`path_hash`),
-  KEY `index_host_paths_on_c14n_path_hash` (`c14n_path_hash`),
-  KEY `index_host_paths_on_mapping_id` (`mapping_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
+CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA public;
+
 
 --
--- Table structure for table `hosts`
+-- Name: EXTENSION pgcrypto; Type: COMMENT; Schema: -; Owner: -
 --
 
-DROP TABLE IF EXISTS `hosts`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `hosts` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `site_id` int(11) NOT NULL,
-  `hostname` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `ttl` int(11) DEFAULT NULL,
-  `cname` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `live_cname` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
-  `ip_address` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `canonical_host_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `index_hosts_on_host` (`hostname`),
-  KEY `index_hosts_on_site_id` (`site_id`),
-  KEY `index_hosts_on_canonical_host_id` (`canonical_host_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+COMMENT ON EXTENSION pgcrypto IS 'cryptographic functions';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
 
 --
--- Table structure for table `imported_hits_files`
+-- Name: daily_hit_totals; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
-DROP TABLE IF EXISTS `imported_hits_files`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `imported_hits_files` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `filename` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `content_hash` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+CREATE TABLE daily_hit_totals (
+    id integer NOT NULL,
+    host_id integer NOT NULL,
+    http_status character varying(3) NOT NULL,
+    count integer NOT NULL,
+    total_on date NOT NULL
+);
+
 
 --
--- Table structure for table `mappings`
+-- Name: daily_hit_totals_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-DROP TABLE IF EXISTS `mappings`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `mappings` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `site_id` int(11) NOT NULL,
-  `path` varchar(1024) COLLATE utf8_unicode_ci NOT NULL,
-  `path_hash` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
-  `new_url` text COLLATE utf8_unicode_ci,
-  `suggested_url` text COLLATE utf8_unicode_ci,
-  `archive_url` text COLLATE utf8_unicode_ci,
-  `from_redirector` tinyint(1) DEFAULT '0',
-  `type` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `hit_count` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `index_mappings_on_site_id_and_path_hash` (`site_id`,`path_hash`),
-  KEY `index_mappings_on_site_id` (`site_id`),
-  KEY `index_mappings_on_site_id_and_type` (`site_id`,`type`),
-  KEY `index_mappings_on_hit_count` (`hit_count`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+CREATE SEQUENCE daily_hit_totals_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
 
 --
--- Table structure for table `mappings_batch_entries`
+-- Name: daily_hit_totals_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-DROP TABLE IF EXISTS `mappings_batch_entries`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `mappings_batch_entries` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `path` varchar(2048) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `mappings_batch_id` int(11) DEFAULT NULL,
-  `mapping_id` int(11) DEFAULT NULL,
-  `processed` tinyint(1) DEFAULT '0',
-  `klass` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `new_url` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `index_mappings_batch_entries_on_mappings_batch_id` (`mappings_batch_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+ALTER SEQUENCE daily_hit_totals_id_seq OWNED BY daily_hit_totals.id;
+
 
 --
--- Table structure for table `mappings_batches`
+-- Name: hits; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
-DROP TABLE IF EXISTS `mappings_batches`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `mappings_batches` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `tag_list` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `new_url` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `update_existing` tinyint(1) DEFAULT NULL,
-  `user_id` int(11) DEFAULT NULL,
-  `site_id` int(11) DEFAULT NULL,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
-  `state` varchar(255) COLLATE utf8_unicode_ci DEFAULT 'unqueued',
-  `seen_outcome` tinyint(1) DEFAULT '0',
-  `type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `klass` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `index_mappings_batches_on_user_id_and_site_id` (`user_id`,`site_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+CREATE TABLE hits (
+    id integer NOT NULL,
+    host_id integer NOT NULL,
+    path character varying(2048) NOT NULL,
+    path_hash character varying(40) NOT NULL,
+    http_status character varying(3) NOT NULL,
+    count integer NOT NULL,
+    hit_on date NOT NULL,
+    mapping_id integer
+);
+
 
 --
--- Table structure for table `mappings_staging`
+-- Name: hits_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-DROP TABLE IF EXISTS `mappings_staging`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `mappings_staging` (
-  `old_url` mediumtext COLLATE utf8_unicode_ci,
-  `new_url` mediumtext COLLATE utf8_unicode_ci,
-  `host` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `path` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `path_hash` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `suggested_url` mediumtext COLLATE utf8_unicode_ci,
-  `archive_url` mediumtext COLLATE utf8_unicode_ci,
-  `type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+CREATE SEQUENCE hits_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
 
 --
--- Table structure for table `organisational_relationships`
+-- Name: hits_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-DROP TABLE IF EXISTS `organisational_relationships`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `organisational_relationships` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `parent_organisation_id` int(11) DEFAULT NULL,
-  `child_organisation_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `index_organisational_relationships_on_parent_organisation_id` (`parent_organisation_id`),
-  KEY `index_organisational_relationships_on_child_organisation_id` (`child_organisation_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+ALTER SEQUENCE hits_id_seq OWNED BY hits.id;
+
 
 --
--- Table structure for table `organisations`
+-- Name: hits_staging; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
-DROP TABLE IF EXISTS `organisations`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `organisations` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `homepage` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `furl` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
-  `css` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `ga_profile_id` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `whitehall_slug` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `whitehall_type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `abbreviation` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `index_organisations_on_whitehall_slug` (`whitehall_slug`),
-  KEY `index_organisations_on_title` (`title`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+CREATE TABLE hits_staging (
+    hostname character varying(255) DEFAULT NULL::character varying,
+    path text DEFAULT NULL::character varying,
+    http_status character varying(3) DEFAULT NULL::character varying,
+    count integer,
+    hit_on date
+);
+
 
 --
--- Table structure for table `organisations_sites`
+-- Name: host_paths; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
-DROP TABLE IF EXISTS `organisations_sites`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `organisations_sites` (
-  `site_id` int(11) NOT NULL,
-  `organisation_id` int(11) NOT NULL,
-  UNIQUE KEY `index_organisations_sites_on_site_id_and_organisation_id` (`site_id`,`organisation_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+CREATE TABLE host_paths (
+    id integer NOT NULL,
+    path character varying(2048) DEFAULT NULL::character varying,
+    path_hash character varying(255) DEFAULT NULL::character varying,
+    c14n_path_hash character varying(255) DEFAULT NULL::character varying,
+    host_id integer,
+    mapping_id integer
+);
+
 
 --
--- Table structure for table `schema_migrations`
+-- Name: host_paths_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-DROP TABLE IF EXISTS `schema_migrations`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `schema_migrations` (
-  `version` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  UNIQUE KEY `unique_schema_migrations` (`version`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+CREATE SEQUENCE host_paths_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
 
 --
--- Table structure for table `sessions`
+-- Name: host_paths_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-DROP TABLE IF EXISTS `sessions`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `sessions` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `session_id` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `data` text COLLATE utf8_unicode_ci,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `index_sessions_on_session_id` (`session_id`),
-  KEY `index_sessions_on_updated_at` (`updated_at`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+ALTER SEQUENCE host_paths_id_seq OWNED BY host_paths.id;
+
 
 --
--- Table structure for table `sites`
+-- Name: hosts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
-DROP TABLE IF EXISTS `sites`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `sites` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `organisation_id` int(11) NOT NULL,
-  `abbr` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `query_params` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `tna_timestamp` datetime NOT NULL,
-  `homepage` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
-  `global_new_url` text COLLATE utf8_unicode_ci,
-  `managed_by_transition` tinyint(1) NOT NULL DEFAULT '1',
-  `launch_date` date DEFAULT NULL,
-  `special_redirect_strategy` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `global_redirect_append_path` tinyint(1) NOT NULL DEFAULT '0',
-  `global_type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `homepage_title` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `homepage_furl` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `index_sites_on_site` (`abbr`),
-  KEY `index_sites_on_organisation_id` (`organisation_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+CREATE TABLE hosts (
+    id integer NOT NULL,
+    site_id integer NOT NULL,
+    hostname character varying(255) NOT NULL,
+    ttl integer,
+    cname character varying(255) DEFAULT NULL::character varying,
+    live_cname character varying(255) DEFAULT NULL::character varying,
+    created_at timestamp with time zone NOT NULL,
+    updated_at timestamp with time zone NOT NULL,
+    ip_address character varying(255) DEFAULT NULL::character varying,
+    canonical_host_id integer
+);
+
 
 --
--- Table structure for table `taggings`
+-- Name: hosts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-DROP TABLE IF EXISTS `taggings`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `taggings` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `tag_id` int(11) DEFAULT NULL,
-  `taggable_id` int(11) DEFAULT NULL,
-  `taggable_type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `tagger_id` int(11) DEFAULT NULL,
-  `tagger_type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `context` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `created_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `taggings_idx` (`tag_id`,`taggable_id`,`taggable_type`,`context`,`tagger_id`,`tagger_type`),
-  KEY `index_taggings_on_taggable_type_and_taggable_id` (`taggable_type`,`taggable_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+CREATE SEQUENCE hosts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
 
 --
--- Table structure for table `tags`
+-- Name: hosts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-DROP TABLE IF EXISTS `tags`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tags` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `taggings_count` int(11) DEFAULT '0',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `index_tags_on_name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+ALTER SEQUENCE hosts_id_seq OWNED BY hosts.id;
+
 
 --
--- Table structure for table `users`
+-- Name: imported_hits_files; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
-DROP TABLE IF EXISTS `users`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `users` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `email` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `uid` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `permissions` text COLLATE utf8_unicode_ci,
-  `remotely_signed_out` tinyint(1) DEFAULT '0',
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
-  `organisation_slug` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `is_robot` tinyint(1) DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+CREATE TABLE imported_hits_files (
+    id integer NOT NULL,
+    filename character varying(255) DEFAULT NULL::character varying,
+    content_hash character varying(255) DEFAULT NULL::character varying,
+    created_at timestamp with time zone,
+    updated_at timestamp with time zone
+);
+
 
 --
--- Table structure for table `versions`
+-- Name: imported_hits_files_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-DROP TABLE IF EXISTS `versions`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `versions` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `item_type` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `item_id` int(11) NOT NULL,
-  `event` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `whodunnit` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `user_id` int(11) DEFAULT NULL,
-  `object_changes` text COLLATE utf8_unicode_ci,
-  `object` text COLLATE utf8_unicode_ci,
-  `created_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `index_versions_on_item_type_and_item_id` (`item_type`,`item_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+CREATE SEQUENCE imported_hits_files_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
 
 --
--- Table structure for table `whitelisted_hosts`
+-- Name: imported_hits_files_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-DROP TABLE IF EXISTS `whitelisted_hosts`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `whitelisted_hosts` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `hostname` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `index_whitelisted_hosts_on_hostname` (`hostname`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+ALTER SEQUENCE imported_hits_files_id_seq OWNED BY imported_hits_files.id;
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-08-15 11:13:20
+--
+-- Name: mappings; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE mappings (
+    id integer NOT NULL,
+    site_id integer NOT NULL,
+    path character varying(1024) NOT NULL,
+    path_hash character varying(40) NOT NULL,
+    new_url text,
+    suggested_url text,
+    archive_url text,
+    from_redirector boolean DEFAULT false,
+    type character varying(255) NOT NULL,
+    hit_count integer
+);
+
+
+--
+-- Name: mappings_batch_entries; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE mappings_batch_entries (
+    id integer NOT NULL,
+    path character varying(2048) DEFAULT NULL::character varying,
+    mappings_batch_id integer,
+    mapping_id integer,
+    processed boolean DEFAULT false,
+    klass character varying(255) DEFAULT NULL::character varying,
+    new_url character varying(255) DEFAULT NULL::character varying,
+    type character varying(255) DEFAULT NULL::character varying
+);
+
+
+--
+-- Name: mappings_batch_entries_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE mappings_batch_entries_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: mappings_batch_entries_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE mappings_batch_entries_id_seq OWNED BY mappings_batch_entries.id;
+
+
+--
+-- Name: mappings_batches; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE mappings_batches (
+    id integer NOT NULL,
+    tag_list character varying(255) DEFAULT NULL::character varying,
+    new_url character varying(255) DEFAULT NULL::character varying,
+    update_existing boolean,
+    user_id integer,
+    site_id integer,
+    created_at timestamp with time zone NOT NULL,
+    updated_at timestamp with time zone NOT NULL,
+    state character varying(255) DEFAULT 'unqueued'::character varying,
+    seen_outcome boolean DEFAULT false,
+    type character varying(255) DEFAULT NULL::character varying,
+    klass character varying(255) DEFAULT NULL::character varying
+);
+
+
+--
+-- Name: mappings_batches_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE mappings_batches_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: mappings_batches_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE mappings_batches_id_seq OWNED BY mappings_batches.id;
+
+
+--
+-- Name: mappings_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE mappings_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: mappings_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE mappings_id_seq OWNED BY mappings.id;
+
+
+--
+-- Name: mappings_staging; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE mappings_staging (
+    old_url text,
+    new_url text,
+    host character varying(255) DEFAULT NULL::character varying,
+    path character varying(255) DEFAULT NULL::character varying,
+    path_hash character varying(255) DEFAULT NULL::character varying,
+    suggested_url text,
+    archive_url text,
+    type character varying(255) DEFAULT NULL::character varying
+);
+
+
+--
+-- Name: organisational_relationships; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE organisational_relationships (
+    id integer NOT NULL,
+    parent_organisation_id integer,
+    child_organisation_id integer
+);
+
+
+--
+-- Name: organisational_relationships_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE organisational_relationships_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: organisational_relationships_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE organisational_relationships_id_seq OWNED BY organisational_relationships.id;
+
+
+--
+-- Name: organisations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE organisations (
+    id integer NOT NULL,
+    title character varying(255) NOT NULL,
+    homepage character varying(255) DEFAULT NULL::character varying,
+    furl character varying(255) DEFAULT NULL::character varying,
+    created_at timestamp with time zone NOT NULL,
+    updated_at timestamp with time zone NOT NULL,
+    css character varying(255) DEFAULT NULL::character varying,
+    ga_profile_id character varying(16) DEFAULT NULL::character varying,
+    whitehall_slug character varying(255) DEFAULT NULL::character varying,
+    whitehall_type character varying(255) DEFAULT NULL::character varying,
+    abbreviation character varying(255) DEFAULT NULL::character varying
+);
+
+
+--
+-- Name: organisations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE organisations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: organisations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE organisations_id_seq OWNED BY organisations.id;
+
+
+--
+-- Name: organisations_sites; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE organisations_sites (
+    site_id integer NOT NULL,
+    organisation_id integer NOT NULL
+);
+
+
+--
+-- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE schema_migrations (
+    version character varying(255) NOT NULL
+);
+
+
+--
+-- Name: sessions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE sessions (
+    id integer NOT NULL,
+    session_id character varying(255) NOT NULL,
+    data text,
+    created_at timestamp with time zone NOT NULL,
+    updated_at timestamp with time zone NOT NULL
+);
+
+
+--
+-- Name: sessions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE sessions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: sessions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE sessions_id_seq OWNED BY sessions.id;
+
+
+--
+-- Name: sites; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE sites (
+    id integer NOT NULL,
+    organisation_id integer NOT NULL,
+    abbr character varying(255) NOT NULL,
+    query_params character varying(255) DEFAULT NULL::character varying,
+    tna_timestamp timestamp with time zone NOT NULL,
+    homepage character varying(255) DEFAULT NULL::character varying,
+    created_at timestamp with time zone NOT NULL,
+    updated_at timestamp with time zone NOT NULL,
+    global_new_url text,
+    launch_date date,
+    special_redirect_strategy character varying(255) DEFAULT NULL::character varying,
+    global_redirect_append_path boolean DEFAULT false NOT NULL,
+    global_type character varying(255) DEFAULT NULL::character varying,
+    homepage_title character varying(255) DEFAULT NULL::character varying,
+    homepage_furl character varying(255) DEFAULT NULL::character varying
+);
+
+
+--
+-- Name: sites_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE sites_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: sites_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE sites_id_seq OWNED BY sites.id;
+
+
+--
+-- Name: taggings; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE taggings (
+    id integer NOT NULL,
+    tag_id integer,
+    taggable_id integer,
+    taggable_type character varying(255) DEFAULT NULL::character varying,
+    tagger_id integer,
+    tagger_type character varying(255) DEFAULT NULL::character varying,
+    context character varying(128) DEFAULT NULL::character varying,
+    created_at timestamp with time zone
+);
+
+
+--
+-- Name: taggings_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE taggings_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: taggings_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE taggings_id_seq OWNED BY taggings.id;
+
+
+--
+-- Name: tags; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE tags (
+    id integer NOT NULL,
+    name character varying(255) DEFAULT NULL::character varying,
+    taggings_count integer DEFAULT 0
+);
+
+
+--
+-- Name: tags_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE tags_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: tags_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE tags_id_seq OWNED BY tags.id;
+
+
+--
+-- Name: users; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE users (
+    id integer NOT NULL,
+    name character varying(255) DEFAULT NULL::character varying,
+    email character varying(255) DEFAULT NULL::character varying,
+    uid character varying(255) DEFAULT NULL::character varying,
+    permissions text,
+    remotely_signed_out boolean DEFAULT false,
+    created_at timestamp with time zone NOT NULL,
+    updated_at timestamp with time zone NOT NULL,
+    organisation_slug character varying(255) DEFAULT NULL::character varying,
+    is_robot boolean DEFAULT false
+);
+
+
+--
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE users_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE users_id_seq OWNED BY users.id;
+
+
+--
+-- Name: versions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE versions (
+    id integer NOT NULL,
+    item_type character varying(255) NOT NULL,
+    item_id integer NOT NULL,
+    event character varying(255) NOT NULL,
+    whodunnit character varying(255) DEFAULT NULL::character varying,
+    user_id integer,
+    object_changes text,
+    object text,
+    created_at timestamp with time zone
+);
+
+
+--
+-- Name: versions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE versions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: versions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE versions_id_seq OWNED BY versions.id;
+
+
+--
+-- Name: whitelisted_hosts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE whitelisted_hosts (
+    id integer NOT NULL,
+    hostname character varying(255) NOT NULL,
+    created_at timestamp with time zone NOT NULL,
+    updated_at timestamp with time zone NOT NULL
+);
+
+
+--
+-- Name: whitelisted_hosts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE whitelisted_hosts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: whitelisted_hosts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE whitelisted_hosts_id_seq OWNED BY whitelisted_hosts.id;
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY daily_hit_totals ALTER COLUMN id SET DEFAULT nextval('daily_hit_totals_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY hits ALTER COLUMN id SET DEFAULT nextval('hits_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY host_paths ALTER COLUMN id SET DEFAULT nextval('host_paths_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY hosts ALTER COLUMN id SET DEFAULT nextval('hosts_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY imported_hits_files ALTER COLUMN id SET DEFAULT nextval('imported_hits_files_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY mappings ALTER COLUMN id SET DEFAULT nextval('mappings_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY mappings_batch_entries ALTER COLUMN id SET DEFAULT nextval('mappings_batch_entries_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY mappings_batches ALTER COLUMN id SET DEFAULT nextval('mappings_batches_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY organisational_relationships ALTER COLUMN id SET DEFAULT nextval('organisational_relationships_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY organisations ALTER COLUMN id SET DEFAULT nextval('organisations_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY sessions ALTER COLUMN id SET DEFAULT nextval('sessions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY sites ALTER COLUMN id SET DEFAULT nextval('sites_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY taggings ALTER COLUMN id SET DEFAULT nextval('taggings_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY tags ALTER COLUMN id SET DEFAULT nextval('tags_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY versions ALTER COLUMN id SET DEFAULT nextval('versions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY whitelisted_hosts ALTER COLUMN id SET DEFAULT nextval('whitelisted_hosts_id_seq'::regclass);
+
+
+--
+-- Name: daily_hit_totals_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY daily_hit_totals
+    ADD CONSTRAINT daily_hit_totals_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: hits_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY hits
+    ADD CONSTRAINT hits_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: host_paths_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY host_paths
+    ADD CONSTRAINT host_paths_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: hosts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY hosts
+    ADD CONSTRAINT hosts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: imported_hits_files_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY imported_hits_files
+    ADD CONSTRAINT imported_hits_files_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: mappings_batch_entries_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY mappings_batch_entries
+    ADD CONSTRAINT mappings_batch_entries_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: mappings_batches_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY mappings_batches
+    ADD CONSTRAINT mappings_batches_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: mappings_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY mappings
+    ADD CONSTRAINT mappings_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: organisational_relationships_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY organisational_relationships
+    ADD CONSTRAINT organisational_relationships_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: organisations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY organisations
+    ADD CONSTRAINT organisations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: sessions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY sessions
+    ADD CONSTRAINT sessions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: sites_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY sites
+    ADD CONSTRAINT sites_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: taggings_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY taggings
+    ADD CONSTRAINT taggings_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY tags
+    ADD CONSTRAINT tags_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: versions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY versions
+    ADD CONSTRAINT versions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: whitelisted_hosts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY whitelisted_hosts
+    ADD CONSTRAINT whitelisted_hosts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: index_daily_hit_totals_on_host_id_and_total_on_and_http_status; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_daily_hit_totals_on_host_id_and_total_on_and_http_status ON daily_hit_totals USING btree (host_id, total_on, http_status);
+
+
+--
+-- Name: index_hits_on_host_id_and_hit_on; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_hits_on_host_id_and_hit_on ON hits USING btree (host_id, hit_on);
+
+
+--
+-- Name: index_hits_on_host_id_and_http_status; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_hits_on_host_id_and_http_status ON hits USING btree (host_id, http_status);
+
+
+--
+-- Name: index_hits_on_host_id_and_path_and_hit_on_and_http_status; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_hits_on_host_id_and_path_and_hit_on_and_http_status ON hits USING btree (host_id, path, hit_on, http_status);
+
+
+--
+-- Name: index_hits_on_mapping_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_hits_on_mapping_id ON hits USING btree (mapping_id);
+
+
+--
+-- Name: index_host_paths_on_c14n_path_hash; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_host_paths_on_c14n_path_hash ON host_paths USING btree (c14n_path_hash);
+
+
+--
+-- Name: index_host_paths_on_host_id_and_path_hash; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_host_paths_on_host_id_and_path_hash ON host_paths USING btree (host_id, path_hash);
+
+
+--
+-- Name: index_host_paths_on_mapping_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_host_paths_on_mapping_id ON host_paths USING btree (mapping_id);
+
+
+--
+-- Name: index_hosts_on_canonical_host_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_hosts_on_canonical_host_id ON hosts USING btree (canonical_host_id);
+
+
+--
+-- Name: index_hosts_on_host; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_hosts_on_host ON hosts USING btree (hostname);
+
+
+--
+-- Name: index_hosts_on_site_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_hosts_on_site_id ON hosts USING btree (site_id);
+
+
+--
+-- Name: index_imported_hits_files_on_filename; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_imported_hits_files_on_filename ON imported_hits_files USING btree (filename);
+
+
+--
+-- Name: index_mappings_batch_entries_on_mappings_batch_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_mappings_batch_entries_on_mappings_batch_id ON mappings_batch_entries USING btree (mappings_batch_id);
+
+
+--
+-- Name: index_mappings_batches_on_user_id_and_site_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_mappings_batches_on_user_id_and_site_id ON mappings_batches USING btree (user_id, site_id);
+
+
+--
+-- Name: index_mappings_on_hit_count; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_mappings_on_hit_count ON mappings USING btree (hit_count);
+
+
+--
+-- Name: index_mappings_on_site_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_mappings_on_site_id ON mappings USING btree (site_id);
+
+
+--
+-- Name: index_mappings_on_site_id_and_path_hash; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_mappings_on_site_id_and_path_hash ON mappings USING btree (site_id, path_hash);
+
+
+--
+-- Name: index_mappings_on_site_id_and_type; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_mappings_on_site_id_and_type ON mappings USING btree (site_id, type);
+
+
+--
+-- Name: index_organisational_relationships_on_child_organisation_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_organisational_relationships_on_child_organisation_id ON organisational_relationships USING btree (child_organisation_id);
+
+
+--
+-- Name: index_organisational_relationships_on_parent_organisation_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_organisational_relationships_on_parent_organisation_id ON organisational_relationships USING btree (parent_organisation_id);
+
+
+--
+-- Name: index_organisations_on_title; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_organisations_on_title ON organisations USING btree (title);
+
+
+--
+-- Name: index_organisations_on_whitehall_slug; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_organisations_on_whitehall_slug ON organisations USING btree (whitehall_slug);
+
+
+--
+-- Name: index_organisations_sites_on_site_id_and_organisation_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_organisations_sites_on_site_id_and_organisation_id ON organisations_sites USING btree (site_id, organisation_id);
+
+
+--
+-- Name: index_sessions_on_session_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_sessions_on_session_id ON sessions USING btree (session_id);
+
+
+--
+-- Name: index_sessions_on_updated_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_sessions_on_updated_at ON sessions USING btree (updated_at);
+
+
+--
+-- Name: index_sites_on_organisation_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_sites_on_organisation_id ON sites USING btree (organisation_id);
+
+
+--
+-- Name: index_sites_on_site; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_sites_on_site ON sites USING btree (abbr);
+
+
+--
+-- Name: index_taggings_on_taggable_type_and_taggable_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_taggings_on_taggable_type_and_taggable_id ON taggings USING btree (taggable_type, taggable_id);
+
+
+--
+-- Name: index_tags_on_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_tags_on_name ON tags USING btree (name);
+
+
+--
+-- Name: index_versions_on_item_type_and_item_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_versions_on_item_type_and_item_id ON versions USING btree (item_type, item_id);
+
+
+--
+-- Name: index_whitelisted_hosts_on_hostname; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_whitelisted_hosts_on_hostname ON whitelisted_hosts USING btree (hostname);
+
+
+--
+-- Name: taggings_idx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX taggings_idx ON taggings USING btree (tag_id, taggable_id, taggable_type, context, tagger_id, tagger_type);
+
+
+--
+-- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (version);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
+SET search_path TO "$user",public;
+
 INSERT INTO schema_migrations (version) VALUES ('20130910133049');
 
 INSERT INTO schema_migrations (version) VALUES ('20130910135517');
@@ -563,14 +1279,30 @@ INSERT INTO schema_migrations (version) VALUES ('20140606155408');
 
 INSERT INTO schema_migrations (version) VALUES ('20140611144610');
 
+INSERT INTO schema_migrations (version) VALUES ('20140613165318');
+
 INSERT INTO schema_migrations (version) VALUES ('20140618092821');
 
 INSERT INTO schema_migrations (version) VALUES ('20140618145219');
 
 INSERT INTO schema_migrations (version) VALUES ('20140623135055');
 
+INSERT INTO schema_migrations (version) VALUES ('20140625132230');
+
+INSERT INTO schema_migrations (version) VALUES ('20140708144520');
+
 INSERT INTO schema_migrations (version) VALUES ('20140724164511');
 
 INSERT INTO schema_migrations (version) VALUES ('20140815095728');
+
+INSERT INTO schema_migrations (version) VALUES ('20140911113424');
+
+INSERT INTO schema_migrations (version) VALUES ('20140912150755');
+
+INSERT INTO schema_migrations (version) VALUES ('20140922152625');
+
+INSERT INTO schema_migrations (version) VALUES ('20140924105220');
+
+INSERT INTO schema_migrations (version) VALUES ('20140925104317');
 
 
