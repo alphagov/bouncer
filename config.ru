@@ -15,5 +15,6 @@ use Bouncer::Cacher
 # Turn public/foo.css into /foo.css
 urls = ["/favicon.ico"] + Dir["public/*.css", "public/*.png"].map { |path| path.gsub("public", "") }
 use Rack::Static, urls: urls, root: 'public'
+use ActiveRecord::QueryCache
 use ActiveRecord::ConnectionAdapters::ConnectionManagement
 run Bouncer::App.new
