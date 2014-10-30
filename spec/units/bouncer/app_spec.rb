@@ -1,9 +1,5 @@
 require 'spec_helper'
 
-##
-# Assume that test URLs have been through c14n
-# in middleware. Test accordingly, e.g. /my-path, not /my-path///, http not https, etc.
-# See +URI::BLURI.canonicalize!+ for rules
 describe Bouncer::App do
   include Rack::Test::Methods
 
