@@ -1,3 +1,5 @@
+$LOAD_PATH.unshift(File.expand_path('lib', File.dirname(__FILE__)))
+
 require 'airbrake'
 require 'airbrake_tasks'
 
@@ -20,3 +22,5 @@ namespace :errbit do
                          :dry_run        => ENV['DRY_RUN'])
   end
 end
+
+Dir['lib/tasks/**/*.rake'].each {|tasks_file| load tasks_file}

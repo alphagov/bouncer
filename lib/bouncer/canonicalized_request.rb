@@ -63,8 +63,8 @@ module Bouncer
       # We must use the canonicalized_host, not @request.host
       host_record = Host.find_by(hostname: self.host)
       # It would be nice to reuse this variable in RequestContext to avoid
-      # duplicate queries. If we had ActionController's query cache this would
-      # happen by magic. It seems messy to expose it directly.
+      # duplicate queries, though the ActiveRecord query cache is now
+      # preventing the repeat DB round trip.
       if host_record && host_record.site.query_params
         host_record.site.query_params.split(":")
       else
