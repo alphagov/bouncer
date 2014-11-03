@@ -3,6 +3,7 @@
 --
 
 SET statement_timeout = 0;
+SET lock_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SET check_function_bodies = false;
@@ -231,7 +232,7 @@ ALTER SEQUENCE imported_hits_files_id_seq OWNED BY imported_hits_files.id;
 CREATE TABLE mappings (
     id integer NOT NULL,
     site_id integer NOT NULL,
-    path character varying(1024) NOT NULL,
+    path character varying(2048) NOT NULL,
     path_hash character varying(40) NOT NULL,
     new_url text,
     suggested_url text,
@@ -253,7 +254,7 @@ CREATE TABLE mappings_batch_entries (
     mapping_id integer,
     processed boolean DEFAULT false,
     klass character varying(255) DEFAULT NULL::character varying,
-    new_url character varying(255) DEFAULT NULL::character varying,
+    new_url character varying(2048) DEFAULT NULL::character varying,
     type character varying(255) DEFAULT NULL::character varying
 );
 
@@ -284,7 +285,7 @@ ALTER SEQUENCE mappings_batch_entries_id_seq OWNED BY mappings_batch_entries.id;
 CREATE TABLE mappings_batches (
     id integer NOT NULL,
     tag_list character varying(255) DEFAULT NULL::character varying,
-    new_url character varying(255) DEFAULT NULL::character varying,
+    new_url character varying(2048) DEFAULT NULL::character varying,
     update_existing boolean,
     user_id integer,
     site_id integer,
@@ -333,22 +334,6 @@ CREATE SEQUENCE mappings_id_seq
 --
 
 ALTER SEQUENCE mappings_id_seq OWNED BY mappings.id;
-
-
---
--- Name: mappings_staging; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE mappings_staging (
-    old_url text,
-    new_url text,
-    host character varying(255) DEFAULT NULL::character varying,
-    path character varying(255) DEFAULT NULL::character varying,
-    path_hash character varying(255) DEFAULT NULL::character varying,
-    suggested_url text,
-    archive_url text,
-    type character varying(255) DEFAULT NULL::character varying
-);
 
 
 --
@@ -1049,6 +1034,13 @@ CREATE INDEX index_mappings_on_site_id ON mappings USING btree (site_id);
 
 
 --
+-- Name: index_mappings_on_site_id_and_path; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_mappings_on_site_id_and_path ON mappings USING btree (site_id, path);
+
+
+--
 -- Name: index_mappings_on_site_id_and_path_hash; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1304,5 +1296,13 @@ INSERT INTO schema_migrations (version) VALUES ('20140922152625');
 INSERT INTO schema_migrations (version) VALUES ('20140924105220');
 
 INSERT INTO schema_migrations (version) VALUES ('20140925104317');
+
+INSERT INTO schema_migrations (version) VALUES ('20141031104246');
+
+INSERT INTO schema_migrations (version) VALUES ('20141103110325');
+
+INSERT INTO schema_migrations (version) VALUES ('20141103111339');
+
+INSERT INTO schema_migrations (version) VALUES ('20141103142639');
 
 
