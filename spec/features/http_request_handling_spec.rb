@@ -645,11 +645,14 @@ describe 'HTTP request handling' do
 
     describe 'parameters without values do not get thrown away' do
       before do
-        path = '/an-archived-page?with&a&weird&querystring'
         site.update_attribute(:query_params, "with:a:weird:querystring")
+
+        path           = '/an-archived-page?with&a&weird&querystring'
+        canonical_path = '/an-archived-page?a&querystring&weird&with'
+
         site.mappings.create \
-          path: path,
-          path_hash:    Digest::SHA1.hexdigest('/an-archived-page?a&querystring&weird&with'),
+          path:         canonical_path,
+          path_hash:    Digest::SHA1.hexdigest(canonical_path),
           type:         'archive'
 
         get "http://www.minitrue.gov.uk#{path}"

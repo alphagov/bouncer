@@ -50,11 +50,6 @@ describe Bouncer::App do
     shared_examples 'a redirector which recognises the host' do
       it_should_behave_like 'a redirector'
 
-      it 'should hash the path' do
-        Digest::SHA1.should_receive(:hexdigest).with(path)
-        get url
-      end
-
       it 'should get the host\'s site' do
         host.should_receive(:site).with(no_args)
         get url
@@ -66,7 +61,7 @@ describe Bouncer::App do
       end
 
       it 'should try to find the right mapping' do
-        mappings.should_receive(:find_by).with(path_hash: path_hash)
+        mappings.should_receive(:find_by).with(path: path)
         get url
       end
     end

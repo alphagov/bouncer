@@ -15,7 +15,7 @@ module Bouncer
 
     def mapping
       # Reminder: the hash is always calculated on the canonicalize!d request
-      mappings.find_by path_hash: Digest::SHA1.hexdigest(@request.fullpath)
+      mappings.find_by path: @request.fullpath
     end
 
     def mappings
