@@ -31,13 +31,11 @@ describe Bouncer::App do
 
   context 'when the host is recognised' do
     let(:host)         { double('host').as_null_object }
-    let(:path_hash)    { double 'path hash' }
     let(:organisation) { double('organisation').as_null_object }
     let(:site)         { double('site').as_null_object }
     let(:mappings)     { double 'mappings' }
 
     before(:each) do
-      Digest::SHA1.stub hexdigest: path_hash
       host.stub site: site
       site.stub mappings: mappings,
                 query_params: nil,
