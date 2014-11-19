@@ -73,7 +73,6 @@ describe 'HTTP request handling' do
     before do
       site.mappings.create \
         path:         '/a-redirected-page',
-        path_hash:    Digest::SHA1.hexdigest('/a-redirected-page'),
         type:         'redirect',
         new_url:      'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page'
 
@@ -89,7 +88,6 @@ describe 'HTTP request handling' do
       site.update_attribute(:query_params, "a:b")
       site.mappings.create \
         path:         '/a-redirected-page?a=1&b=2',
-        path_hash:    Digest::SHA1.hexdigest('/a-redirected-page?a=1&b=2'),
         type:         'redirect',
         new_url:      'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page'
 
@@ -104,7 +102,6 @@ describe 'HTTP request handling' do
     before do
       site.mappings.create \
         path:         '/a-redirected-page',
-        path_hash:    Digest::SHA1.hexdigest('/a-redirected-page'),
         type:         'redirect',
         new_url:      'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page'
     end
@@ -136,7 +133,6 @@ describe 'HTTP request handling' do
       before do
         site.mappings.create \
           path:         '/page?itemid=2&style=1',
-          path_hash:    Digest::SHA1.hexdigest('/page?itemid=2&style=1'),
           type:         'redirect',
           new_url:      'http://www.gov.uk/foo'
       end
@@ -160,7 +156,6 @@ describe 'HTTP request handling' do
       site.update_attribute(:query_params, "")
       site.mappings.create \
           path:         '/page',
-          path_hash:    Digest::SHA1.hexdigest('/page'),
           type:         'redirect',
           new_url:      'http://www.gov.uk/foo'
     end
@@ -175,7 +170,6 @@ describe 'HTTP request handling' do
     before do
       site.mappings.create \
         path:         '/a-redirected-page',
-        path_hash:    Digest::SHA1.hexdigest('/a-redirected-page'),
         type:         'redirect',
         new_url:      'http://spam.net/gov.uk'
 
@@ -190,7 +184,6 @@ describe 'HTTP request handling' do
     before do
       site.mappings.create \
         path:         '/a-redirected-page',
-        path_hash:    Digest::SHA1.hexdigest('/a-redirected-page'),
         type:         'redirect',
         new_url:      'http://anything-at-all.gov.uk'
 
@@ -205,7 +198,6 @@ describe 'HTTP request handling' do
     before do
       site.mappings.create \
         path:         '/a-redirected-page',
-        path_hash:    Digest::SHA1.hexdigest('/a-redirected-page'),
         type:         'redirect',
         new_url:      'http://anything-at-all.mod.uk'
 
@@ -220,7 +212,6 @@ describe 'HTTP request handling' do
     before do
       site.mappings.create \
         path:         '/a-redirected-page',
-        path_hash:    Digest::SHA1.hexdigest('/a-redirected-page'),
         type:         'redirect',
         new_url:      'http://www.gov.uk/[0]'
 
@@ -235,7 +226,6 @@ describe 'HTTP request handling' do
     before do
       site.mappings.create \
         path:         '/an-archived-page',
-        path_hash:    Digest::SHA1.hexdigest('/an-archived-page'),
         type:         'archive'
       get 'http://www.minitrue.gov.uk/an-archived-page?non-canonical-param=1'
     end
@@ -253,7 +243,6 @@ describe 'HTTP request handling' do
     before do
       site.mappings.create \
         path:           '/an-archived-page',
-        path_hash:      Digest::SHA1.hexdigest('/an-archived-page'),
         type:           'archive',
         suggested_url:  'http://www.truthiness.co.uk/'
       get 'http://www.minitrue.gov.uk/an-archived-page'
@@ -273,7 +262,6 @@ describe 'HTTP request handling' do
     before do
       site.mappings.create \
         path:           '/an-unresolved-page',
-        path_hash:      Digest::SHA1.hexdigest('/an-unresolved-page'),
         type:           'unresolved'
       get 'http://www.minitrue.gov.uk/an-unresolved-page'
     end
@@ -285,7 +273,6 @@ describe 'HTTP request handling' do
     before do
       site.mappings.create \
         path:         '/an-archived-page',
-        path_hash:    Digest::SHA1.hexdigest('/an-archived-page'),
         type:         'archive',
         archive_url:  'http://webarchive.nationalarchives.gov.uk/20130101000000/http://www.minitrue.gov.uk/an-archived-page/the_actual_page.php'
       get 'http://www.minitrue.gov.uk/an-archived-page'
@@ -305,7 +292,6 @@ describe 'HTTP request handling' do
       site.update_attribute(:homepage_title, 'Custom Title')
       site.mappings.create \
         path:         '/an-archived-page',
-        path_hash:    Digest::SHA1.hexdigest('/an-archived-page'),
         type:         'archive'
       get 'http://www.minitrue.gov.uk/an-archived-page'
     end
@@ -403,7 +389,6 @@ describe 'HTTP request handling' do
         before do
           site.mappings.create \
             path:         '/a-dummy-page',
-            path_hash:    Digest::SHA1.hexdigest('/a-dummy-page'),
             type:         'redirect',
             new_url:      'http://www.gov.uk/new-page'
           get 'http://www.minitrue.gov.uk/sitemap.xml'
@@ -528,21 +513,17 @@ describe 'HTTP request handling' do
     before do
       site.mappings.create \
         path:         '/a-redirected-page',
-        path_hash:    Digest::SHA1.hexdigest('/a-redirected-page'),
         type:         'redirect',
         new_url:      'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page'
       site.mappings.create \
         path:         '/a-redirected-page?p=np',
-        path_hash:    Digest::SHA1.hexdigest('/a-redirected-page?p=np'),
         type:         'redirect',
         new_url:      'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page'
       site.mappings.create \
         path:         '/a-deleted-page',
-        path_hash:    Digest::SHA1.hexdigest('/a-deleted-page'),
         type:         'never served'
       site.mappings.create \
         path:         '/an-archived-page',
-        path_hash:    Digest::SHA1.hexdigest('/an-archived-page'),
         type:         'archive'
 
       get 'http://www.minitrue.gov.uk/sitemap.xml'
@@ -634,7 +615,6 @@ describe 'HTTP request handling' do
         path = '/an-archived-page'
         site.mappings.create \
           path: path,
-          path_hash:    Digest::SHA1.hexdigest(path),
           type:         'archive'
 
         get "http://www.minitrue.gov.uk#{path}"
@@ -652,7 +632,6 @@ describe 'HTTP request handling' do
 
         site.mappings.create \
           path:         canonical_path,
-          path_hash:    Digest::SHA1.hexdigest(canonical_path),
           type:         'archive'
 
         get "http://www.minitrue.gov.uk#{path}"
@@ -709,7 +688,6 @@ describe 'HTTP request handling' do
 
           dh_site.mappings.create \
               path:        path,
-              path_hash:   Digest::SHA1.hexdigest(path),
               type:        'redirect',
               new_url:     'http://www.gov.uk/government/organisations/dh/really-special-asset'
 
@@ -847,7 +825,7 @@ describe 'HTTP request handling' do
       describe 'overrides any mapping (PreemptiveRules)' do
         before do
           path = '/homeandleisure/floods/34678.aspx?page=1'
-          site.mappings.create(path: path, path_hash: Digest::SHA1.hexdigest(path), type: 'archive')
+          site.mappings.create(path: path, type: 'archive')
           get "http://www.environment-agency.gov.uk#{path}"
         end
 
