@@ -83,7 +83,6 @@ CREATE TABLE hits (
     id integer NOT NULL,
     host_id integer NOT NULL,
     path character varying(2048) NOT NULL,
-    path_hash character varying(40),
     http_status character varying(3) NOT NULL,
     count integer NOT NULL,
     hit_on date NOT NULL,
@@ -130,8 +129,6 @@ CREATE TABLE hits_staging (
 CREATE TABLE host_paths (
     id integer NOT NULL,
     path character varying(2048) DEFAULT NULL::character varying,
-    path_hash character varying(255) DEFAULT NULL::character varying,
-    c14n_path_hash character varying(255) DEFAULT NULL::character varying,
     host_id integer,
     mapping_id integer,
     canonical_path character varying(2048)
@@ -234,7 +231,6 @@ CREATE TABLE mappings (
     id integer NOT NULL,
     site_id integer NOT NULL,
     path character varying(2048) NOT NULL,
-    path_hash character varying(40),
     new_url text,
     suggested_url text,
     archive_url text,
@@ -1042,13 +1038,6 @@ CREATE UNIQUE INDEX index_mappings_on_site_id_and_path ON mappings USING btree (
 
 
 --
--- Name: index_mappings_on_site_id_and_path_hash; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE UNIQUE INDEX index_mappings_on_site_id_and_path_hash ON mappings USING btree (site_id, path_hash);
-
-
---
 -- Name: index_mappings_on_site_id_and_type; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1313,5 +1302,7 @@ INSERT INTO schema_migrations (version) VALUES ('20141114110930');
 INSERT INTO schema_migrations (version) VALUES ('20141118112125');
 
 INSERT INTO schema_migrations (version) VALUES ('20141118121300');
+
+INSERT INTO schema_migrations (version) VALUES ('20141119113045');
 
 
