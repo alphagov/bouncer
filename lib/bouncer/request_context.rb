@@ -14,7 +14,7 @@ module Bouncer
     end
 
     def mapping
-      # Reminder: the hash is always calculated on the canonicalize!d request
+      # Reminder: the request's fullpath is canonical
       mappings.find_by path: @request.fullpath
     end
 
