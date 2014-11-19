@@ -83,7 +83,7 @@ CREATE TABLE hits (
     id integer NOT NULL,
     host_id integer NOT NULL,
     path character varying(2048) NOT NULL,
-    path_hash character varying(40) NOT NULL,
+    path_hash character varying(40),
     http_status character varying(3) NOT NULL,
     count integer NOT NULL,
     hit_on date NOT NULL,
@@ -133,7 +133,8 @@ CREATE TABLE host_paths (
     path_hash character varying(255) DEFAULT NULL::character varying,
     c14n_path_hash character varying(255) DEFAULT NULL::character varying,
     host_id integer,
-    mapping_id integer
+    mapping_id integer,
+    canonical_path character varying(2048)
 );
 
 
@@ -233,7 +234,7 @@ CREATE TABLE mappings (
     id integer NOT NULL,
     site_id integer NOT NULL,
     path character varying(2048) NOT NULL,
-    path_hash character varying(40) NOT NULL,
+    path_hash character varying(40),
     new_url text,
     suggested_url text,
     archive_url text,
@@ -957,17 +958,17 @@ CREATE INDEX index_hits_on_mapping_id ON hits USING btree (mapping_id);
 
 
 --
--- Name: index_host_paths_on_c14n_path_hash; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_host_paths_on_canonical_path; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_host_paths_on_c14n_path_hash ON host_paths USING btree (c14n_path_hash);
+CREATE INDEX index_host_paths_on_canonical_path ON host_paths USING btree (canonical_path);
 
 
 --
--- Name: index_host_paths_on_host_id_and_path_hash; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_host_paths_on_host_id_and_path; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE UNIQUE INDEX index_host_paths_on_host_id_and_path_hash ON host_paths USING btree (host_id, path_hash);
+CREATE UNIQUE INDEX index_host_paths_on_host_id_and_path ON host_paths USING btree (host_id, path);
 
 
 --
@@ -1304,5 +1305,13 @@ INSERT INTO schema_migrations (version) VALUES ('20141103110325');
 INSERT INTO schema_migrations (version) VALUES ('20141103111339');
 
 INSERT INTO schema_migrations (version) VALUES ('20141103142639');
+
+INSERT INTO schema_migrations (version) VALUES ('20141113115152');
+
+INSERT INTO schema_migrations (version) VALUES ('20141114110930');
+
+INSERT INTO schema_migrations (version) VALUES ('20141118112125');
+
+INSERT INTO schema_migrations (version) VALUES ('20141118121300');
 
 
