@@ -23,20 +23,6 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
---
--- Name: pgcrypto; Type: EXTENSION; Schema: -; Owner: -
---
-
-CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA public;
-
-
---
--- Name: EXTENSION pgcrypto; Type: COMMENT; Schema: -; Owner: -
---
-
-COMMENT ON EXTENSION pgcrypto IS 'cryptographic functions';
-
-
 SET search_path = public, pg_catalog;
 
 SET default_tablespace = '';
@@ -1304,5 +1290,7 @@ INSERT INTO schema_migrations (version) VALUES ('20141118112125');
 INSERT INTO schema_migrations (version) VALUES ('20141118121300');
 
 INSERT INTO schema_migrations (version) VALUES ('20141119113045');
+
+INSERT INTO schema_migrations (version) VALUES ('20141120164444');
 
 
