@@ -887,6 +887,29 @@ describe 'HTTP request handling' do
       end
     end
 
+    describe 'Ofsted inspection reports redirects' do
+      before { site.hosts.create hostname: 'www.ofsted.gov.uk' }
+
+      describe 'visiting a landing page URL' do
+        before do
+          get 'http://www.ofsted.gov.uk/inspection-reports/find-inspection-report/provider/CARE/EY480906'
+        end
+
+        it_behaves_like 'a 301'
+        its(:location) { should == 'http://reports.ofsted.gov.uk/inspection-reports/find-inspection-report/provider/CARE/EY480906' }
+      end
+
+      describe 'visiting a report asset URL' do
+        before do
+          get 'http://www.ofsted.gov.uk/provider/files/1908405/urn/137739.pdf'
+        end
+
+        it_behaves_like 'a 301'
+        its(:location) { should == 'http://reports.ofsted.gov.uk/provider/files/1908405/urn/137739.pdf' }
+      end
+
+    end
+
     describe 'Treasury redirects' do
       before { site.hosts.create hostname: 'cdn.hm-treasury.gov.uk' }
 
