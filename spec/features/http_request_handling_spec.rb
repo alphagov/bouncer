@@ -910,6 +910,20 @@ describe 'HTTP request handling' do
 
     end
 
+    describe 'Ofsted inspection reports non-www redirects' do
+      before { site.hosts.create hostname: 'ofsted.gov.uk' }
+
+      describe 'visiting a report asset URL' do
+        before do
+          get 'http://ofsted.gov.uk/provider/files/1908405/urn/137739.pdf'
+        end
+
+        it_behaves_like 'a 301'
+        its(:location) { should == 'http://reports.ofsted.gov.uk/provider/files/1908405/urn/137739.pdf' }
+      end
+
+    end
+
     describe 'Treasury redirects' do
       before { site.hosts.create hostname: 'cdn.hm-treasury.gov.uk' }
 
