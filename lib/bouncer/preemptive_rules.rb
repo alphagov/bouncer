@@ -11,7 +11,7 @@ module Bouncer
       request = context.request
 
       case request.host
-      when 'www.environment-agency.gov.uk'
+      when 'www.environment-agency.gov.uk', 'environment-agency.gov.uk'
         case request.non_canonicalised_fullpath
         when %r{^/homeandleisure/floods/riverlevels(/.*)?$}i
           redirect("http://apps.environment-agency.gov.uk/river-and-sea-levels#{$1}")
@@ -27,7 +27,7 @@ module Bouncer
           redirect("http://reports.ofsted.gov.uk/provider/files/#{$1}/urn/#{$2}")
         end
 
-      when 'www.businesslink.gov.uk'
+      when 'www.businesslink.gov.uk', 'businesslink.gov.uk'
         case request.non_canonicalised_fullpath
         when %r{^(.*site=230.*)$}i
           redirect("http://business.wales.gov.uk#{$1}")
@@ -35,7 +35,7 @@ module Bouncer
           redirect("http://www.nibusinessinfo.co.uk#{$1}")
         end
 
-      when 'www.mcga.gov.uk'
+      when 'www.mcga.gov.uk', 'mcga.gov.uk'
         case request.non_canonicalised_fullpath
         when %r{^/c4mca/(.*)$}
           redirect("http://www.dft.gov.uk/mca/#{$1}")

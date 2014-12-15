@@ -763,6 +763,19 @@ describe 'HTTP request handling' do
       end
     end
 
+    describe 'Business Link non-www redirects' do
+      before { site.hosts.create hostname: 'businesslink.gov.uk' }
+
+      describe 'visiting a former businesslink site for Wales' do
+        before do
+          get 'http://businesslink.gov.uk/bdotg/action/ercsectorsdetails?r.lc=en&itemid=1077111298&site=230'
+        end
+
+        it_behaves_like 'a 301'
+        its(:location) { should == 'http://business.wales.gov.uk/bdotg/action/ercsectorsdetails?r.lc=en&itemid=1077111298&site=230' }
+      end
+    end
+
     describe 'Environment Agency' do
       before { site.hosts.create hostname: 'www.environment-agency.gov.uk' }
 
@@ -843,6 +856,19 @@ describe 'HTTP request handling' do
       end
     end
 
+    describe 'Environment Agency non-www redirects' do
+      before { site.hosts.create hostname: 'environment-agency.gov.uk' }
+
+      describe 'river levels homepage without trailing slash' do
+        before do
+          get 'http://environment-agency.gov.uk/homeandleisure/floods/riverlevels'
+        end
+
+        it_behaves_like 'a 301'
+        its(:location) { should == 'http://apps.environment-agency.gov.uk/river-and-sea-levels' }
+      end
+    end
+
     describe 'Marine Coastguard Agency' do
       before { site.hosts.create hostname: 'www.mcga.gov.uk' }
 
@@ -867,6 +893,19 @@ describe 'HTTP request handling' do
       describe 'all other paths' do
         before do
           get 'http://www.mcga.gov.uk/hydrography'
+        end
+
+        it_behaves_like 'a 301'
+        its(:location) { should == 'http://www.dft.gov.uk/mca/hydrography' }
+      end
+    end
+
+    describe 'Marine Coastguard Agency non-www redirects' do
+      before { site.hosts.create hostname: 'mcga.gov.uk' }
+
+      describe 'all paths that aren\'t /mca/ or /c4mca/' do
+        before do
+          get 'http://mcga.gov.uk/hydrography'
         end
 
         it_behaves_like 'a 301'
