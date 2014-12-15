@@ -19,7 +19,7 @@ module Bouncer
           redirect("http://apps.environment-agency.gov.uk/flood/#{$1}")
         end
 
-      when 'www.ofsted.gov.uk'
+      when ['www.ofsted.gov.uk', 'ofsted.gov.uk'].include?(request.host)
         case request.non_canonicalised_fullpath
         when %r{^/inspection-reports/find-inspection-report/provider/(.*)$}i
           redirect("http://reports.ofsted.gov.uk/inspection-reports/find-inspection-report/provider/#{$1}")
