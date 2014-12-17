@@ -655,6 +655,17 @@ describe 'HTTP request handling' do
       end
     end
 
+    describe 'DFID non-www redirects' do
+      before do
+        site.hosts.create hostname: 'dfid.gov.uk'
+
+        get 'http://dfid.gov.uk/r4d/Output/193679/Default.aspx'
+      end
+
+      it_behaves_like 'a 301'
+      its(:location) { should == 'http://r4d.dfid.gov.uk/Output/193679/Default.aspx' }
+    end
+
     describe 'DH redirects' do
       let!(:dh_site) {
         department_of_health.sites.create(
@@ -699,6 +710,19 @@ describe 'HTTP request handling' do
       end
     end
 
+    describe 'DH non-www redirects' do
+      before { site.hosts.create hostname: 'dh.gov.uk' }
+
+      describe 'visiting a /dh_digitalassets/ URL' do
+        before do
+          get 'http://dh.gov.uk/a/b/dh_digitalassets/c'
+        end
+
+        it_behaves_like 'a 410'
+        its(:content_type) { should == 'text/html' }
+      end
+    end
+
     describe 'Directgov redirects' do
       before { site.hosts.create hostname: 'www.direct.gov.uk' }
 
@@ -732,6 +756,19 @@ describe 'HTTP request handling' do
       end
     end
 
+    describe 'Directgov non-www redirects' do
+      before { site.hosts.create hostname: 'direct.gov.uk' }
+
+      describe 'visitng a /en search URL' do
+        before do
+          get 'http://direct.gov.uk/a/b/en/AdvancedSearch'
+        end
+
+        it_behaves_like 'a 301'
+        its(:location) { should == "https://www.gov.uk/search" }
+      end
+    end
+
     describe 'Businesslink redirects' do
       before { site.hosts.create hostname: 'www.businesslink.gov.uk' }
 
@@ -760,6 +797,19 @@ describe 'HTTP request handling' do
 
         it_behaves_like 'a 404'
         its(:location) { should == nil }
+      end
+    end
+
+    describe 'Business Link non-www redirects' do
+      before { site.hosts.create hostname: 'businesslink.gov.uk' }
+
+      describe 'visiting a former businesslink site for Wales' do
+        before do
+          get 'http://businesslink.gov.uk/bdotg/action/ercsectorsdetails?r.lc=en&itemid=1077111298&site=230'
+        end
+
+        it_behaves_like 'a 301'
+        its(:location) { should == 'http://business.wales.gov.uk/bdotg/action/ercsectorsdetails?r.lc=en&itemid=1077111298&site=230' }
       end
     end
 
@@ -843,6 +893,19 @@ describe 'HTTP request handling' do
       end
     end
 
+    describe 'Environment Agency non-www redirects' do
+      before { site.hosts.create hostname: 'environment-agency.gov.uk' }
+
+      describe 'river levels homepage without trailing slash' do
+        before do
+          get 'http://environment-agency.gov.uk/homeandleisure/floods/riverlevels'
+        end
+
+        it_behaves_like 'a 301'
+        its(:location) { should == 'http://apps.environment-agency.gov.uk/river-and-sea-levels' }
+      end
+    end
+
     describe 'Marine Coastguard Agency' do
       before { site.hosts.create hostname: 'www.mcga.gov.uk' }
 
@@ -874,12 +937,38 @@ describe 'HTTP request handling' do
       end
     end
 
+    describe 'Marine Coastguard Agency non-www redirects' do
+      before { site.hosts.create hostname: 'mcga.gov.uk' }
+
+      describe 'all paths that aren\'t /mca/ or /c4mca/' do
+        before do
+          get 'http://mcga.gov.uk/hydrography'
+        end
+
+        it_behaves_like 'a 301'
+        its(:location) { should == 'http://www.dft.gov.uk/mca/hydrography' }
+      end
+    end
+
     describe 'Number 10 redirects' do
       before { site.hosts.create hostname: 'www.number10.gov.uk' }
 
       describe 'visiting a news URL' do
         before do
           get 'http://www.number10.gov.uk/news/latest-news/2007/06/Brown-unveils-new-faces-12225'
+        end
+
+        it_behaves_like 'a 301'
+        its(:location) { should == 'http://www.number10.gov.uk/news/brown-unveils-new-faces' }
+      end
+    end
+
+    describe 'Number 10 non-www redirects' do
+      before { site.hosts.create hostname: 'number10.gov.uk' }
+
+      describe 'visiting a news URL' do
+        before do
+          get 'http://number10.gov.uk/news/latest-news/2007/06/Brown-unveils-new-faces-12225'
         end
 
         it_behaves_like 'a 301'
