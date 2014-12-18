@@ -542,9 +542,11 @@ describe 'HTTP request handling' do
 
   describe 'visiting a /sitemap.xml URL for a site with a large number of redirects' do
     let(:maximum_size) { 10 }
+    let(:batch_size) { 5 } # if the batch size is larger than the max, it will always add too many
 
     before do
       stub_const('Bouncer::Outcome::Sitemap::MAXIMUM_SIZE', maximum_size)
+      stub_const('Bouncer::Outcome::Sitemap::BATCH_SIZE', batch_size)
       (1..maximum_size + 1).each do |index|
         site.mappings.create \
         path:         "/a-redirected-page-#{index}",
