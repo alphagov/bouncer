@@ -24,3 +24,11 @@ RSpec::Matchers.define :have_sitemap_entry_for do |url|
     !sitemap.xpath("/xmlns:urlset/xmlns:url/xmlns:loc[text()='#{url}']").empty?
   end
 end
+
+RSpec::Matchers.define :have_so_many_sitemap_entries do |expected_count|
+  match do |string|
+    sitemap = Nokogiri::XML::Document.parse(string)
+    sitemap.xpath("/xmlns:urlset/xmlns:url/xmlns:loc").count == expected_count
+  end
+end
+
