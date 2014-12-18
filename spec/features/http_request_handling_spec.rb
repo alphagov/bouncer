@@ -540,6 +540,29 @@ describe 'HTTP request handling' do
     its(:content_type) { should == 'application/xml' }
   end
 
+  describe 'visiting a /sitemap.xml URL for a site with a large number of redirects' do
+    let(:maximum_size) { 10 }
+
+    before do
+      stub_const('Bouncer::Outcome::Sitemap::MAXIMUM_SIZE', maximum_size)
+      (1..maximum_size + 1).each do |index|
+        site.mappings.create \
+        path:         "/a-redirected-page-#{index}",
+        type:         'redirect',
+        new_url:      'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page'
+      end
+
+      get 'http://www.minitrue.gov.uk/sitemap.xml'
+    end
+
+    it 'should include the first n entries' do
+      last_response.status.should be(200)
+      last_response.body.should have_so_many_sitemap_entries(maximum_size)
+      last_response.body.should have_sitemap_entry_for("http://www.minitrue.gov.uk/a-redirected-page-#{maximum_size}")
+      last_response.body.should_not have_sitemap_entry_for("http://www.minitrue.gov.uk/a-redirected-page-#{maximum_size + 1}")
+    end
+  end
+
   describe 'visiting a /robots.txt URL' do
     before do
       get 'http://www.minitrue.gov.uk/robots.txt'
