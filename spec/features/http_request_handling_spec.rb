@@ -1020,6 +1020,33 @@ describe 'HTTP request handling' do
         its(:location) { should == 'http://reports.ofsted.gov.uk/provider/files/1908405/urn/137739.pdf' }
       end
 
+      describe 'visiting an interstitial asset download URL' do
+        before do
+          get 'http://www.ofsted.gov.uk/index.php?q=filedownloading&id=2150035&type=1&refer=0'
+        end
+
+        it_behaves_like 'a 301'
+        its(:location) { should == 'http://reports.ofsted.gov.uk/index.php?q=filedownloading&id=2150035&type=1&refer=0' }
+      end
+
+      describe 'visiting an oxedu provider report page URL' do
+        before do
+          get 'http://www.ofsted.gov.uk/oxedu_providers/full/(urn)/136338'
+        end
+
+        it_behaves_like 'a 301'
+        its(:location) { should == 'http://reports.ofsted.gov.uk/inspection-reports/find-inspection-report/provider/ELS/136338' }
+      end
+
+      describe 'visiting an oxcare provider report page URL' do
+        before do
+          get 'http://www.ofsted.gov.uk/oxcare_providers/full/(urn)/EY333119/(type)/33/(typename)/Childcare%20on%20Non-Domestic%20Premises'
+        end
+
+        it_behaves_like 'a 301'
+        its(:location) { should == 'http://reports.ofsted.gov.uk/inspection-reports/find-inspection-report/provider/CARE/EY333119' }
+      end
+
     end
 
     describe 'Ofsted inspection reports non-www redirects' do

@@ -25,6 +25,12 @@ module Bouncer
           redirect("http://reports.ofsted.gov.uk/inspection-reports/find-inspection-report/provider/#{$1}")
         when %r{^/provider/files/(.*)/urn/(.*)$}i
           redirect("http://reports.ofsted.gov.uk/provider/files/#{$1}/urn/#{$2}")
+        when %r{^/oxedu_providers/full/\(?urn\)?/([^/]*)/?(.*)$}i
+          redirect("http://reports.ofsted.gov.uk/inspection-reports/find-inspection-report/provider/ELS/#{$1}")
+        when %r{^/oxcare_providers/full/\(?urn\)?/([^/]*)/?(.*)$}i
+          redirect("http://reports.ofsted.gov.uk/inspection-reports/find-inspection-report/provider/CARE/#{$1}")
+        when %r{^/index.php\?q=filedownloading(.*)$}i
+          redirect("http://reports.ofsted.gov.uk/index.php?q=filedownloading#{$1}")
         end
 
       when 'www.businesslink.gov.uk', 'businesslink.gov.uk'
