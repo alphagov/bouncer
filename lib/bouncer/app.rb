@@ -14,6 +14,8 @@ module Bouncer
                   Outcome::UnrecognisedHost
                 when ['/404', '/410'].include?(context.request.path)
                   Outcome::TestThe4xxPages
+                when context.host == 'www.direct.gov.uk' && context.request.path == '__canary__'
+                  Outcome::Canary
                 when context.request.path == '/sitemap.xml'
                   Outcome::Sitemap
                 when context.request.path == '/robots.txt'
