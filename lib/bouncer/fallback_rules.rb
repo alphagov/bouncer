@@ -30,8 +30,6 @@ module Bouncer
           request.path =~ %r{^/news/?([_0-9a-zA-Z-]+)?/([0-9]+)/([0-9]+)/(.*)-([0-9]+)$}
       when 'cdn.hm-treasury.gov.uk'
         redirect("http://www.hm-treasury.gov.uk/#{$1}") if request.path =~ %r{^/(.*)$}
-      when 'digital.cabinetoffice.gov.uk'
-        redirect("https://gds.blog.gov.uk/#{$1}") if request.path =~ %r{^/(.*)$}
       when 'govstore.service.gov.uk'
         case request.path
         when %r{^/cloudstore/([_0-9a-zA-Z-]+)$}

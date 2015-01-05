@@ -1111,19 +1111,6 @@ describe 'HTTP request handling' do
       end
     end
 
-    describe 'GDS blog redirects' do
-      before { site.hosts.create hostname: 'digital.cabinetoffice.gov.uk' }
-
-      describe 'visiting a /* URL' do
-        before do
-          get 'http://digital.cabinetoffice.gov.uk/tag/david-mann'
-        end
-
-        it_behaves_like 'a 301'
-        its(:location) { should == 'https://gds.blog.gov.uk/tag/david-mann' }
-      end
-    end
-
     describe 'GovStore/CloudStore fallback rules' do
       before { site.hosts.create hostname: 'govstore.service.gov.uk' }
 
