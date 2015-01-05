@@ -1063,19 +1063,6 @@ describe 'HTTP request handling' do
 
     end
 
-    describe 'Treasury redirects' do
-      before { site.hosts.create hostname: 'cdn.hm-treasury.gov.uk' }
-
-      describe 'visiting a CDN /* URL' do
-        before do
-          get 'http://cdn.hm-treasury.gov.uk/budget2013_complete.pdf'
-        end
-
-        it_behaves_like 'a 301'
-        its(:location) { should == 'http://www.hm-treasury.gov.uk/budget2013_complete.pdf' }
-      end
-    end
-
     describe 'GDS blog redirects' do
       before { site.hosts.create hostname: 'digital.cabinetoffice.gov.uk' }
 
