@@ -33,6 +33,24 @@ module Bouncer
           redirect("http://reports.ofsted.gov.uk/index.php?q=filedownloading#{$1}")
         end
 
+      when 'www.aaib.gov.uk', 'aaib.gov.uk'
+        case request.non_canonicalised_fullpath
+        when %r{^/sites/aaib/(.*)$}i
+          redirect("http://www.aaib.gov.uk/#{$1}")
+        end
+
+      when 'www.maib.gov.uk', 'maib.gov.uk'
+        case request.non_canonicalised_fullpath
+        when %r{^/sites/maib/(.*)$}i
+          redirect("http://www.maib.gov.uk/#{$1}")
+        end
+
+      when 'www.raib.gov.uk', 'raib.gov.uk'
+        case request.non_canonicalised_fullpath
+        when %r{^/sites/raib/(.*)$}i
+          redirect("http://www.raib.gov.uk/#{$1}")
+        end
+
       when 'www.businesslink.gov.uk', 'businesslink.gov.uk'
         case request.non_canonicalised_fullpath
         when %r{^(.*site=230.*)$}i
