@@ -1063,6 +1063,41 @@ describe 'HTTP request handling' do
 
     end
 
+    describe 'Accident Investigation Branches multi-surfaced content' do
+      before { site.hosts.create hostname: 'www.aaib.gov.uk' }
+      before { site.hosts.create hostname: 'www.maib.gov.uk' }
+      before { site.hosts.create hostname: 'www.raib.gov.uk' }
+
+      describe 'visiting an AAIB multi surfaced page' do
+        before do
+          get 'http://www.aaib.gov.uk/sites/aaib/publications/bulletins/january_2006/pierre_robin_dr400_180__g_bsla.htm'
+        end
+
+        it_behaves_like 'a 301'
+        its(:location) { should == 'http://www.aaib.gov.uk/publications/bulletins/january_2006/pierre_robin_dr400_180__g_bsla.htm' }
+      end
+
+      describe 'visiting a RAIB multi surfaced page' do
+        before do
+          get 'http://www.raib.gov.uk/sites/raib/publications/index.cfm'
+        end
+
+        it_behaves_like 'a 301'
+        its(:location) { should == 'http://www.raib.gov.uk/publications/index.cfm' }
+      end
+
+      describe 'visiting a MAIB multi surfaced page' do
+        before do
+          get 'http://www.maib.gov.uk/sites/maib/home/index.cfm'
+        end
+
+        it_behaves_like 'a 301'
+        its(:location) { should == 'http://www.maib.gov.uk/home/index.cfm' }
+      end
+
+    end
+
+
     describe 'Treasury redirects' do
       before { site.hosts.create hostname: 'cdn.hm-treasury.gov.uk' }
 
