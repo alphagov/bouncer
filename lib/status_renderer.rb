@@ -16,6 +16,6 @@ class StatusRenderer
 
   def render(context, status)
     template = self[status]
-    template.result(context.render_binding)
+    template.result(context.attributes_for_render)
   end
 end
