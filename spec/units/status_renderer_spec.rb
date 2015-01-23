@@ -17,8 +17,8 @@ describe StatusRenderer do
   end
 
   describe 'template rendering' do
-    let(:request_context) do
-      attributes = {
+    let(:attributes_for_render) do
+      {
         title: 'Keeping bees',
         homepage: nil,
         css: nil,
@@ -27,10 +27,9 @@ describe StatusRenderer do
         suggested_url: nil,
         archive_url: nil
       }
-      double('RequestContext', attributes_for_render: attributes).as_null_object
     end
 
-    subject(:rendered) { renderer.render(request_context, 410) }
+    subject(:rendered) { renderer.render(attributes_for_render, 410) }
 
     it { should include('410 - Page Archived') }
     it { should include('Keeping bees') }
