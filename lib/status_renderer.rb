@@ -14,8 +14,8 @@ class StatusRenderer
     @templates[status.to_s] ||= (template_str = template_content(status)) && Erubis::EscapedEruby.new(template_str)
   end
 
-  def render(context, status)
+  def render(attributes_for_render, status)
     template = self[status]
-    template.result(context.render_binding)
+    template.result(attributes_for_render)
   end
 end
