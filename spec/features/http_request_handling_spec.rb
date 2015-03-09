@@ -208,6 +208,20 @@ describe 'HTTP request handling' do
     its(:location) { should == 'http://anything-at-all.mod.uk' }
   end
 
+  describe 'visiting a URL which redirects to anything on *.nhs.uk' do
+    before do
+      site.mappings.create \
+        path:          '/a-redirected-page',
+        type:          'redirect',
+        new_url:       'http://anything-at-all.nhs.uk'
+
+      get 'https://www.minitrue.gov.uk/a-redirected-page'
+    end
+
+    its(:status) { should == 301 }
+    its(:location) { should == 'http://anything-at-all.nhs.uk' }
+  end
+
   describe 'visiting a URL which redirects to a URL including square brackets' do
     before do
       site.mappings.create \
