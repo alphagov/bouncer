@@ -68,6 +68,12 @@ module Bouncer
         when %r{^/(.*)$}
           redirect("http://www.dft.gov.uk/mca/#{$1}")
         end
+
+      when 'www.planningportal.gov.uk', 'planningportal.gov.uk'
+        case request.non_canonicalised_fullpath
+        when %r{^/wps/portal/portalhome/unauthenticatedhome/!ut/}
+          redirect("http://www.planningportal.gov.uk")
+        end
       end
 
     end
