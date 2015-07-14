@@ -987,6 +987,32 @@ describe 'HTTP request handling' do
       end
     end
 
+    describe 'Planning Portal redirects' do
+      before { site.hosts.create hostname: 'www.planningportal.gov.uk' }
+
+      describe 'session based unauthenticated home page' do
+        before do
+          get 'http://www.planningportal.gov.uk/wps/portal/portalhome/unauthenticatedhome/!ut/p/c5/04_SB8K8xLLM9MSSzPy8xBz9CP0os3gjtxBnJydDRwMLbzdLA09nSw_zsKBAIwN3U_1wkA6zeHMXS4gKd29TRwNPI0s3b2e_AGMDAwOIvAEO4Gig7-eRn5uqX5CdneboqKgIAGUwqho!/dl3/d3/L2dBISEvZ0FBIS9nQSEh/'
+        end
+
+        it_behaves_like 'a 301'
+        its(:location) { should == 'http://www.planningportal.gov.uk' }
+      end
+    end
+
+    describe 'Planning Portal non-www redirects' do
+      before { site.hosts.create hostname: 'planningportal.gov.uk' }
+
+      describe 'session based unauthenticated home page' do
+        before do
+          get 'http://planningportal.gov.uk/wps/portal/portalhome/unauthenticatedhome/!ut/p/c5/04_SB8K8xLLM9MSSzPy8xBz9CP0os3gjtxBnJydDRwMLbzdLA09nSw_zsKBAIwN3U_1wkA6zeHMXS4gKd29TRwNPI0s3b2e_AGMDAwOIvAEO4Gig7-eRn5uqX5CdneboqKgIAGUwqho!/dl3/d3/L2dBISEvZ0FBIS9nQSEh/'
+        end
+
+        it_behaves_like 'a 301'
+        its(:location) { should == 'http://www.planningportal.gov.uk' }
+      end
+    end
+
     describe 'Number 10 redirects' do
       before { site.hosts.create hostname: 'www.number10.gov.uk' }
 
