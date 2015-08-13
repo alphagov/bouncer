@@ -109,6 +109,42 @@ CREATE TABLE hits_staging (
 
 
 --
+-- Name: hosts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE hosts (
+    id integer NOT NULL,
+    site_id integer NOT NULL,
+    hostname character varying(255) NOT NULL,
+    ttl integer,
+    cname character varying(255) DEFAULT NULL::character varying,
+    live_cname character varying(255) DEFAULT NULL::character varying,
+    created_at timestamp with time zone NOT NULL,
+    updated_at timestamp with time zone NOT NULL,
+    ip_address character varying(255) DEFAULT NULL::character varying,
+    canonical_host_id integer
+);
+
+
+--
+-- Name: hmrc_all_hits; Type: MATERIALIZED VIEW; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE MATERIALIZED VIEW hmrc_all_hits AS
+ SELECT hits.path,
+    sum(hits.count) AS count,
+    hits.http_status,
+    min(hits.mapping_id) AS mapping_id,
+    min(hits.host_id) AS host_id
+   FROM (hits
+     JOIN hosts ON ((hits.host_id = hosts.id)))
+  WHERE (hosts.site_id = 56)
+  GROUP BY hits.path, hits.http_status
+  ORDER BY sum(hits.count) DESC
+  WITH NO DATA;
+
+
+--
 -- Name: host_paths; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -138,24 +174,6 @@ CREATE SEQUENCE host_paths_id_seq
 --
 
 ALTER SEQUENCE host_paths_id_seq OWNED BY host_paths.id;
-
-
---
--- Name: hosts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE hosts (
-    id integer NOT NULL,
-    site_id integer NOT NULL,
-    hostname character varying(255) NOT NULL,
-    ttl integer,
-    cname character varying(255) DEFAULT NULL::character varying,
-    live_cname character varying(255) DEFAULT NULL::character varying,
-    created_at timestamp with time zone NOT NULL,
-    updated_at timestamp with time zone NOT NULL,
-    ip_address character varying(255) DEFAULT NULL::character varying,
-    canonical_host_id integer
-);
 
 
 --
@@ -320,6 +338,42 @@ ALTER SEQUENCE mappings_id_seq OWNED BY mappings.id;
 
 
 --
+-- Name: mhra_all_hits; Type: MATERIALIZED VIEW; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE MATERIALIZED VIEW mhra_all_hits AS
+ SELECT hits.path,
+    sum(hits.count) AS count,
+    hits.http_status,
+    min(hits.mapping_id) AS mapping_id,
+    min(hits.host_id) AS host_id
+   FROM (hits
+     JOIN hosts ON ((hits.host_id = hosts.id)))
+  WHERE (hosts.site_id = 447)
+  GROUP BY hits.path, hits.http_status
+  ORDER BY sum(hits.count) DESC
+  WITH NO DATA;
+
+
+--
+-- Name: ofsted_all_hits; Type: MATERIALIZED VIEW; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE MATERIALIZED VIEW ofsted_all_hits AS
+ SELECT hits.path,
+    sum(hits.count) AS count,
+    hits.http_status,
+    min(hits.mapping_id) AS mapping_id,
+    min(hits.host_id) AS host_id
+   FROM (hits
+     JOIN hosts ON ((hits.host_id = hosts.id)))
+  WHERE (hosts.site_id = 403)
+  GROUP BY hits.path, hits.http_status
+  ORDER BY sum(hits.count) DESC
+  WITH NO DATA;
+
+
+--
 -- Name: organisational_relationships; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -364,7 +418,8 @@ CREATE TABLE organisations (
     ga_profile_id character varying(16) DEFAULT NULL::character varying,
     whitehall_slug character varying(255) DEFAULT NULL::character varying,
     whitehall_type character varying(255) DEFAULT NULL::character varying,
-    abbreviation character varying(255) DEFAULT NULL::character varying
+    abbreviation character varying(255) DEFAULT NULL::character varying,
+    content_id character varying(255) NOT NULL
 );
 
 
@@ -457,7 +512,8 @@ CREATE TABLE sites (
     global_redirect_append_path boolean DEFAULT false NOT NULL,
     global_type character varying(255) DEFAULT NULL::character varying,
     homepage_title character varying(255) DEFAULT NULL::character varying,
-    homepage_furl character varying(255) DEFAULT NULL::character varying
+    homepage_furl character varying(255) DEFAULT NULL::character varying,
+    precompute_all_hits_view boolean DEFAULT false NOT NULL
 );
 
 
@@ -559,7 +615,9 @@ CREATE TABLE users (
     created_at timestamp with time zone NOT NULL,
     updated_at timestamp with time zone NOT NULL,
     organisation_slug character varying(255) DEFAULT NULL::character varying,
-    is_robot boolean DEFAULT false
+    is_robot boolean DEFAULT false,
+    disabled boolean DEFAULT false,
+    organisation_content_id character varying(255)
 );
 
 
@@ -1045,6 +1103,13 @@ CREATE INDEX index_organisational_relationships_on_parent_organisation_id ON org
 
 
 --
+-- Name: index_organisations_on_content_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_organisations_on_content_id ON organisations USING btree (content_id);
+
+
+--
 -- Name: index_organisations_on_title; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1281,6 +1346,8 @@ INSERT INTO schema_migrations (version) VALUES ('20141103111339');
 
 INSERT INTO schema_migrations (version) VALUES ('20141103142639');
 
+INSERT INTO schema_migrations (version) VALUES ('20141111093926');
+
 INSERT INTO schema_migrations (version) VALUES ('20141113115152');
 
 INSERT INTO schema_migrations (version) VALUES ('20141114110930');
@@ -1292,5 +1359,17 @@ INSERT INTO schema_migrations (version) VALUES ('20141118121300');
 INSERT INTO schema_migrations (version) VALUES ('20141119113045');
 
 INSERT INTO schema_migrations (version) VALUES ('20141120164444');
+
+INSERT INTO schema_migrations (version) VALUES ('20150320164433');
+
+INSERT INTO schema_migrations (version) VALUES ('20150421161752');
+
+INSERT INTO schema_migrations (version) VALUES ('20150421161957');
+
+INSERT INTO schema_migrations (version) VALUES ('20150423102347');
+
+INSERT INTO schema_migrations (version) VALUES ('20150428155430');
+
+INSERT INTO schema_migrations (version) VALUES ('20150429154045');
 
 
