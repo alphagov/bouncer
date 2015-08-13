@@ -14,13 +14,15 @@ describe 'HTTP request handling' do
   let(:department_of_health) do
     Organisation.create \
       title: 'Department of Health',
-      css: 'department-of-health'
+      css: 'department-of-health',
+      content_id: SecureRandom.uuid
   end
 
   let(:organisation) do
     Organisation.create \
       title: 'Ministry of Truth',
-      css: 'ministry-of-truth'
+      css: 'ministry-of-truth',
+      content_id: SecureRandom.uuid
   end
 
   let!(:site) do
@@ -332,7 +334,7 @@ describe 'HTTP request handling' do
 
   describe 'visiting an unrecognised path on a different recognised host' do
     before do
-      Organisation.create(css: 'ministry-of-love', title: 'Ministry of Love').
+      Organisation.create(css: 'ministry-of-love', title: 'Ministry of Love', content_id: SecureRandom.uuid).
         sites.create(tna_timestamp: '2013-07-24 10:32:51', abbr: 'minil', homepage: 'http://www.gov.uk/government/organisations/ministry-of-love').
         hosts.create hostname: 'www.miniluv.gov.uk'
 
