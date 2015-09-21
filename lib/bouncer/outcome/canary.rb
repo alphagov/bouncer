@@ -3,8 +3,7 @@ module Bouncer
     class Canary < Base
       HEADERS = {
         'Content-Type' => 'text/plain',
-        # FIXME: stop this being overridden by our cacher middleware:
-        'Cache-Control' => 'private'
+        'Cache-Control' => 'private',
       }
 
       def serve
