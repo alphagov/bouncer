@@ -63,6 +63,11 @@ describe 'HTTP request handling' do
     specify { last_response.headers['Cache-Control'].should == 'public, max-age=3600' }
   end
 
+  shared_examples 'a 503' do
+    its(:status) { should == 503 }
+    specify { last_response.headers['Cache-Control'].should == 'private' }
+  end
+
   describe 'redirects get a cache header of 1 hour' do
     before do
       get 'http://www.minitrue.gov.uk'
@@ -1199,6 +1204,57 @@ describe 'HTTP request handling' do
 
         it_behaves_like 'a 301'
         its(:location) { should == 'https://www.gov.uk/digital-marketplace' }
+      end
+    end
+
+    describe 'visiting www.direct.gov.uk/__canary__' do
+
+      before do
+        site.hosts.create hostname: 'www.direct.gov.uk'
+      end
+
+      context 'when everything is fine' do
+        before do
+          site.mappings.create(
+            path:         '/a-redirected-page',
+            type:         'redirect',
+            new_url:      'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page'
+          )
+          WhitelistedHost.create(hostname: 'www.example.com')
+
+          get "http://www.direct.gov.uk/__canary__"
+        end
+
+        its(:status)   { should == 200 }
+        specify        { last_response.headers['Cache-Control'].should == 'private' }
+      end
+
+      context 'when the Database errors when finding a Host' do
+        before do
+          Host.stub(:find_by).and_raise('Database does not exist')
+        end
+
+        it 'raises an uncaught exception' do
+          expect { get "http://www.direct.gov.uk/__canary__" }.to raise_error(RuntimeError, 'Database does not exist')
+        end
+      end
+
+      context 'when the Database errors when querying a required table' do
+        before do
+          WhitelistedHost.stub(:first).and_raise('Database does not exist')
+          get "http://www.direct.gov.uk/__canary__"
+        end
+
+        it_behaves_like 'a 503'
+      end
+
+      context 'when a required table is empty' do
+        before do
+          WhitelistedHost.stub(:first).and_return(nil)
+          get "http://www.direct.gov.uk/__canary__"
+        end
+
+        it_behaves_like 'a 503'
       end
     end
   end

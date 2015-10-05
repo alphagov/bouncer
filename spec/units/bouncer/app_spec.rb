@@ -43,6 +43,7 @@ describe Bouncer::App do
                 organisation: organisation,
                 tna_timestamp: nil
       mappings.stub find_by: mapping
+      mappings.stub first: mapping
     end
 
     shared_examples 'a redirector which recognises the host' do
@@ -138,6 +139,127 @@ describe Bouncer::App do
         it 'should respond with a client error' do
           get url
           last_response.should be_client_error
+        end
+      end
+    end
+
+    context 'when visiting www.direct.gov.uk/__canary__' do
+      let(:path)             { '/__canary__' }
+      let(:hostname)         { 'www.direct.gov.uk' }
+      let(:host)             { double('host') }
+      let(:whitelisted_host) { double('whitelisted_host')}
+
+      before(:each) do
+        mappings.stub first: mapping
+        host.stub(:hostname) { hostname }
+        WhitelistedHost.stub(:first).and_return(whitelisted_host)
+      end
+
+      context 'when everything is fine' do
+        let(:mapping)      { double('mapping') }
+        let(:organisation) { double('organisation') }
+
+        it 'responds with 200' do
+          get url
+          last_response.status.should == 200
+        end
+      end
+
+      context 'when required tables are empty' do
+        context 'when there is no Site' do
+          let(:mapping)      { double('mapping') }
+          let(:organisation) { double('organisation') }
+          let(:site)         { nil }
+
+          it 'should respond with 503' do
+            get url
+            last_response.status.should == 503
+          end
+        end
+
+        context 'when there is no organisation' do
+          let(:mapping)      { double 'mapping' }
+          let(:organisation) { nil }
+
+          it 'should respond with 503' do
+            get url
+            last_response.status.should == 503
+          end
+        end
+
+        context 'when there is no mapping' do
+          let(:mapping)      { nil }
+          let(:organisation) { double('organisation') }
+
+          it 'should respond with 503' do
+            get url
+            last_response.status.should == 503
+          end
+        end
+
+        context 'when there are no WhitelistedHosts' do
+          let(:mapping)      { double('mapping') }
+          let(:organisation) { double('organisation') }
+
+          before do
+            WhitelistedHost.stub(:first).and_return(nil)
+          end
+
+          it 'should respond with 503' do
+            get url
+            last_response.status.should == 503
+          end
+        end
+      end
+
+      context 'when we get an Error from the Database' do
+        # This variable needs to be present for the setup in the outer context
+        let(:mapping)      { nil }
+
+        context 'when ActiveRecord raises an exception when querying Host' do
+          it 'should raise error' do
+            Host.stub(:find_by).and_raise('Database does not exist')
+
+            expect { get url }.to raise_error
+          end
+        end
+
+        context 'when ActiveRecord raises an exception when querying Sites' do
+          it 'should raise error' do
+
+            # canonicalising the request queries site before
+            # we get to the canary
+            host.stub(:site).and_raise('Database does not exist')
+
+            expect { get url }.to raise_error
+          end
+        end
+
+        context 'when ActiveRecord raises an exception when querying WhitelistedHosts' do
+          it 'should respond with 503' do
+            WhitelistedHost.stub(:first).and_raise('Database does not exist')
+
+            get url
+            last_response.status.should == 503
+          end
+        end
+
+        context 'when ActiveRecord raises an exception when querying Organisation' do
+          it 'should respond with 503' do
+            site.stub(:organisation).and_raise('Database does not exist')
+
+            get url
+            last_response.status.should == 503
+          end
+        end
+
+        context 'when ActiveRecord raises an exception when querying Mappings' do
+          it 'should respond with 503' do
+            site.stub(:mappings).and_raise('Database does not exist')
+
+            get url
+            last_response.status.should == 503
+          end
         end
       end
     end
