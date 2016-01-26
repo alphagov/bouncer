@@ -1,8 +1,8 @@
 source 'https://rubygems.org/'
 
-gem 'activerecord', '4.1.11' # Ideally version should be synced with Transition
+gem 'activerecord', '4.1.14.1' # Ideally version should be synced with Transition
 gem 'pg', '0.17.1'
-gem 'nokogiri', '1.6.0'
+gem 'nokogiri', '1.6.7.2'
 gem 'rack', '1.5.4'
 gem 'optic14n', '2.0.0' # Ideally version should be synced with Transition
 gem 'erubis', '2.7.0'
