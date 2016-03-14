@@ -18,7 +18,7 @@ group :development do
 end
 
 group :test do
-  gem 'database_cleaner', '1.0.1'
-  gem 'rack-test', '0.6.2'
+  gem 'database_cleaner', '1.5.1'
+  gem 'rack-test', '0.6.3'
   gem 'rspec', '~> 3.4.0'
 end
