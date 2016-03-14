@@ -10,7 +10,7 @@ gem 'airbrake', '~> 4.3.0'
 gem 'rake', '10.1.0'
 
 group :production do
-  gem 'unicorn', '4.6.3'
+  gem 'unicorn', '~> 5.0.0'
 end
 
 group :development do
