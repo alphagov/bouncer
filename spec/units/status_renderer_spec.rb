@@ -4,15 +4,26 @@ describe StatusRenderer do
   subject(:renderer) { StatusRenderer.new }
 
   describe 'template storage' do
-    its([404]) { should be_an(Erubis::EscapedEruby) }
-    its([410]) { should be_an(Erubis::EscapedEruby) }
-    its([301]) { should be_nil }
+    describe '[404]' do
+      subject { super()[404] }
+      it { is_expected.to be_an(Erubis::EscapedEruby) }
+    end
+
+    describe '[410]' do
+      subject { super()[410] }
+      it { is_expected.to be_an(Erubis::EscapedEruby) }
+    end
+
+    describe '[301]' do
+      subject { super()[301] }
+      it { is_expected.to be_nil }
+    end
 
     it 'reuses its templates' do
       t1 = renderer[404]
       t2 = renderer[404]
 
-      t1.object_id.should == t2.object_id
+      expect(t1.object_id).to eq(t2.object_id)
     end
   end
 
@@ -31,7 +42,7 @@ describe StatusRenderer do
 
     subject(:rendered) { renderer.render(attributes_for_render, 410) }
 
-    it { should include('410 - Page Archived') }
-    it { should include('Keeping bees') }
+    it { is_expected.to include('410 - Page Archived') }
+    it { is_expected.to include('Keeping bees') }
   end
 end

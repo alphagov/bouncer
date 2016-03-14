@@ -6,13 +6,13 @@ describe Mapping do
     let(:mapping) { double 'mapping', save: true }
 
     before(:each) do
-      Mapping.stub new: mapping
+      allow(Mapping).to receive_messages new: mapping
     end
 
-    specify { Mapping.create(attributes).should == mapping }
+    specify { expect(Mapping.create(attributes)).to eq(mapping) }
 
     specify do
-      Mapping.should_receive(:new).with(attributes)
+      expect(Mapping).to receive(:new).with(attributes)
       Mapping.create(attributes)
     end
   end
@@ -24,9 +24,21 @@ describe Mapping do
 
     subject { Mapping.new path: path, type: type, new_url: new_url }
 
-    it { should be_a Mapping }
-    its(:path) { should == path }
-    its(:type) { should == type }
-    its(:new_url) { should == new_url }
+    it { is_expected.to be_a Mapping }
+
+    describe '#path' do
+      subject { super().path }
+      it { is_expected.to eq(path) }
+    end
+
+    describe '#type' do
+      subject { super().type }
+      it { is_expected.to eq(type) }
+    end
+
+    describe '#new_url' do
+      subject { super().new_url }
+      it { is_expected.to eq(new_url) }
+    end
   end
 end

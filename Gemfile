@@ -20,5 +20,5 @@ end
 group :test do
   gem 'database_cleaner', '1.0.1'
   gem 'rack-test', '0.6.2'
-  gem 'rspec', '2.13.0'
+  gem 'rspec', '~> 3.4.0'
 end

@@ -10,7 +10,7 @@ describe Bouncer::App do
 
   before(:each) do
     stub_const 'Host', double
-    Host.stub find_by: host
+    allow(Host).to receive_messages find_by: host
   end
 
   shared_examples 'a redirector' do
@@ -19,13 +19,13 @@ describe Bouncer::App do
     end
 
     it 'should try to find the right host' do
-      Host.should_receive(:find_by).with(hostname: hostname)
+      expect(Host).to receive(:find_by).with(hostname: hostname)
       get url
     end
 
     it 'should respond with the correct status code' do
       get url
-      last_response.status.should == status_code
+      expect(last_response.status).to eq(status_code)
     end
   end
 
@@ -36,31 +36,31 @@ describe Bouncer::App do
     let(:mappings)     { double 'mappings' }
 
     before(:each) do
-      host.stub site: site
-      site.stub mappings: mappings,
+      allow(host).to receive_messages site: site
+      allow(site).to receive_messages mappings: mappings,
                 query_params: nil,
                 global_type: nil,
                 organisation: organisation,
                 tna_timestamp: nil
-      mappings.stub find_by: mapping
-      mappings.stub first: mapping
+      allow(mappings).to receive_messages find_by: mapping
+      allow(mappings).to receive_messages first: mapping
     end
 
     shared_examples 'a redirector which recognises the host' do
       it_should_behave_like 'a redirector'
 
       it 'should get the host\'s site' do
-        host.should_receive(:site).with(no_args)
+        expect(host).to receive(:site).with(no_args)
         get url
       end
 
       it 'should get the site\'s mappings' do
-        site.should_receive(:mappings).with(no_args)
+        expect(site).to receive(:mappings).with(no_args)
         get url
       end
 
       it 'should try to find the right mapping' do
-        mappings.should_receive(:find_by).with(path: path)
+        expect(mappings).to receive(:find_by).with(path: path)
         get url
       end
     end
@@ -69,14 +69,14 @@ describe Bouncer::App do
       let(:mapping) { double 'mapping' }
 
       before(:each) do
-        mapping.stub type: type
+        allow(mapping).to receive_messages type: type
       end
 
       shared_examples 'a redirector which recognises the host and path' do
         it_should_behave_like 'a redirector which recognises the host'
 
         it 'should get the mapping\'s type' do
-          mapping.should_receive(:type).with(no_args)
+          expect(mapping).to receive(:type).with(no_args)
           get url
         end
       end
@@ -87,24 +87,24 @@ describe Bouncer::App do
         let(:new_url)     { "http://www.gov.uk" }
 
         before(:each) do
-          mapping.stub new_url: new_url
+          allow(mapping).to receive_messages new_url: new_url
         end
 
         it_should_behave_like 'a redirector which recognises the host and path'
 
         it 'should get the mapping\'s new URL' do
-          mapping.should_receive(:new_url).with(no_args)
+          expect(mapping).to receive(:new_url).with(no_args)
           get url
         end
 
         it 'should respond with a redirect' do
           get url
-          last_response.should be_redirect
+          expect(last_response).to be_redirect
         end
 
         it 'should redirect to the new URL' do
           get url
-          last_response.location.should == new_url
+          expect(last_response.location).to eq(new_url)
         end
 
         context 'when the host is aka-' do
@@ -112,7 +112,7 @@ describe Bouncer::App do
           let(:rewritten_hostname) { 'example.com'}
 
           it 'writes out the aka' do
-            Host.should_receive(:find_by).with(hostname: rewritten_hostname)
+            expect(Host).to receive(:find_by).with(hostname: rewritten_hostname)
             get url
           end
         end
@@ -126,7 +126,7 @@ describe Bouncer::App do
 
         it 'should respond with a client error' do
           get url
-          last_response.should be_client_error
+          expect(last_response).to be_client_error
         end
       end
 
@@ -138,7 +138,7 @@ describe Bouncer::App do
 
         it 'should respond with a client error' do
           get url
-          last_response.should be_client_error
+          expect(last_response).to be_client_error
         end
       end
     end
@@ -150,9 +150,9 @@ describe Bouncer::App do
       let(:whitelisted_host) { double('whitelisted_host')}
 
       before(:each) do
-        mappings.stub first: mapping
-        host.stub(:hostname) { hostname }
-        WhitelistedHost.stub(:first).and_return(whitelisted_host)
+        allow(mappings).to receive_messages first: mapping
+        allow(host).to receive(:hostname) { hostname }
+        allow(WhitelistedHost).to receive(:first).and_return(whitelisted_host)
       end
 
       context 'when everything is fine' do
@@ -161,7 +161,7 @@ describe Bouncer::App do
 
         it 'responds with 200' do
           get url
-          last_response.status.should == 200
+          expect(last_response.status).to eq(200)
         end
       end
 
@@ -173,7 +173,7 @@ describe Bouncer::App do
 
           it 'should respond with 503' do
             get url
-            last_response.status.should == 503
+            expect(last_response.status).to eq(503)
           end
         end
 
@@ -183,7 +183,7 @@ describe Bouncer::App do
 
           it 'should respond with 503' do
             get url
-            last_response.status.should == 503
+            expect(last_response.status).to eq(503)
           end
         end
 
@@ -193,7 +193,7 @@ describe Bouncer::App do
 
           it 'should respond with 503' do
             get url
-            last_response.status.should == 503
+            expect(last_response.status).to eq(503)
           end
         end
 
@@ -202,12 +202,12 @@ describe Bouncer::App do
           let(:organisation) { double('organisation') }
 
           before do
-            WhitelistedHost.stub(:first).and_return(nil)
+            allow(WhitelistedHost).to receive(:first).and_return(nil)
           end
 
           it 'should respond with 503' do
             get url
-            last_response.status.should == 503
+            expect(last_response.status).to eq(503)
           end
         end
       end
@@ -218,9 +218,9 @@ describe Bouncer::App do
 
         context 'when ActiveRecord raises an exception when querying Host' do
           it 'should raise error' do
-            Host.stub(:find_by).and_raise('Database does not exist')
+            allow(Host).to receive(:find_by).and_raise('Database does not exist')
 
-            expect { get url }.to raise_error
+            expect { get url }.to raise_error('Database does not exist')
           end
         end
 
@@ -229,36 +229,36 @@ describe Bouncer::App do
 
             # canonicalising the request queries site before
             # we get to the canary
-            host.stub(:site).and_raise('Database does not exist')
+            allow(host).to receive(:site).and_raise('Database does not exist')
 
-            expect { get url }.to raise_error
+            expect { get url }.to raise_error('Database does not exist')
           end
         end
 
         context 'when ActiveRecord raises an exception when querying WhitelistedHosts' do
           it 'should respond with 503' do
-            WhitelistedHost.stub(:first).and_raise('Database does not exist')
+            allow(WhitelistedHost).to receive(:first).and_raise('Database does not exist')
 
             get url
-            last_response.status.should == 503
+            expect(last_response.status).to eq(503)
           end
         end
 
         context 'when ActiveRecord raises an exception when querying Organisation' do
           it 'should respond with 503' do
-            site.stub(:organisation).and_raise('Database does not exist')
+            allow(site).to receive(:organisation).and_raise('Database does not exist')
 
             get url
-            last_response.status.should == 503
+            expect(last_response.status).to eq(503)
           end
         end
 
         context 'when ActiveRecord raises an exception when querying Mappings' do
           it 'should respond with 503' do
-            site.stub(:mappings).and_raise('Database does not exist')
+            allow(site).to receive(:mappings).and_raise('Database does not exist')
 
             get url
-            last_response.status.should == 503
+            expect(last_response.status).to eq(503)
           end
         end
       end
@@ -273,7 +273,7 @@ describe Bouncer::App do
 
       it 'should respond with a not found' do
         get url
-        last_response.should be_not_found
+        expect(last_response).to be_not_found
       end
     end
   end
@@ -287,7 +287,7 @@ describe Bouncer::App do
 
     it 'should respond with a not found' do
       get url
-      last_response.should be_not_found
+      expect(last_response).to be_not_found
     end
   end
 end

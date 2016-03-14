@@ -6,13 +6,13 @@ describe Organisation do
     let(:organisation) { double 'organisation', save: true }
 
     before(:each) do
-      Organisation.stub new: organisation
+      allow(Organisation).to receive_messages new: organisation
     end
 
-    specify { Organisation.create(attributes).should == organisation }
+    specify { expect(Organisation.create(attributes)).to eq(organisation) }
 
     specify do
-      Organisation.should_receive(:new).with(attributes)
+      expect(Organisation).to receive(:new).with(attributes)
       Organisation.create(attributes)
     end
   end
