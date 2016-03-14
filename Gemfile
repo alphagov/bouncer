@@ -6,7 +6,7 @@ gem 'nokogiri', '1.6.7.2'
 gem 'rack', '1.5.4'
 gem 'optic14n', '2.0.0' # Ideally version should be synced with Transition
 gem 'erubis', '2.7.0'
-gem 'airbrake', '3.1.15'
+gem 'airbrake', '~> 4.3.0'
 gem 'rake', '10.1.0'
 
 group :production do

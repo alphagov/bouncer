@@ -15,7 +15,7 @@ GEM
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
     addressable (2.3.6)
-    airbrake (3.1.15)
+    airbrake (4.3.6)
       builder
       multi_json
     arel (5.0.1.20140414130214)
@@ -38,7 +38,7 @@ GEM
       rb-fsevent (>= 0.9)
       rb-inotify (>= 0.8)
       unicorn (>= 4.5)
-    multi_json (1.8.2)
+    multi_json (1.11.2)
     nokogiri (1.6.7.2)
       mini_portile2 (~> 2.0.0.rc2)
     optic14n (2.0.0)
@@ -80,7 +80,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord (= 4.1.14.1)
-  airbrake (= 3.1.15)
+  airbrake (~> 4.3.0)
   database_cleaner (= 1.5.1)
   erubis (= 2.7.0)
   mr-sparkle (= 0.2.0)
