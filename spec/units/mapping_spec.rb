@@ -18,9 +18,9 @@ describe Mapping do
   end
 
   describe '.new' do
-    let(:path) { double 'path' }
-    let(:type) { double 'type' }
-    let(:new_url) { double 'new URL' }
+    let(:path) { 'path' }
+    let(:type) { 'type' }
+    let(:new_url) { 'new URL' }
 
     subject { Mapping.new path: path, type: type, new_url: new_url }
 

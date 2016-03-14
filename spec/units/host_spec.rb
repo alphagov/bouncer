@@ -19,7 +19,7 @@ describe Host do
 
   describe '.new' do
     let(:site) { Site.new }
-    let(:hostname) { double 'hostname' }
+    let(:hostname) { 'host.name' }
 
     subject { Host.new site: site, hostname: hostname }
 
