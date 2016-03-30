@@ -5,13 +5,13 @@ describe Site do
     let(:site) { double 'site', save: true }
 
     before(:each) do
-      Site.stub new: site
+      allow(Site).to receive_messages new: site
     end
 
-    specify { Site.create.should == site }
+    specify { expect(Site.create).to eq(site) }
 
     specify do
-      Site.should_receive(:new).with(nil)
+      expect(Site).to receive(:new).with(nil)
       Site.create
     end
   end

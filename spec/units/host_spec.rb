@@ -6,26 +6,34 @@ describe Host do
     let(:host) { double 'host', save: true }
 
     before(:each) do
-      Host.stub new: host
+      allow(Host).to receive_messages new: host
     end
 
-    specify { Host.create(attributes).should == host }
+    specify { expect(Host.create(attributes)).to eq(host) }
 
     specify do
-      Host.should_receive(:new).with(attributes)
+      expect(Host).to receive(:new).with(attributes)
       Host.create(attributes)
     end
   end
 
   describe '.new' do
     let(:site) { Site.new }
-    let(:hostname) { double 'hostname' }
+    let(:hostname) { 'host.name' }
 
     subject { Host.new site: site, hostname: hostname }
 
-    it { should be_a Host }
-    its(:site) { should == site }
-    its(:hostname) { should == hostname }
+    it { is_expected.to be_a Host }
+
+    describe '#site' do
+      subject { super().site }
+      it { is_expected.to eq(site) }
+    end
+
+    describe '#hostname' do
+      subject { super().hostname }
+      it { is_expected.to eq(hostname) }
+    end
   end
 
   describe '.find_by' do
@@ -37,6 +45,6 @@ describe Host do
       @host = Host.create hostname: hostname, site_id: 321
     end
 
-    specify { Host.find_by(hostname: hostname).should == @host }
+    specify { expect(Host.find_by(hostname: hostname)).to eq(@host) }
   end
 end

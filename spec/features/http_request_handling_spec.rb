@@ -37,35 +37,61 @@ describe 'HTTP request handling' do
   end
 
   shared_examples 'a server error' do
-    its(:status)    { should == 500 }
-    its(:location)  { should == nil }
-    specify         { last_response.headers.should_not include('Cache-Control') }
+    describe '#status' do
+      subject { super().status }
+      it { is_expected.to eq(500) }
+    end
+
+    describe '#location' do
+      subject { super().location }
+      it { is_expected.to eq(nil) }
+    end
+    specify { expect(last_response.headers).not_to include('Cache-Control') }
   end
 
   shared_examples 'a 200' do
-    its(:status)   { should == 200 }
-    specify        { last_response.headers['Cache-Control'].should == 'public, max-age=3600' }
+    describe '#status' do
+      subject { super().status }
+      it { is_expected.to eq(200) }
+    end
+    specify { expect(last_response.headers['Cache-Control']).to eq('public, max-age=3600') }
   end
 
   shared_examples 'a 301' do
-    its(:status) { should == 301 }
-    specify      { last_response.headers['Cache-Control'].should == 'public, max-age=3600' }
+    describe '#status' do
+      subject { super().status }
+      it { is_expected.to eq(301) }
+    end
+    specify { expect(last_response.headers['Cache-Control']).to eq('public, max-age=3600') }
   end
 
   shared_examples 'a 410' do
-    its(:status) { should == 410 }
-    its(:content_type) { should == 'text/html' }
-    specify      { last_response.headers['Cache-Control'].should == 'public, max-age=3600' }
+    describe '#status' do
+      subject { super().status }
+      it { is_expected.to eq(410) }
+    end
+
+    describe '#content_type' do
+      subject { super().content_type }
+      it { is_expected.to eq('text/html') }
+    end
+    specify { expect(last_response.headers['Cache-Control']).to eq('public, max-age=3600') }
   end
 
   shared_examples 'a 404' do
-    its(:status) { should == 404 }
-    specify { last_response.headers['Cache-Control'].should == 'public, max-age=3600' }
+    describe '#status' do
+      subject { super().status }
+      it { is_expected.to eq(404) }
+    end
+    specify { expect(last_response.headers['Cache-Control']).to eq('public, max-age=3600') }
   end
 
   shared_examples 'a 503' do
-    its(:status) { should == 503 }
-    specify { last_response.headers['Cache-Control'].should == 'private' }
+    describe '#status' do
+      subject { super().status }
+      it { is_expected.to eq(503) }
+    end
+    specify { expect(last_response.headers['Cache-Control']).to eq('private') }
   end
 
   describe 'redirects get a cache header of 1 hour' do
@@ -87,7 +113,11 @@ describe 'HTTP request handling' do
     end
 
     it_behaves_like 'a 301'
-    its(:location) { should == 'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page' }
+
+    describe '#location' do
+      subject { super().location }
+      it { is_expected.to eq('http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page') }
+    end
   end
 
   describe 'visiting a URL with query parameters which has been redirected' do
@@ -102,7 +132,11 @@ describe 'HTTP request handling' do
     end
 
     it_behaves_like 'a 301'
-    its(:location) { should == 'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page' }
+
+    describe '#location' do
+      subject { super().location }
+      it { is_expected.to eq('http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page') }
+    end
   end
 
   describe 'visiting a redirected aka URL' do
@@ -119,7 +153,11 @@ describe 'HTTP request handling' do
         get 'http://aka-minitrue.gov.uk/a-redirected-page'
       end
       it_behaves_like 'a 301'
-      its(:location) { should == 'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page' }
+
+      describe '#location' do
+        subject { super().location }
+        it { is_expected.to eq('http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page') }
+      end
     end
 
     context "aka.hostname style" do
@@ -127,7 +165,11 @@ describe 'HTTP request handling' do
         get 'http://aka.minitrue.gov.uk/a-redirected-page'
       end
       it_behaves_like 'a 301'
-      its(:location) { should == 'http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page' }
+
+      describe '#location' do
+        subject { super().location }
+        it { is_expected.to eq('http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page') }
+      end
     end
   end
 
@@ -147,13 +189,13 @@ describe 'HTTP request handling' do
       it 'retains only the significant query parameters when finding the mapping' do
         # has the two important params and an irrelevant param
         get 'https://www.MINITRUE.gov.uk/page?itemid=2&irrelevant=x&style=1'
-        last_response.location.should == 'http://www.gov.uk/foo'
+        expect(last_response.location).to eq('http://www.gov.uk/foo')
       end
 
       it 'reorders the significant query parameters when finding the mapping' do
         # has the two params in wrong order
         get 'https://www.MINITRUE.gov.uk/page?style=1&itemid=2'
-        last_response.location.should == 'http://www.gov.uk/foo'
+        expect(last_response.location).to eq('http://www.gov.uk/foo')
       end
     end
   end
@@ -169,7 +211,7 @@ describe 'HTTP request handling' do
 
     it 'throw away all query params' do
       get 'https://www.MINITRUE.gov.uk/page?ignore=1&me=2'
-      last_response.location.should == 'http://www.gov.uk/foo'
+      expect(last_response.location).to eq('http://www.gov.uk/foo')
     end
   end
 
@@ -183,8 +225,15 @@ describe 'HTTP request handling' do
       get 'https://www.minitrue.gov.uk/a-redirected-page'
     end
 
-    its(:status) { should == 501 }
-    its(:location) { should == nil }
+    describe '#status' do
+      subject { super().status }
+      it { is_expected.to eq(501) }
+    end
+
+    describe '#location' do
+      subject { super().location }
+      it { is_expected.to eq(nil) }
+    end
   end
 
   describe 'visiting a URL which redirects to anything on *.gov.uk' do
@@ -197,8 +246,15 @@ describe 'HTTP request handling' do
       get 'https://www.minitrue.gov.uk/a-redirected-page'
     end
 
-    its(:status) { should == 301 }
-    its(:location) { should == 'http://anything-at-all.gov.uk' }
+    describe '#status' do
+      subject { super().status }
+      it { is_expected.to eq(301) }
+    end
+
+    describe '#location' do
+      subject { super().location }
+      it { is_expected.to eq('http://anything-at-all.gov.uk') }
+    end
   end
 
   describe 'visiting a URL which redirects to anything on *.mod.uk' do
@@ -211,8 +267,15 @@ describe 'HTTP request handling' do
       get 'https://www.minitrue.gov.uk/a-redirected-page'
     end
 
-    its(:status) { should == 301 }
-    its(:location) { should == 'http://anything-at-all.mod.uk' }
+    describe '#status' do
+      subject { super().status }
+      it { is_expected.to eq(301) }
+    end
+
+    describe '#location' do
+      subject { super().location }
+      it { is_expected.to eq('http://anything-at-all.mod.uk') }
+    end
   end
 
   describe 'visiting a URL which redirects to anything on *.nhs.uk' do
@@ -225,8 +288,15 @@ describe 'HTTP request handling' do
       get 'https://www.minitrue.gov.uk/a-redirected-page'
     end
 
-    its(:status) { should == 301 }
-    its(:location) { should == 'http://anything-at-all.nhs.uk' }
+    describe '#status' do
+      subject { super().status }
+      it { is_expected.to eq(301) }
+    end
+
+    describe '#location' do
+      subject { super().location }
+      it { is_expected.to eq('http://anything-at-all.nhs.uk') }
+    end
   end
 
   describe 'visiting a URL which redirects to a URL including square brackets' do
@@ -240,7 +310,11 @@ describe 'HTTP request handling' do
     end
 
     it_behaves_like 'a 301'
-    its(:location) { should == 'http://www.gov.uk/[0]' }
+
+    describe '#location' do
+      subject { super().location }
+      it { is_expected.to eq('http://www.gov.uk/[0]') }
+    end
   end
 
   describe 'visiting a URL which has been archived' do
@@ -253,11 +327,30 @@ describe 'HTTP request handling' do
 
     it_behaves_like 'a 410'
 
-    its(:body) { should include '<title>410 - Page Archived</title>' }
-    its(:body) { should include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>' }
-    its(:body) { should include '<div class="organisation ministry-of-truth">' }
-    its(:body) { should include 'Visit the new Ministry of Truth site at <a href="http://www.gov.uk/government/organisations/ministry-of-truth">www.gov.uk/mot</a>' }
-    its(:body) { should include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk/an-archived-page?non-canonical-param=1">This item has been archived</a>' }
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to include '<title>410 - Page Archived</title>' }
+    end
+
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>' }
+    end
+
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to include '<div class="organisation ministry-of-truth">' }
+    end
+
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to include 'Visit the new Ministry of Truth site at <a href="http://www.gov.uk/government/organisations/ministry-of-truth">www.gov.uk/mot</a>' }
+    end
+
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk/an-archived-page?non-canonical-param=1">This item has been archived</a>' }
+    end
   end
 
   describe 'visiting a URL which has been archived with a suggested URL' do
@@ -271,12 +364,35 @@ describe 'HTTP request handling' do
 
     it_behaves_like 'a 410'
 
-    its(:body) { should include '<title>410 - Page Archived</title>' }
-    its(:body) { should include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>' }
-    its(:body) { should include '<div class="organisation ministry-of-truth">' }
-    its(:body) { should include 'Visit the new Ministry of Truth site at <a href="http://www.gov.uk/government/organisations/ministry-of-truth">www.gov.uk/mot</a>' }
-    its(:body) { should include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk/an-archived-page">This item has been archived</a>' }
-    its(:body) { should include 'Visit <a href="http://www.truthiness.co.uk/">www.truthiness.co.uk</a> for more information on this topic.' }
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to include '<title>410 - Page Archived</title>' }
+    end
+
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>' }
+    end
+
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to include '<div class="organisation ministry-of-truth">' }
+    end
+
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to include 'Visit the new Ministry of Truth site at <a href="http://www.gov.uk/government/organisations/ministry-of-truth">www.gov.uk/mot</a>' }
+    end
+
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk/an-archived-page">This item has been archived</a>' }
+    end
+
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to include 'Visit <a href="http://www.truthiness.co.uk/">www.truthiness.co.uk</a> for more information on this topic.' }
+    end
   end
 
   describe 'visiting a URL about which no decision has been made' do
@@ -301,11 +417,30 @@ describe 'HTTP request handling' do
 
     it_behaves_like 'a 410'
 
-    its(:body) { should include '<title>410 - Page Archived</title>' }
-    its(:body) { should include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>' }
-    its(:body) { should include '<div class="organisation ministry-of-truth">' }
-    its(:body) { should include 'Visit the new Ministry of Truth site at <a href="http://www.gov.uk/government/organisations/ministry-of-truth">www.gov.uk/mot</a>' }
-    its(:body) { should include '<a href="http://webarchive.nationalarchives.gov.uk/20130101000000/http://www.minitrue.gov.uk/an-archived-page/the_actual_page.php">This item has been archived</a>' }
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to include '<title>410 - Page Archived</title>' }
+    end
+
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>' }
+    end
+
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to include '<div class="organisation ministry-of-truth">' }
+    end
+
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to include 'Visit the new Ministry of Truth site at <a href="http://www.gov.uk/government/organisations/ministry-of-truth">www.gov.uk/mot</a>' }
+    end
+
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to include '<a href="http://webarchive.nationalarchives.gov.uk/20130101000000/http://www.minitrue.gov.uk/an-archived-page/the_actual_page.php">This item has been archived</a>' }
+    end
   end
 
   describe 'visiting a URL which has been archived on a site with a custom title' do
@@ -319,7 +454,10 @@ describe 'HTTP request handling' do
 
     it_behaves_like 'a 410'
 
-    its(:body) { should include 'Visit the new Custom Title site at <a href="http://www.gov.uk/government/organisations/ministry-of-truth">www.gov.uk/mot</a>' }
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to include 'Visit the new Custom Title site at <a href="http://www.gov.uk/government/organisations/ministry-of-truth">www.gov.uk/mot</a>' }
+    end
   end
 
   describe 'visiting an unrecognised path on a recognised host' do
@@ -329,12 +467,30 @@ describe 'HTTP request handling' do
 
     it_behaves_like 'a 404'
 
-    its(:content_type) { should == 'text/html' }
+    describe '#content_type' do
+      subject { super().content_type }
+      it { is_expected.to eq('text/html') }
+    end
 
-    its(:body) { should include '<title>404 - Not Found</title>' }
-    its(:body) { should include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>' }
-    its(:body) { should include '<div class="organisation ministry-of-truth">' }
-    its(:body) { should include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk/an-unrecognised-page">UK Government Web Archive</a>' }
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to include '<title>404 - Not Found</title>' }
+    end
+
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>' }
+    end
+
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to include '<div class="organisation ministry-of-truth">' }
+    end
+
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk/an-unrecognised-page">UK Government Web Archive</a>' }
+    end
   end
 
   describe 'visiting an unrecognised path on a different recognised host' do
@@ -348,12 +504,30 @@ describe 'HTTP request handling' do
 
     it_behaves_like 'a 404'
 
-    its(:content_type) { should == 'text/html' }
+    describe '#content_type' do
+      subject { super().content_type }
+      it { is_expected.to eq('text/html') }
+    end
 
-    its(:body) { should include '<title>404 - Not Found</title>' }
-    its(:body) { should include '<a href="http://www.gov.uk/government/organisations/ministry-of-love"><span>Ministry of Love</span></a>' }
-    its(:body) { should include '<div class="organisation ministry-of-love">' }
-    its(:body) { should include '<a href="http://webarchive.nationalarchives.gov.uk/20130724103251/http://www.miniluv.gov.uk/an-unrecognised-page">UK Government Web Archive</a>' }
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to include '<title>404 - Not Found</title>' }
+    end
+
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to include '<a href="http://www.gov.uk/government/organisations/ministry-of-love"><span>Ministry of Love</span></a>' }
+    end
+
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to include '<div class="organisation ministry-of-love">' }
+    end
+
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to include '<a href="http://webarchive.nationalarchives.gov.uk/20130724103251/http://www.miniluv.gov.uk/an-unrecognised-page">UK Government Web Archive</a>' }
+    end
   end
 
   describe 'sites with global types' do
@@ -368,7 +542,10 @@ describe 'HTTP request handling' do
           get 'http://www.minitrue.gov.uk'
         end
 
-        its(:location) { should == 'http://www.gov.uk/global-new' }
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('http://www.gov.uk/global-new') }
+        end
       end
 
       describe 'visiting a URL' do
@@ -377,7 +554,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 301'
-        its(:location) { should == 'http://www.gov.uk/global-new' }
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('http://www.gov.uk/global-new') }
+        end
       end
 
       describe 'sites where we append the original path' do
@@ -387,7 +568,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 301'
-        its(:location) { should == 'http://www.gov.uk/global-new/my-page' }
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('http://www.gov.uk/global-new/my-page') }
+        end
       end
 
       describe 'visiting a /404 URL' do
@@ -417,8 +602,15 @@ describe 'HTTP request handling' do
 
         it_behaves_like 'a 200'
 
-        its(:body) { should be_valid_xml }
-        its(:body) { should be_valid_sitemap }
+        describe '#body' do
+          subject { super().body }
+          it { is_expected.to be_valid_xml }
+        end
+
+        describe '#body' do
+          subject { super().body }
+          it { is_expected.to be_valid_sitemap }
+        end
       end
 
       describe 'visiting /robots.txt' do
@@ -428,10 +620,25 @@ describe 'HTTP request handling' do
 
         it_behaves_like 'a 200'
 
-        its(:content_type) { should == 'text/plain' }
-        its(:body) { should match %r{^User-agent: \*$} }
-        its(:body) { should match %r{^Disallow:$} }
-        its(:body) { should match %r{^Sitemap: http://www.minitrue.gov.uk/sitemap.xml$} }
+        describe '#content_type' do
+          subject { super().content_type }
+          it { is_expected.to eq('text/plain') }
+        end
+
+        describe '#body' do
+          subject { super().body }
+          it { is_expected.to match %r{^User-agent: \*$} }
+        end
+
+        describe '#body' do
+          subject { super().body }
+          it { is_expected.to match %r{^Disallow:$} }
+        end
+
+        describe '#body' do
+          subject { super().body }
+          it { is_expected.to match %r{^Sitemap: http://www.minitrue.gov.uk/sitemap.xml$} }
+        end
       end
     end
 
@@ -490,12 +697,30 @@ describe 'HTTP request handling' do
 
     it_behaves_like 'a 404'
 
-    its(:content_type) { should == 'text/html' }
+    describe '#content_type' do
+      subject { super().content_type }
+      it { is_expected.to eq('text/html') }
+    end
 
-    its(:body) { should include '<title>404 - Not Found</title>' }
-    its(:body) { should include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>' }
-    its(:body) { should include '<div class="organisation ministry-of-truth">' }
-    its(:body) { should include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk/404">UK Government Web Archive</a>' }
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to include '<title>404 - Not Found</title>' }
+    end
+
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>' }
+    end
+
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to include '<div class="organisation ministry-of-truth">' }
+    end
+
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk/404">UK Government Web Archive</a>' }
+    end
   end
 
   describe 'escaping Database content in the 404 page' do
@@ -504,7 +729,10 @@ describe 'HTTP request handling' do
       get 'http://www.minitrue.gov.uk/404'
     end
 
-    its(:body) { should include '&lt;script&gt;alert(&quot;xss&quot;);&lt;/script&gt;Ministry of Truth'}
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to include '&lt;script&gt;alert(&quot;xss&quot;);&lt;/script&gt;Ministry of Truth'}
+    end
   end
 
   describe 'visiting a /410 URL' do
@@ -514,11 +742,30 @@ describe 'HTTP request handling' do
 
     it_behaves_like 'a 410'
 
-    its(:body) { should include '<title>410 - Page Archived</title>' }
-    its(:body) { should include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>' }
-    its(:body) { should include '<div class="organisation ministry-of-truth">' }
-    its(:body) { should include 'Visit the new Ministry of Truth site at <a href="http://www.gov.uk/government/organisations/ministry-of-truth">www.gov.uk/mot</a>' }
-    its(:body) { should include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk/410">This item has been archived</a>' }
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to include '<title>410 - Page Archived</title>' }
+    end
+
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>' }
+    end
+
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to include '<div class="organisation ministry-of-truth">' }
+    end
+
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to include 'Visit the new Ministry of Truth site at <a href="http://www.gov.uk/government/organisations/ministry-of-truth">www.gov.uk/mot</a>' }
+    end
+
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk/410">This item has been archived</a>' }
+    end
   end
 
   describe 'visiting a /410 URL with no furl' do
@@ -527,7 +774,10 @@ describe 'HTTP request handling' do
       get 'http://www.minitrue.gov.uk/410'
     end
 
-    its(:body) { should include 'Visit the new Ministry of Truth site at <a href="http://www.gov.uk/government/organisations/ministry-of-truth">http://www.gov.uk/government/organisations/ministry-of-truth</a>' }
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to include 'Visit the new Ministry of Truth site at <a href="http://www.gov.uk/government/organisations/ministry-of-truth">http://www.gov.uk/government/organisations/ministry-of-truth</a>' }
+    end
   end
 
   describe 'visiting a /sitemap.xml URL' do
@@ -552,13 +802,40 @@ describe 'HTTP request handling' do
 
     it_behaves_like 'a 200'
 
-    its(:body) { should be_valid_xml }
-    its(:body) { should be_valid_sitemap }
-    its(:body) { should have_sitemap_entry_for 'http://www.minitrue.gov.uk/a-redirected-page' }
-    its(:body) { should have_sitemap_entry_for 'http://www.minitrue.gov.uk/a-redirected-page?p=np' }
-    its(:body) { should_not have_sitemap_entry_for 'http://www.minitrue.gov.uk/a-deleted-page' }
-    its(:body) { should_not have_sitemap_entry_for 'http://www.minitrue.gov.uk/an-archived-page' }
-    its(:content_type) { should == 'application/xml' }
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to be_valid_xml }
+    end
+
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to be_valid_sitemap }
+    end
+
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to have_sitemap_entry_for 'http://www.minitrue.gov.uk/a-redirected-page' }
+    end
+
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to have_sitemap_entry_for 'http://www.minitrue.gov.uk/a-redirected-page?p=np' }
+    end
+
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.not_to have_sitemap_entry_for 'http://www.minitrue.gov.uk/a-deleted-page' }
+    end
+
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.not_to have_sitemap_entry_for 'http://www.minitrue.gov.uk/an-archived-page' }
+    end
+
+    describe '#content_type' do
+      subject { super().content_type }
+      it { is_expected.to eq('application/xml') }
+    end
   end
 
   describe 'visiting a /sitemap.xml URL for a site with a large number of redirects' do
@@ -577,10 +854,10 @@ describe 'HTTP request handling' do
     end
 
     it 'should include the first n entries' do
-      last_response.status.should be(200)
-      last_response.body.should have_so_many_sitemap_entries(maximum_size)
-      last_response.body.should have_sitemap_entry_for("http://www.minitrue.gov.uk/a-redirected-page-#{maximum_size}")
-      last_response.body.should_not have_sitemap_entry_for("http://www.minitrue.gov.uk/a-redirected-page-#{maximum_size + 1}")
+      expect(last_response.status).to be(200)
+      expect(last_response.body).to have_so_many_sitemap_entries(maximum_size)
+      expect(last_response.body).to have_sitemap_entry_for("http://www.minitrue.gov.uk/a-redirected-page-#{maximum_size}")
+      expect(last_response.body).not_to have_sitemap_entry_for("http://www.minitrue.gov.uk/a-redirected-page-#{maximum_size + 1}")
     end
   end
 
@@ -591,10 +868,25 @@ describe 'HTTP request handling' do
 
     it_behaves_like 'a 200'
 
-    its(:content_type) { should == 'text/plain' }
-    its(:body) { should match %r{^User-agent: \*$} }
-    its(:body) { should match %r{^Disallow:$} }
-    its(:body) { should match %r{^Sitemap: http://www.minitrue.gov.uk/sitemap.xml$} }
+    describe '#content_type' do
+      subject { super().content_type }
+      it { is_expected.to eq('text/plain') }
+    end
+
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to match %r{^User-agent: \*$} }
+    end
+
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to match %r{^Disallow:$} }
+    end
+
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to match %r{^Sitemap: http://www.minitrue.gov.uk/sitemap.xml$} }
+    end
   end
 
   describe 'visiting a homepage' do
@@ -604,7 +896,10 @@ describe 'HTTP request handling' do
 
     it_behaves_like 'a 301'
 
-    its(:location) { should == 'http://www.gov.uk/government/organisations/ministry-of-truth' }
+    describe '#location' do
+      subject { super().location }
+      it { is_expected.to eq('http://www.gov.uk/government/organisations/ministry-of-truth') }
+    end
   end
 
   describe 'visiting a homepage with a redirect to a site not on the whitelist' do
@@ -613,10 +908,25 @@ describe 'HTTP request handling' do
       get 'http://www.minitrue.gov.uk'
     end
 
-    its(:status) { should == 501 }
-    its(:body) { should match %r{non\-whitelisted}}
-    its(:body) { should match %r{spam.net} }
-    its(:location) { should == nil }
+    describe '#status' do
+      subject { super().status }
+      it { is_expected.to eq(501) }
+    end
+
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to match %r{non\-whitelisted}}
+    end
+
+    describe '#body' do
+      subject { super().body }
+      it { is_expected.to match %r{spam.net} }
+    end
+
+    describe '#location' do
+      subject { super().location }
+      it { is_expected.to eq(nil) }
+    end
   end
 
   context 'when the host is not recognised' do
@@ -626,7 +936,11 @@ describe 'HTTP request handling' do
       end
 
       it_behaves_like 'a 404'
-      its(:body) { should eql('This host is not configured in Transition') }
+
+      describe '#body' do
+        subject { super().body }
+        it { is_expected.to eql('This host is not configured in Transition') }
+      end
     end
 
     describe 'visiting another page' do
@@ -635,7 +949,11 @@ describe 'HTTP request handling' do
       end
 
       it_behaves_like 'a 404'
-      its(:body) { should eql('This host is not configured in Transition') }
+
+      describe '#body' do
+        subject { super().body }
+        it { is_expected.to eql('This host is not configured in Transition') }
+      end
     end
 
     describe 'visiting /healthcheck' do
@@ -644,7 +962,11 @@ describe 'HTTP request handling' do
       end
 
       it_behaves_like 'a 200'
-      its(:body) { should match %r{^OK$} }
+
+      describe '#body' do
+        subject { super().body }
+        it { is_expected.to match %r{^OK$} }
+      end
     end
   end
 
@@ -695,7 +1017,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 301'
-        its(:location) { should == 'http://r4d.dfid.gov.uk/Output/193679/Default.aspx' }
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('http://r4d.dfid.gov.uk/Output/193679/Default.aspx') }
+        end
       end
     end
 
@@ -707,7 +1033,11 @@ describe 'HTTP request handling' do
       end
 
       it_behaves_like 'a 301'
-      its(:location) { should == 'http://r4d.dfid.gov.uk/Output/193679/Default.aspx' }
+
+      describe '#location' do
+        subject { super().location }
+        it { is_expected.to eq('http://r4d.dfid.gov.uk/Output/193679/Default.aspx') }
+      end
     end
 
     describe 'DH redirects' do
@@ -729,12 +1059,35 @@ describe 'HTTP request handling' do
 
         it_behaves_like 'a 410'
 
-        its(:content_type) { should == 'text/html' }
-        its(:body) { should include '<title>410 - Page Archived</title>' }
-        its(:body) { should include '<a href="https://www.gov.uk/government/organisations/department-of-health"><span>Department of Health</span></a>' }
-        its(:body) { should include '<div class="organisation department-of-health">' }
-        its(:body) { should include 'Visit the new Department of Health site at <a href="https://www.gov.uk/government/organisations/department-of-health">www.gov.uk/doh</a>' }
-        its(:body) { should include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.dh.gov.uk/a/b/dh_digitalassets/c">This item has been archived</a>' }
+        describe '#content_type' do
+          subject { super().content_type }
+          it { is_expected.to eq('text/html') }
+        end
+
+        describe '#body' do
+          subject { super().body }
+          it { is_expected.to include '<title>410 - Page Archived</title>' }
+        end
+
+        describe '#body' do
+          subject { super().body }
+          it { is_expected.to include '<a href="https://www.gov.uk/government/organisations/department-of-health"><span>Department of Health</span></a>' }
+        end
+
+        describe '#body' do
+          subject { super().body }
+          it { is_expected.to include '<div class="organisation department-of-health">' }
+        end
+
+        describe '#body' do
+          subject { super().body }
+          it { is_expected.to include 'Visit the new Department of Health site at <a href="https://www.gov.uk/government/organisations/department-of-health">www.gov.uk/doh</a>' }
+        end
+
+        describe '#body' do
+          subject { super().body }
+          it { is_expected.to include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.dh.gov.uk/a/b/dh_digitalassets/c">This item has been archived</a>' }
+        end
       end
 
       context 'When a mapping exists that would trump the regex' do
@@ -750,7 +1103,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 301'
-        its(:location) { should == 'http://www.gov.uk/government/organisations/dh/really-special-asset' }
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('http://www.gov.uk/government/organisations/dh/really-special-asset') }
+        end
       end
     end
 
@@ -763,7 +1120,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 410'
-        its(:content_type) { should == 'text/html' }
+
+        describe '#content_type' do
+          subject { super().content_type }
+          it { is_expected.to eq('text/html') }
+        end
       end
     end
 
@@ -776,7 +1137,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 301'
-        its(:location) { should == 'https://www.gov.uk/search' }
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('https://www.gov.uk/search') }
+        end
       end
 
       describe 'visiting a non-/en search URL' do
@@ -785,7 +1150,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 301'
-        its(:location) { should == 'https://www.gov.uk/search' }
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('https://www.gov.uk/search') }
+        end
       end
 
       describe 'visiting a Fire Kills URL' do
@@ -796,7 +1165,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 301'
-        its(:location) { should == 'https://www.gov.uk/firekills' }
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('https://www.gov.uk/firekills') }
+        end
       end
     end
 
@@ -809,7 +1182,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 301'
-        its(:location) { should == "https://www.gov.uk/search" }
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq("https://www.gov.uk/search") }
+        end
       end
     end
 
@@ -822,7 +1199,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 301'
-        its(:location) { should == 'http://business.wales.gov.uk/bdotg/action/ercsectorsdetails?r.lc=en&itemid=1077111298&site=230' }
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('http://business.wales.gov.uk/bdotg/action/ercsectorsdetails?r.lc=en&itemid=1077111298&site=230') }
+        end
       end
 
       describe 'visiting a former businesslink site for Northern Ireland' do
@@ -831,7 +1212,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 301'
-        its(:location) { should == 'http://www.nibusinessinfo.co.uk/bdotg/action/layer?topicId=1073935899&site=191' }
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('http://www.nibusinessinfo.co.uk/bdotg/action/layer?topicId=1073935899&site=191') }
+        end
       end
 
       describe 'Businesslink URL that shouldn\'t match' do
@@ -840,7 +1225,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 404'
-        its(:location) { should == nil }
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq(nil) }
+        end
       end
     end
 
@@ -853,7 +1242,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 301'
-        its(:location) { should == 'http://business.wales.gov.uk/bdotg/action/ercsectorsdetails?r.lc=en&itemid=1077111298&site=230' }
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('http://business.wales.gov.uk/bdotg/action/ercsectorsdetails?r.lc=en&itemid=1077111298&site=230') }
+        end
       end
     end
 
@@ -866,7 +1259,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 301'
-        its(:location) { should == 'http://apps.environment-agency.gov.uk/flood/34678.aspx?type=Region&term=Anglian' }
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('http://apps.environment-agency.gov.uk/flood/34678.aspx?type=Region&term=Anglian') }
+        end
       end
 
       describe 'Flood Warnings redirects (Welsh)' do
@@ -875,7 +1272,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 301'
-        its(:location) { should  == 'http://apps.environment-agency.gov.uk/flood/cy/34678.aspx?type=Region&term=Wales&Severity=1' }
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to  eq('http://apps.environment-agency.gov.uk/flood/cy/34678.aspx?type=Region&term=Wales&Severity=1') }
+        end
       end
 
       describe 'River Levels redirects' do
@@ -884,7 +1285,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 301'
-        its(:location) { should == 'http://apps.environment-agency.gov.uk/river-and-sea-levels/120691.aspx?foo=bar'}
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('http://apps.environment-agency.gov.uk/river-and-sea-levels/120691.aspx?foo=bar')}
+        end
       end
 
       describe 'River Levels redirects (Welsh)' do
@@ -893,7 +1298,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 301'
-        its(:location) { should == 'http://apps.environment-agency.gov.uk/river-and-sea-levels/cy/120691.aspx?foo=bar' }
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('http://apps.environment-agency.gov.uk/river-and-sea-levels/cy/120691.aspx?foo=bar') }
+        end
       end
 
       describe 'river levels homepage' do
@@ -903,7 +1312,11 @@ describe 'HTTP request handling' do
           end
 
           it_behaves_like 'a 301'
-          its(:location) { should == 'http://apps.environment-agency.gov.uk/river-and-sea-levels/' }
+
+          describe '#location' do
+            subject { super().location }
+            it { is_expected.to eq('http://apps.environment-agency.gov.uk/river-and-sea-levels/') }
+          end
         end
 
         describe 'without trailing slash' do
@@ -912,7 +1325,11 @@ describe 'HTTP request handling' do
           end
 
           it_behaves_like 'a 301'
-          its(:location) { should == 'http://apps.environment-agency.gov.uk/river-and-sea-levels' }
+
+          describe '#location' do
+            subject { super().location }
+            it { is_expected.to eq('http://apps.environment-agency.gov.uk/river-and-sea-levels') }
+          end
         end
       end
 
@@ -924,7 +1341,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 301'
-        its(:location) { should == 'http://apps.environment-agency.gov.uk/flood/34678.aspx?page=1'}
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('http://apps.environment-agency.gov.uk/flood/34678.aspx?page=1')}
+        end
       end
 
       describe 'URL that shouldn\'t match' do
@@ -933,7 +1354,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 404'
-        its(:location) { should == nil }
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq(nil) }
+        end
       end
     end
 
@@ -946,7 +1371,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 301'
-        its(:location) { should == 'http://apps.environment-agency.gov.uk/river-and-sea-levels' }
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('http://apps.environment-agency.gov.uk/river-and-sea-levels') }
+        end
       end
     end
 
@@ -959,7 +1388,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 301'
-        its(:location) { should == 'http://www.dft.gov.uk/mca/mcga07-home/shipsandcargoes/mcga-shipsregsandguidance.htm' }
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('http://www.dft.gov.uk/mca/mcga07-home/shipsandcargoes/mcga-shipsregsandguidance.htm') }
+        end
       end
 
       describe 'paths beginning with /mca/' do
@@ -968,7 +1401,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 301'
-        its(:location) { should == 'http://www.dft.gov.uk/mca/msn1693.pdf' }
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('http://www.dft.gov.uk/mca/msn1693.pdf') }
+        end
       end
 
       describe 'all other paths' do
@@ -977,7 +1414,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 301'
-        its(:location) { should == 'http://www.dft.gov.uk/mca/hydrography' }
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('http://www.dft.gov.uk/mca/hydrography') }
+        end
       end
     end
 
@@ -990,7 +1431,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 301'
-        its(:location) { should == 'http://www.dft.gov.uk/mca/hydrography' }
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('http://www.dft.gov.uk/mca/hydrography') }
+        end
       end
     end
 
@@ -1003,7 +1448,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 301'
-        its(:location) { should == 'http://www.planningportal.gov.uk' }
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('http://www.planningportal.gov.uk') }
+        end
       end
     end
 
@@ -1016,7 +1465,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 301'
-        its(:location) { should == 'http://www.planningportal.gov.uk' }
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('http://www.planningportal.gov.uk') }
+        end
       end
     end
 
@@ -1029,7 +1482,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 301'
-        its(:location) { should == 'http://www.number10.gov.uk/news/brown-unveils-new-faces' }
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('http://www.number10.gov.uk/news/brown-unveils-new-faces') }
+        end
       end
     end
 
@@ -1042,7 +1499,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 301'
-        its(:location) { should == 'http://www.number10.gov.uk/news/brown-unveils-new-faces' }
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('http://www.number10.gov.uk/news/brown-unveils-new-faces') }
+        end
       end
     end
 
@@ -1055,7 +1516,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 301'
-        its(:location) { should == 'http://reports.ofsted.gov.uk/inspection-reports/find-inspection-report/provider/CARE/EY480906' }
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('http://reports.ofsted.gov.uk/inspection-reports/find-inspection-report/provider/CARE/EY480906') }
+        end
       end
 
       describe 'visiting a report asset URL' do
@@ -1064,7 +1529,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 301'
-        its(:location) { should == 'http://reports.ofsted.gov.uk/provider/files/1908405/urn/137739.pdf' }
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('http://reports.ofsted.gov.uk/provider/files/1908405/urn/137739.pdf') }
+        end
       end
 
       describe 'visiting an interstitial asset download URL' do
@@ -1073,7 +1542,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 301'
-        its(:location) { should == 'http://reports.ofsted.gov.uk/index.php?q=filedownloading&id=2150035&type=1&refer=0' }
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('http://reports.ofsted.gov.uk/index.php?q=filedownloading&id=2150035&type=1&refer=0') }
+        end
       end
 
       describe 'visiting an oxedu provider report page URL' do
@@ -1082,7 +1555,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 301'
-        its(:location) { should == 'http://reports.ofsted.gov.uk/inspection-reports/find-inspection-report/provider/ELS/136338' }
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('http://reports.ofsted.gov.uk/inspection-reports/find-inspection-report/provider/ELS/136338') }
+        end
       end
 
       describe 'visiting an oxcare provider report page URL' do
@@ -1091,7 +1568,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 301'
-        its(:location) { should == 'http://reports.ofsted.gov.uk/inspection-reports/find-inspection-report/provider/CARE/EY333119' }
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('http://reports.ofsted.gov.uk/inspection-reports/find-inspection-report/provider/CARE/EY333119') }
+        end
       end
 
     end
@@ -1105,7 +1586,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 301'
-        its(:location) { should == 'http://reports.ofsted.gov.uk/provider/files/1908405/urn/137739.pdf' }
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('http://reports.ofsted.gov.uk/provider/files/1908405/urn/137739.pdf') }
+        end
       end
 
     end
@@ -1121,7 +1606,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 301'
-        its(:location) { should == 'http://www.aaib.gov.uk/publications/bulletins/january_2006/pierre_robin_dr400_180__g_bsla.htm' }
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('http://www.aaib.gov.uk/publications/bulletins/january_2006/pierre_robin_dr400_180__g_bsla.htm') }
+        end
       end
 
       describe 'visiting a RAIB multi surfaced page' do
@@ -1130,7 +1619,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 301'
-        its(:location) { should == 'http://www.raib.gov.uk/publications/index.cfm' }
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('http://www.raib.gov.uk/publications/index.cfm') }
+        end
       end
 
       describe 'visiting a MAIB multi surfaced page' do
@@ -1139,7 +1632,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 301'
-        its(:location) { should == 'http://www.maib.gov.uk/home/index.cfm' }
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('http://www.maib.gov.uk/home/index.cfm') }
+        end
       end
 
     end
@@ -1154,7 +1651,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 301'
-        its(:location) { should == 'http://www.hm-treasury.gov.uk/budget2013_complete.pdf' }
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('http://www.hm-treasury.gov.uk/budget2013_complete.pdf') }
+        end
       end
     end
 
@@ -1167,7 +1668,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 301'
-        its(:location) { should == 'http://www.digitalmarketplace.service.gov.uk/service/5-g5-0722-028' }
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('http://www.digitalmarketplace.service.gov.uk/service/5-g5-0722-028') }
+        end
       end
 
       context 'visiting a /cloudstore/category/service-id URL' do
@@ -1176,7 +1681,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 301'
-        its(:location) { should == 'http://www.digitalmarketplace.service.gov.uk/service/5-g5-0722-028' }
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('http://www.digitalmarketplace.service.gov.uk/service/5-g5-0722-028') }
+        end
       end
 
       context 'visiting a /cloudstore/category/sub-category/service-id URL' do
@@ -1185,7 +1694,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 301'
-        its(:location) { should == 'http://www.digitalmarketplace.service.gov.uk/service/5-g5-0722-028' }
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('http://www.digitalmarketplace.service.gov.uk/service/5-g5-0722-028') }
+        end
       end
 
       context 'visiting a /cloudstore/category/sub-category/sub-sub-category/service-id URL' do
@@ -1194,7 +1707,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 301'
-        its(:location) { should == 'http://www.digitalmarketplace.service.gov.uk/service/5-g5-0722-028' }
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('http://www.digitalmarketplace.service.gov.uk/service/5-g5-0722-028') }
+        end
       end
 
       context 'visiting a GovStore URL that isn\'t for a supplier in a category or within /cloudstore' do
@@ -1203,7 +1720,11 @@ describe 'HTTP request handling' do
         end
 
         it_behaves_like 'a 301'
-        its(:location) { should == 'https://www.gov.uk/digital-marketplace' }
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('https://www.gov.uk/digital-marketplace') }
+        end
       end
     end
 
@@ -1225,13 +1746,16 @@ describe 'HTTP request handling' do
           get "http://www.direct.gov.uk/__canary__"
         end
 
-        its(:status)   { should == 200 }
-        specify        { last_response.headers['Cache-Control'].should == 'private' }
+        describe '#status' do
+          subject { super().status }
+          it { is_expected.to eq(200) }
+        end
+        specify { expect(last_response.headers['Cache-Control']).to eq('private') }
       end
 
       context 'when the Database errors when finding a Host' do
         before do
-          Host.stub(:find_by).and_raise('Database does not exist')
+          allow(Host).to receive(:find_by).and_raise('Database does not exist')
         end
 
         it 'raises an uncaught exception' do
@@ -1241,7 +1765,7 @@ describe 'HTTP request handling' do
 
       context 'when the Database errors when querying a required table' do
         before do
-          WhitelistedHost.stub(:first).and_raise('Database does not exist')
+          allow(WhitelistedHost).to receive(:first).and_raise('Database does not exist')
           get "http://www.direct.gov.uk/__canary__"
         end
 
@@ -1250,7 +1774,7 @@ describe 'HTTP request handling' do
 
       context 'when a required table is empty' do
         before do
-          WhitelistedHost.stub(:first).and_return(nil)
+          allow(WhitelistedHost).to receive(:first).and_return(nil)
           get "http://www.direct.gov.uk/__canary__"
         end
 
