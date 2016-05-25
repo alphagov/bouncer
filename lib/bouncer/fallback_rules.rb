@@ -39,6 +39,13 @@ module Bouncer
         else
           redirect('https://www.gov.uk/digital-marketplace')
         end
+      when 'houseprices.landregistry.gov.uk', 'www.houseprices.landregistry.gov.uk'
+        case request.path
+        when %r{^/sold-prices/.*}
+          redirect('http://landregistry.data.gov.uk/app/ppd')
+        when %r{^/price-paid-record/.*}
+          redirect('http://landregistry.data.gov.uk/app/ppd')
+        end
       end
     end
   end

@@ -1728,6 +1728,36 @@ describe 'HTTP request handling' do
       end
     end
 
+    describe 'Land Registry house prices redirects' do
+      before { site.hosts.create hostname: 'houseprices.landregistry.gov.uk' }
+
+      describe 'visiting a /sold-prices/* URL' do
+        before do
+          get 'http://houseprices.landregistry.gov.uk/sold-prices/WC2B6NH'
+        end
+
+        it_behaves_like 'a 301'
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('http://landregistry.data.gov.uk/app/ppd') }
+        end
+      end
+
+      describe 'visiting a /price-paid-record/* URL' do
+        before do
+          get 'http://houseprices.landregistry.gov.uk/price-paid-record/1234567/125+kingsway+london'
+        end
+
+        it_behaves_like 'a 301'
+
+        describe '#location' do
+          subject { super().location }
+          it { is_expected.to eq('http://landregistry.data.gov.uk/app/ppd') }
+        end
+      end
+    end
+
     describe 'visiting www.direct.gov.uk/__canary__' do
 
       before do
