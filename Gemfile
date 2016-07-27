@@ -4,7 +4,7 @@ gem 'activerecord', '4.2.6' # Ideally version should be synced with Transition
 gem 'pg', '0.18.4'
 gem 'nokogiri', '1.6.7.2'
 gem 'rack', '1.6.4'
-gem 'optic14n', '2.0.0' # Ideally version should be synced with Transition
+gem 'optic14n', '2.0.1' # Ideally version should be synced with Transition
 gem 'erubis', '2.7.0'
 gem 'airbrake', '~> 4.3.0'
 gem 'rake', '10.1.0'
