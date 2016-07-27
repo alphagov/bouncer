@@ -14,7 +14,7 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
-    addressable (2.3.6)
+    addressable (2.4.0)
     airbrake (4.3.6)
       builder
       multi_json
@@ -41,7 +41,7 @@ GEM
     multi_json (1.11.2)
     nokogiri (1.6.7.2)
       mini_portile2 (~> 2.0.0.rc2)
-    optic14n (2.0.0)
+    optic14n (2.0.1)
       addressable (~> 2.3)
     pg (0.18.4)
     rack (1.6.4)
@@ -85,7 +85,7 @@ DEPENDENCIES
   erubis (= 2.7.0)
   mr-sparkle (= 0.3.0)
   nokogiri (= 1.6.7.2)
-  optic14n (= 2.0.0)
+  optic14n (= 2.0.1)
   pg (= 0.18.4)
   rack (= 1.6.4)
   rack-test (= 0.6.3)
@@ -94,4 +94,4 @@ DEPENDENCIES
   unicorn (~> 5.0.0)
 
 BUNDLED WITH
-   1.10.6
+   1.11.2
