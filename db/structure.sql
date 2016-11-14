@@ -255,8 +255,9 @@ CREATE TABLE mappings_batch_entries (
     mapping_id integer,
     processed boolean DEFAULT false,
     klass character varying(255) DEFAULT NULL::character varying,
-    new_url character varying(2048) DEFAULT NULL::character varying,
-    type character varying(255) DEFAULT NULL::character varying
+    new_url text DEFAULT NULL::character varying,
+    type character varying(255) DEFAULT NULL::character varying,
+    archive_url text
 );
 
 
@@ -1159,6 +1160,13 @@ CREATE UNIQUE INDEX index_sites_on_site ON sites USING btree (abbr);
 
 
 --
+-- Name: index_taggings_on_taggable_id_and_taggable_type_and_context; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_taggings_on_taggable_id_and_taggable_type_and_context ON taggings USING btree (taggable_id, taggable_type, context);
+
+
+--
 -- Name: index_taggings_on_taggable_type_and_taggable_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1371,5 +1379,13 @@ INSERT INTO schema_migrations (version) VALUES ('20150423102347');
 INSERT INTO schema_migrations (version) VALUES ('20150428155430');
 
 INSERT INTO schema_migrations (version) VALUES ('20150429154045');
+
+INSERT INTO schema_migrations (version) VALUES ('20150715141152');
+
+INSERT INTO schema_migrations (version) VALUES ('20160314150052');
+
+INSERT INTO schema_migrations (version) VALUES ('20160314150053');
+
+INSERT INTO schema_migrations (version) VALUES ('20161111172455');
 
 
