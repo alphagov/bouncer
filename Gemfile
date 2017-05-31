@@ -1,9 +1,9 @@
 source 'https://rubygems.org/'
 
-gem 'activerecord', '4.2.7.1' # Ideally version should be synced with Transition
+gem 'activerecord', '~> 5.1.1' # Ideally version should be synced with Transition
 gem 'pg', '0.18.4'
 gem 'nokogiri', '1.6.7.2'
-gem 'rack', '1.6.4'
+gem 'rack', '~> 2.0.1'
 gem 'optic14n', '2.0.1' # Ideally version should be synced with Transition
 gem 'erubis', '2.7.0'
 gem 'airbrake', '~> 4.3.0'
@@ -21,4 +21,5 @@ group :test do
   gem 'database_cleaner', '1.5.1'
   gem 'rack-test', '0.6.3'
   gem 'rspec', '~> 3.4.0'
+  gem 'pry'
 end
