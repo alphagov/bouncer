@@ -7,7 +7,7 @@ require 'status_renderer'
 require 'host'
 require 'whitelisted_host'
 require 'optic14n'
-require 'airbrake'
+require 'govuk_app_config'
 
 require 'bouncer/cacher'
 require 'bouncer/canonicalized_request'
