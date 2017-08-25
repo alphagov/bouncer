@@ -2,11 +2,7 @@ require './boot'
 require 'rack/static'
 require './lib/active_record/rack/connection_management'
 
-if ENV['RACK_ENV'] == 'production'
-  require './config/airbrake'
-  use Airbrake::Rack
-end
-
+use Raven::Rack
 use Bouncer::Cacher
 
 # We need compatibility with redirector which serves its assets from '/''.
