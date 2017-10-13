@@ -356,17 +356,17 @@ a:active {
   border-color: #9c132e;
 }
 
-.scotland-office a {
+.office-of-the-secretary-of-state-for-scotland a {
   background-image: url('/so_crest_18px_x2.png');
   border-color: #002663;
 }
 
 @media (max-width: 640px) {
-  .scotland-office a {
+  .office-of-the-secretary-of-state-for-scotland a {
     background-image: url('/so_crest_13px_x2.png');
   }
 
-  .scotland-office a span {
+  .office-of-the-secretary-of-state-for-scotland a span {
     left: 0;
   }
 }
