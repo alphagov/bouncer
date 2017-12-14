@@ -10,7 +10,7 @@ gem 'govuk_app_config', '~> 0.2'
 gem 'rake', '10.1.0'
 
 group :production do
-  gem 'unicorn', '~> 5.0.0'
+  gem 'unicorn', '~> 5.3.1'
 end
 
 group :development do
