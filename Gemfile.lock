@@ -23,7 +23,7 @@ GEM
     faraday (0.13.1)
       multipart-post (>= 1.2, < 3)
     ffi (1.9.18)
-    govuk_app_config (1.2.0)
+    govuk_app_config (1.2.1)
       logstasher (~> 1.2.2)
       sentry-raven (~> 2.7.1)
       statsd-ruby (~> 1.4.0)
