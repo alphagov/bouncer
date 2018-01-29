@@ -2,7 +2,7 @@ source 'https://rubygems.org/'
 
 gem 'activerecord', '~> 5.1.1' # Ideally version should be synced with Transition
 gem 'pg', '0.21.0'
-gem 'nokogiri', '1.8.1'
+gem 'nokogiri', '1.8.2'
 gem 'rack', '~> 2.0.1'
 gem 'optic14n', '2.0.1' # Ideally version should be synced with Transition
 gem 'erubis', '2.7.0'
