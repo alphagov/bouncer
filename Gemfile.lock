@@ -44,7 +44,7 @@ GEM
       logstash-event (~> 1.2.0)
       request_store
     method_source (0.9.2)
-    mini_portile2 (2.3.0)
+    mini_portile2 (2.4.0)
     minitest (5.11.3)
     mr-sparkle (0.3.0)
       listen (~> 1.0)
@@ -52,8 +52,8 @@ GEM
       rb-inotify (>= 0.8)
       unicorn (>= 4.5)
     multipart-post (2.0.0)
-    nokogiri (1.8.5)
-      mini_portile2 (~> 2.3.0)
+    nokogiri (1.10.0)
+      mini_portile2 (~> 2.4.0)
     oj (3.7.6)
     optic14n (2.0.1)
       addressable (~> 2.3)
@@ -106,7 +106,7 @@ DEPENDENCIES
   erubis (= 2.7.0)
   govuk_app_config (~> 1.11)
   mr-sparkle (= 0.3.0)
-  nokogiri (= 1.8.5)
+  nokogiri (= 1.10.0)
   optic14n (= 2.0.1)
   pg (= 0.21.0)
   pry
