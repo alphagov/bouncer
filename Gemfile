@@ -1,7 +1,7 @@
 source 'https://rubygems.org/'
 
 gem 'activerecord', '~> 6.0.1' # Ideally version should be synced with Transition
-gem 'pg', '1.1.4'
+gem 'pg', '1.2.0'
 gem 'nokogiri', '1.10.7'
 gem 'rack', '~> 2.0.7'
 gem 'optic14n', '2.0.1' # Ideally version should be synced with Transition
