@@ -52,7 +52,7 @@ GEM
       mini_portile2 (~> 2.4.0)
     optic14n (2.0.1)
       addressable (~> 2.3)
-    pg (1.2.0)
+    pg (1.2.1)
     pry (0.12.2)
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
@@ -104,7 +104,7 @@ DEPENDENCIES
   mr-sparkle (= 0.3.0)
   nokogiri (= 1.10.7)
   optic14n (= 2.0.1)
-  pg (= 1.2.0)
+  pg (= 1.2.1)
   pry
   rack (~> 2.0.8)
   rack-test (= 1.1.0)
