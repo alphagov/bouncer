@@ -1,6 +1,6 @@
 source 'https://rubygems.org/'
 
-gem 'activerecord', '~> 6.0.2' # Ideally version should be synced with Transition
+gem 'activerecord', '~> 6.0.3' # Ideally version should be synced with Transition
 gem 'pg', '1.2.3'
 gem 'nokogiri', '1.10.9'
 gem 'rack', '~> 2.2.2'
