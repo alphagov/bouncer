@@ -10,7 +10,7 @@ module Bouncer
     end
 
     def host
-      @_host ||= Host.find_by(hostname: @request.host)
+      @host ||= Host.find_by(hostname: @request.host)
     end
 
     def mapping

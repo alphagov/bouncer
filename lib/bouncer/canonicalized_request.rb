@@ -54,7 +54,7 @@ module Bouncer
   private
 
     def bluri
-      @_fullpath ||= begin
+      @bluri ||= begin
         bluri = BLURI(@request.url)
         bluri.canonicalize!(allow_query: significant_query_params)
       end

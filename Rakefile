@@ -8,6 +8,7 @@ if ENV["RACK_ENV"] != "production"
 end
 
 namespace :db do
+  desc "Drop test database and create a new one, named to match db:reset for Jenkins"
   task :reset do
     if ENV["TEST_DATABASE_URL"]
       uri = URI.parse(ENV["TEST_DATABASE_URL"])

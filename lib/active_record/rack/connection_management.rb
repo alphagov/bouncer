@@ -1,5 +1,5 @@
 # This functionality has been removed from ActiveRecord
-#  see: https://github.com/rails/rails/issues/26947#issuecomment-265372902
+# see: https://github.com/rails/rails/issues/26947#issuecomment-265372902
 module ActiveRecord
   module Rack
     class ConnectionManagement
@@ -12,7 +12,7 @@ module ActiveRecord
         response = @app.call(env)
         ActiveRecord::Base.clear_active_connections! unless testing
         response
-      rescue Exception
+      rescue StandardError
         ActiveRecord::Base.clear_active_connections! unless testing
         raise
       end

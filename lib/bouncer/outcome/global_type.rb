@@ -9,7 +9,7 @@ module Bouncer
                                 context.request.non_canonicalised_fullpath)
                     else
                       context.site.global_new_url
-          end
+                    end
           guarded_redirect(new_url)
         when "archive"
           [410, { "Content-Type" => "text/html" }, [renderer.render(context.attributes_for_render, 410)]]
