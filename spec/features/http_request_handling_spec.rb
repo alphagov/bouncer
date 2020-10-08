@@ -5,11 +5,9 @@ describe "HTTP request handling" do
 
   subject { last_response }
 
-  before :all do
-    @app = Rack::Builder.parse_file("config.ru")[0]
+  def app
+    Rack::Builder.parse_file("config.ru")[0]
   end
-
-  let(:app) { @app }
 
   let(:department_of_health) do
     Organisation.create \

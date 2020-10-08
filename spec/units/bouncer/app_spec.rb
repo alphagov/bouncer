@@ -3,7 +3,10 @@ require "spec_helper"
 describe Bouncer::App do
   include Rack::Test::Methods
 
-  let(:app)       { subject }
+  def app
+    described_class.new
+  end
+
   let(:hostname)  { "example.com" }
   let(:path)      { "/an-interesting-page" }
   let(:url)       { "http://#{hostname}#{path}" }
