@@ -1,6 +1,6 @@
-require 'host'
-require 'mapping'
-require 'organisation'
+require "host"
+require "mapping"
+require "organisation"
 
 class Site < ActiveRecord::Base
   belongs_to :organisation

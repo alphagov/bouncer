@@ -1,25 +1,28 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe StatusRenderer do
   subject(:renderer) { StatusRenderer.new }
 
-  describe 'template storage' do
-    describe '[404]' do
+  describe "template storage" do
+    describe "[404]" do
       subject { super()[404] }
+
       it { is_expected.to be_an(Erubis::EscapedEruby) }
     end
 
-    describe '[410]' do
+    describe "[410]" do
       subject { super()[410] }
+
       it { is_expected.to be_an(Erubis::EscapedEruby) }
     end
 
-    describe '[301]' do
+    describe "[301]" do
       subject { super()[301] }
+
       it { is_expected.to be_nil }
     end
 
-    it 'reuses its templates' do
+    it "reuses its templates" do
       t1 = renderer[404]
       t2 = renderer[404]
 
@@ -27,22 +30,22 @@ describe StatusRenderer do
     end
   end
 
-  describe 'template rendering' do
+  describe "template rendering" do
+    subject(:rendered) { renderer.render(attributes_for_render, 410) }
+
     let(:attributes_for_render) do
       {
-        title: 'Keeping bees',
+        title: "Keeping bees",
         homepage: nil,
         css: nil,
         furl: nil,
         host: nil,
         suggested_url: nil,
-        archive_url: nil
+        archive_url: nil,
       }
     end
 
-    subject(:rendered) { renderer.render(attributes_for_render, 410) }
-
-    it { is_expected.to include('410 - Page Archived') }
-    it { is_expected.to include('Keeping bees') }
+    it { is_expected.to include("410 - Page Archived") }
+    it { is_expected.to include("Keeping bees") }
   end
 end

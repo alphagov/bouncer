@@ -1,10 +1,10 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Site do
-  describe '.create' do
-    let(:site) { double 'site', save: true }
+  describe ".create" do
+    let(:site) { double "site", save: true }
 
-    before(:each) do
+    before do
       allow(Site).to receive_messages new: site
     end
 

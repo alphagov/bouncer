@@ -1,7 +1,7 @@
 # http://ariejan.net/2011/09/24/rspec-speed-up-by-tweaking-ruby-garbage-collection/
 
 class DeferredGarbageCollection
-  DEFERRED_GC_THRESHOLD = (ENV['DEFER_GC'] || 15.0).to_f
+  DEFERRED_GC_THRESHOLD = (ENV["DEFER_GC"] || 15.0).to_f
 
   @@last_gc_run = Time.now
 

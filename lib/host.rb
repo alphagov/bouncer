@@ -1,4 +1,4 @@
-require 'site'
+require "site"
 
 class Host < ActiveRecord::Base
   belongs_to :site

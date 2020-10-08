@@ -38,12 +38,12 @@ module Bouncer
         furl: site.homepage_furl,
         host: host.hostname,
         suggested_url: mapping.try(:suggested_url),
-        archive_url: mapping.try(:archive_url) || default_archive_url
+        archive_url: mapping.try(:archive_url) || default_archive_url,
       }
     end
 
     def default_archive_url
-      tna_timestamp = site.tna_timestamp.try(:strftime, '%Y%m%d%H%M%S')
+      tna_timestamp = site.tna_timestamp.try(:strftime, "%Y%m%d%H%M%S")
       "http://webarchive.nationalarchives.gov.uk/#{tna_timestamp}/http://#{host.hostname}#{request.non_canonicalised_fullpath}"
     end
   end

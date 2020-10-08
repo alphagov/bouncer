@@ -1,10 +1,10 @@
-require 'govuk_app_config'
-require 'uri'
+require "govuk_app_config"
+require "uri"
 
-if ENV['RACK_ENV'] != "production"
-  require 'rspec/core/rake_task'
+if ENV["RACK_ENV"] != "production"
+  require "rspec/core/rake_task"
   RSpec::Core::RakeTask.new(:spec)
-  task :default => :spec
+  task default: :spec
 end
 
 namespace :db do

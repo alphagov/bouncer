@@ -1,11 +1,11 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Organisation do
-  describe '.create' do
-    let(:attributes) { double 'attributes' }
-    let(:organisation) { double 'organisation', save: true }
+  describe ".create" do
+    let(:attributes) { double "attributes" }
+    let(:organisation) { double "organisation", save: true }
 
-    before(:each) do
+    before do
       allow(Organisation).to receive_messages new: organisation
     end
 

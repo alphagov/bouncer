@@ -1,11 +1,11 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Mapping do
-  describe '.create' do
-    let(:attributes) { double 'attributes' }
-    let(:mapping) { double 'mapping', save: true }
+  describe ".create" do
+    let(:attributes) { double "attributes" }
+    let(:mapping) { double "mapping", save: true }
 
-    before(:each) do
+    before do
       allow(Mapping).to receive_messages new: mapping
     end
 
@@ -17,27 +17,30 @@ describe Mapping do
     end
   end
 
-  describe '.new' do
-    let(:path) { 'path' }
-    let(:type) { 'type' }
-    let(:new_url) { 'new URL' }
-
+  describe ".new" do
     subject { Mapping.new path: path, type: type, new_url: new_url }
+
+    let(:path) { "path" }
+    let(:type) { "type" }
+    let(:new_url) { "new URL" }
 
     it { is_expected.to be_a Mapping }
 
-    describe '#path' do
+    describe "#path" do
       subject { super().path }
+
       it { is_expected.to eq(path) }
     end
 
-    describe '#type' do
+    describe "#type" do
       subject { super().type }
+
       it { is_expected.to eq(type) }
     end
 
-    describe '#new_url' do
+    describe "#new_url" do
       subject { super().new_url }
+
       it { is_expected.to eq(new_url) }
     end
   end

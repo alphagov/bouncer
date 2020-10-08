@@ -1,5 +1,5 @@
-require 'rack/test'
-require 'benchmark'
+require "rack/test"
+require "benchmark"
 
 module Benchmark
   ##
@@ -20,15 +20,15 @@ module Benchmark
     end
 
     def app
-      @app ||= Rack::Builder.parse_file('config.ru')[0]
+      @app ||= Rack::Builder.parse_file("config.ru")[0]
     end
 
     def run!
       Benchmark.bm(7) do |x|
-        x.report("no host:") { number_of_runs.times { get 'http://www.fluffy.gov.uk/news'     } }
-        x.report("410:")     { number_of_runs.times { get 'http://www.direct.gov.uk/news'     } }
-        x.report("301:")     { number_of_runs.times { get 'http://www.direct.gov.uk/motoring' } }
-        x.report("404:")     { number_of_runs.times { get 'http://www.direct.gov.uk/prickly'  } }
+        x.report("no host:") { number_of_runs.times { get "http://www.fluffy.gov.uk/news"     } }
+        x.report("410:")     { number_of_runs.times { get "http://www.direct.gov.uk/news"     } }
+        x.report("301:")     { number_of_runs.times { get "http://www.direct.gov.uk/motoring" } }
+        x.report("404:")     { number_of_runs.times { get "http://www.direct.gov.uk/prickly"  } }
       end
     end
   end
