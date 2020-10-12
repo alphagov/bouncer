@@ -1,6 +1,7 @@
 development:
   adapter: postgresql
   database: transition_development
+  url: <%= ENV["DATABASE_URL"]%>
 
 # Warning: The contents of the database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -8,6 +9,7 @@ development:
 test:
   adapter: postgresql
   database: transition_test
+  url: <%= ENV["TEST_DATABASE_URL"] %>
 
 production:
   adapter: postgresql
