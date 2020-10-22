@@ -161,7 +161,7 @@ describe "HTTP request handling" do
         new_url: "http://www.gov.uk/government/organisations/ministry-of-truth/a-redirected-page"
     end
 
-    context "aka-hostname style" do
+    context "with aka-hostname style" do
       before do
         site.hosts.first.update_attribute(:hostname, "minitrue.gov.uk")
         get "http://aka-minitrue.gov.uk/a-redirected-page"
@@ -176,7 +176,7 @@ describe "HTTP request handling" do
       end
     end
 
-    context "aka.hostname style" do
+    context "with aka.hostname style" do
       before do
         get "http://aka.minitrue.gov.uk/a-redirected-page"
       end
@@ -196,7 +196,7 @@ describe "HTTP request handling" do
       site.update_attribute(:query_params, "itemid:style")
     end
 
-    context "site has significant query parameters" do
+    context "when site has significant query parameters" do
       before do
         site.mappings.create \
           path: "/page?itemid=2&style=1",
@@ -218,7 +218,7 @@ describe "HTTP request handling" do
     end
   end
 
-  context "visiting a URL where the site has blank string for query_params" do
+  context "when visiting a URL where the site has blank string for query_params" do
     before do
       site.update_attribute(:query_params, "")
       site.mappings.create \
@@ -358,29 +358,9 @@ describe "HTTP request handling" do
       subject { super().body }
 
       it { is_expected.to include "<title>410 - Page Archived</title>" }
-    end
-
-    describe "#body" do
-      subject { super().body }
-
       it { is_expected.to include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>' }
-    end
-
-    describe "#body" do
-      subject { super().body }
-
       it { is_expected.to include '<div class="organisation ministry-of-truth">' }
-    end
-
-    describe "#body" do
-      subject { super().body }
-
       it { is_expected.to include 'Visit the new Ministry of Truth site at <a href="http://www.gov.uk/government/organisations/ministry-of-truth">www.gov.uk/mot</a>' }
-    end
-
-    describe "#body" do
-      subject { super().body }
-
       it { is_expected.to include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk/an-archived-page?non-canonical-param=1">This item has been archived</a>' }
     end
   end
@@ -400,35 +380,10 @@ describe "HTTP request handling" do
       subject { super().body }
 
       it { is_expected.to include "<title>410 - Page Archived</title>" }
-    end
-
-    describe "#body" do
-      subject { super().body }
-
       it { is_expected.to include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>' }
-    end
-
-    describe "#body" do
-      subject { super().body }
-
       it { is_expected.to include '<div class="organisation ministry-of-truth">' }
-    end
-
-    describe "#body" do
-      subject { super().body }
-
       it { is_expected.to include 'Visit the new Ministry of Truth site at <a href="http://www.gov.uk/government/organisations/ministry-of-truth">www.gov.uk/mot</a>' }
-    end
-
-    describe "#body" do
-      subject { super().body }
-
       it { is_expected.to include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk/an-archived-page">This item has been archived</a>' }
-    end
-
-    describe "#body" do
-      subject { super().body }
-
       it { is_expected.to include 'Visit <a href="http://www.truthiness.co.uk/">www.truthiness.co.uk</a> for more information on this topic.' }
     end
   end
@@ -458,30 +413,9 @@ describe "HTTP request handling" do
     describe "#body" do
       subject { super().body }
 
-      it { is_expected.to include "<title>410 - Page Archived</title>" }
-    end
-
-    describe "#body" do
-      subject { super().body }
-
       it { is_expected.to include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>' }
-    end
-
-    describe "#body" do
-      subject { super().body }
-
       it { is_expected.to include '<div class="organisation ministry-of-truth">' }
-    end
-
-    describe "#body" do
-      subject { super().body }
-
       it { is_expected.to include 'Visit the new Ministry of Truth site at <a href="http://www.gov.uk/government/organisations/ministry-of-truth">www.gov.uk/mot</a>' }
-    end
-
-    describe "#body" do
-      subject { super().body }
-
       it { is_expected.to include '<a href="http://webarchive.nationalarchives.gov.uk/20130101000000/http://www.minitrue.gov.uk/an-archived-page/the_actual_page.php">This item has been archived</a>' }
     end
   end
@@ -521,23 +455,8 @@ describe "HTTP request handling" do
       subject { super().body }
 
       it { is_expected.to include "<title>404 - Not Found</title>" }
-    end
-
-    describe "#body" do
-      subject { super().body }
-
       it { is_expected.to include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>' }
-    end
-
-    describe "#body" do
-      subject { super().body }
-
       it { is_expected.to include '<div class="organisation ministry-of-truth">' }
-    end
-
-    describe "#body" do
-      subject { super().body }
-
       it { is_expected.to include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk/an-unrecognised-page">UK Government Web Archive</a>' }
     end
   end
@@ -563,23 +482,8 @@ describe "HTTP request handling" do
       subject { super().body }
 
       it { is_expected.to include "<title>404 - Not Found</title>" }
-    end
-
-    describe "#body" do
-      subject { super().body }
-
       it { is_expected.to include '<a href="http://www.gov.uk/government/organisations/ministry-of-love"><span>Ministry of Love</span></a>' }
-    end
-
-    describe "#body" do
-      subject { super().body }
-
       it { is_expected.to include '<div class="organisation ministry-of-love">' }
-    end
-
-    describe "#body" do
-      subject { super().body }
-
       it { is_expected.to include '<a href="http://webarchive.nationalarchives.gov.uk/20130724103251/http://www.miniluv.gov.uk/an-unrecognised-page">UK Government Web Archive</a>' }
     end
   end
@@ -663,11 +567,6 @@ describe "HTTP request handling" do
           subject { super().body }
 
           it { is_expected.to be_valid_xml }
-        end
-
-        describe "#body" do
-          subject { super().body }
-
           it { is_expected.to be_valid_sitemap }
         end
       end
@@ -689,17 +588,7 @@ describe "HTTP request handling" do
           subject { super().body }
 
           it { is_expected.to match %r{^User-agent: \*$} }
-        end
-
-        describe "#body" do
-          subject { super().body }
-
           it { is_expected.to match %r{^Disallow:$} }
-        end
-
-        describe "#body" do
-          subject { super().body }
-
           it { is_expected.to match %r{^Sitemap: http://www.minitrue.gov.uk/sitemap.xml$} }
         end
       end
@@ -770,23 +659,8 @@ describe "HTTP request handling" do
       subject { super().body }
 
       it { is_expected.to include "<title>404 - Not Found</title>" }
-    end
-
-    describe "#body" do
-      subject { super().body }
-
       it { is_expected.to include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>' }
-    end
-
-    describe "#body" do
-      subject { super().body }
-
       it { is_expected.to include '<div class="organisation ministry-of-truth">' }
-    end
-
-    describe "#body" do
-      subject { super().body }
-
       it { is_expected.to include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk/404">UK Government Web Archive</a>' }
     end
   end
@@ -815,29 +689,9 @@ describe "HTTP request handling" do
       subject { super().body }
 
       it { is_expected.to include "<title>410 - Page Archived</title>" }
-    end
-
-    describe "#body" do
-      subject { super().body }
-
       it { is_expected.to include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>' }
-    end
-
-    describe "#body" do
-      subject { super().body }
-
       it { is_expected.to include '<div class="organisation ministry-of-truth">' }
-    end
-
-    describe "#body" do
-      subject { super().body }
-
       it { is_expected.to include 'Visit the new Ministry of Truth site at <a href="http://www.gov.uk/government/organisations/ministry-of-truth">www.gov.uk/mot</a>' }
-    end
-
-    describe "#body" do
-      subject { super().body }
-
       it { is_expected.to include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk/410">This item has been archived</a>' }
     end
   end
@@ -881,35 +735,10 @@ describe "HTTP request handling" do
       subject { super().body }
 
       it { is_expected.to be_valid_xml }
-    end
-
-    describe "#body" do
-      subject { super().body }
-
       it { is_expected.to be_valid_sitemap }
-    end
-
-    describe "#body" do
-      subject { super().body }
-
       it { is_expected.to have_sitemap_entry_for "http://www.minitrue.gov.uk/a-redirected-page" }
-    end
-
-    describe "#body" do
-      subject { super().body }
-
       it { is_expected.to have_sitemap_entry_for "http://www.minitrue.gov.uk/a-redirected-page?p=np" }
-    end
-
-    describe "#body" do
-      subject { super().body }
-
       it { is_expected.not_to have_sitemap_entry_for "http://www.minitrue.gov.uk/a-deleted-page" }
-    end
-
-    describe "#body" do
-      subject { super().body }
-
       it { is_expected.not_to have_sitemap_entry_for "http://www.minitrue.gov.uk/an-archived-page" }
     end
 
@@ -960,17 +789,7 @@ describe "HTTP request handling" do
       subject { super().body }
 
       it { is_expected.to match %r{^User-agent: \*$} }
-    end
-
-    describe "#body" do
-      subject { super().body }
-
       it { is_expected.to match %r{^Disallow:$} }
-    end
-
-    describe "#body" do
-      subject { super().body }
-
       it { is_expected.to match %r{^Sitemap: http://www.minitrue.gov.uk/sitemap.xml$} }
     end
   end
@@ -1005,11 +824,6 @@ describe "HTTP request handling" do
       subject { super().body }
 
       it { is_expected.to match %r{non\-whitelisted} }
-    end
-
-    describe "#body" do
-      subject { super().body }
-
       it { is_expected.to match %r{spam.net} }
     end
 
@@ -1165,34 +979,14 @@ describe "HTTP request handling" do
           subject { super().body }
 
           it { is_expected.to include "<title>410 - Page Archived</title>" }
-        end
-
-        describe "#body" do
-          subject { super().body }
-
           it { is_expected.to include '<a href="https://www.gov.uk/government/organisations/department-of-health"><span>Department of Health</span></a>' }
-        end
-
-        describe "#body" do
-          subject { super().body }
-
           it { is_expected.to include '<div class="organisation department-of-health">' }
-        end
-
-        describe "#body" do
-          subject { super().body }
-
           it { is_expected.to include 'Visit the new Department of Health site at <a href="https://www.gov.uk/government/organisations/department-of-health">www.gov.uk/doh</a>' }
-        end
-
-        describe "#body" do
-          subject { super().body }
-
           it { is_expected.to include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.dh.gov.uk/a/b/dh_digitalassets/c">This item has been archived</a>' }
         end
       end
 
-      context "When a mapping exists that would trump the regex" do
+      context "when a mapping exists that would trump the regex" do
         before do
           path = "/dh_digitalassets/really-special-asset"
 
@@ -1729,11 +1523,11 @@ describe "HTTP request handling" do
     end
 
     describe "Accident Investigation Branches multi-surfaced content" do
-      before { site.hosts.create hostname: "www.aaib.gov.uk" }
-
-      before { site.hosts.create hostname: "www.maib.gov.uk" }
-
-      before { site.hosts.create hostname: "www.raib.gov.uk" }
+      before do
+        site.hosts.create hostname: "www.aaib.gov.uk"
+        site.hosts.create hostname: "www.maib.gov.uk"
+        site.hosts.create hostname: "www.raib.gov.uk"
+      end
 
       describe "visiting an AAIB multi surfaced page" do
         before do
@@ -1799,7 +1593,7 @@ describe "HTTP request handling" do
     describe "GovStore/CloudStore fallback rules" do
       before { site.hosts.create hostname: "govstore.service.gov.uk" }
 
-      context "visiting a /cloudstore/service-id URL" do
+      context "when visiting a /cloudstore/service-id URL" do
         before do
           get "http://govstore.service.gov.uk/cloudstore/5-g5-0722-028"
         end
@@ -1813,7 +1607,7 @@ describe "HTTP request handling" do
         end
       end
 
-      context "visiting a /cloudstore/category/service-id URL" do
+      context "when visiting a /cloudstore/category/service-id URL" do
         before do
           get "http://govstore.service.gov.uk/cloudstore/scs/5-g5-0722-028"
         end
@@ -1827,7 +1621,7 @@ describe "HTTP request handling" do
         end
       end
 
-      context "visiting a /cloudstore/category/sub-category/service-id URL" do
+      context "when visiting a /cloudstore/category/sub-category/service-id URL" do
         before do
           get "http://govstore.service.gov.uk/cloudstore/iaas/sub-category/5-g5-0722-028"
         end
@@ -1841,7 +1635,7 @@ describe "HTTP request handling" do
         end
       end
 
-      context "visiting a /cloudstore/category/sub-category/sub-sub-category/service-id URL" do
+      context "when visiting a /cloudstore/category/sub-category/sub-sub-category/service-id URL" do
         before do
           get "http://govstore.service.gov.uk/cloudstore/iaas/sub-category/sub-sub-category/5-g5-0722-028"
         end
@@ -1855,7 +1649,7 @@ describe "HTTP request handling" do
         end
       end
 
-      context "visiting a GovStore URL that isn't for a supplier in a category or within /cloudstore" do
+      context "when visiting a GovStore URL that isn't for a supplier in a category or within /cloudstore" do
         before do
           get "http://govstore.service.gov.uk/a"
         end
