@@ -41,12 +41,12 @@ describe Host do
   describe ".find_by" do
     let(:hostname) { "www.minitrue.gov.uk" }
     let(:other_hostname) { "www.minipax.gov.uk" }
+    let!(:host) { described_class.create hostname: hostname, site_id: 321 }
 
     before do
       described_class.create hostname: other_hostname, site_id: 123
-      @host = described_class.create hostname: hostname, site_id: 321
     end
 
-    specify { expect(described_class.find_by(hostname: hostname)).to eq(@host) }
+    specify { expect(described_class.find_by(hostname: hostname)).to eq(host) }
   end
 end
