@@ -6,25 +6,25 @@ describe Mapping do
     let(:mapping) { double "mapping", save: true }
 
     before do
-      allow(Mapping).to receive_messages new: mapping
+      allow(described_class).to receive_messages new: mapping
     end
 
-    specify { expect(Mapping.create(attributes)).to eq(mapping) }
+    specify { expect(described_class.create(attributes)).to eq(mapping) }
 
     specify do
-      expect(Mapping).to receive(:new).with(attributes)
-      Mapping.create(attributes)
+      expect(described_class).to receive(:new).with(attributes)
+      described_class.create(attributes)
     end
   end
 
   describe ".new" do
-    subject { Mapping.new path: path, type: type, new_url: new_url }
+    subject { described_class.new path: path, type: type, new_url: new_url }
 
     let(:path) { "path" }
     let(:type) { "type" }
     let(:new_url) { "new URL" }
 
-    it { is_expected.to be_a Mapping }
+    it { is_expected.to be_a described_class }
 
     describe "#path" do
       subject { super().path }

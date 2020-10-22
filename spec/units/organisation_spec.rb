@@ -6,14 +6,14 @@ describe Organisation do
     let(:organisation) { double "organisation", save: true }
 
     before do
-      allow(Organisation).to receive_messages new: organisation
+      allow(described_class).to receive_messages new: organisation
     end
 
-    specify { expect(Organisation.create(attributes)).to eq(organisation) }
+    specify { expect(described_class.create(attributes)).to eq(organisation) }
 
     specify do
-      expect(Organisation).to receive(:new).with(attributes)
-      Organisation.create(attributes)
+      expect(described_class).to receive(:new).with(attributes)
+      described_class.create(attributes)
     end
   end
 end

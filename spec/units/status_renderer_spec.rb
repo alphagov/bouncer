@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe StatusRenderer do
-  subject(:renderer) { StatusRenderer.new }
+  subject(:renderer) { described_class.new }
 
   describe "template storage" do
     describe "[404]" do
