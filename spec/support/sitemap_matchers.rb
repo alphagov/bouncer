@@ -1,6 +1,6 @@
 RSpec::Matchers.define :be_valid_xml do
   match do |string|
-    Nokogiri::XML::Document.parse(string) { |config| config.strict }
+    Nokogiri::XML::Document.parse(string, &:strict)
     true
   rescue Nokogiri::XML::SyntaxError
     false
