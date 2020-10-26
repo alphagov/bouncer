@@ -6,3 +6,11 @@ inherit_gem:
 inherit_mode:
   merge:
     - Exclude
+
+RSpec/VerifiedDoubles:
+  Exclude:
+    - "spec/units/bouncer/app_spec.rb"
+    - "spec/units/host_spec.rb"
+    - "spec/units/mapping_spec.rb"
+    - "spec/units/organisation_spec.rb"
+    - "spec/units/site_spec.rb"
