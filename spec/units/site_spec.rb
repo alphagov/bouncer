@@ -1,18 +1,18 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Site do
-  describe '.create' do
-    let(:site) { double 'site', save: true }
+  describe ".create" do
+    let(:site) { double "site", save: true }
 
-    before(:each) do
-      allow(Site).to receive_messages new: site
+    before do
+      allow(described_class).to receive_messages new: site
     end
 
-    specify { expect(Site.create).to eq(site) }
+    specify { expect(described_class.create).to eq(site) }
 
     specify do
-      expect(Site).to receive(:new).with(nil)
-      Site.create
+      expect(described_class).to receive(:new).with(nil)
+      described_class.create
     end
   end
 end

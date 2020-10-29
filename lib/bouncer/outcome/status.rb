@@ -11,16 +11,16 @@ module Bouncer
       def mapping
         if context.mapping
           case context.mapping.try(:type)
-          when 'redirect'
+          when "redirect"
             guarded_redirect(context.mapping.new_url)
-          when 'unresolved', 'archive'
-            [410, { 'Content-Type' => 'text/html' }, [renderer.render(context.attributes_for_render, 410)]]
+          when "unresolved", "archive"
+            [410, { "Content-Type" => "text/html" }, [renderer.render(context.attributes_for_render, 410)]]
           end
         end
       end
 
       def not_found
-        [404, { 'Content-Type' => 'text/html' }, [renderer.render(context.attributes_for_render, 404)]]
+        [404, { "Content-Type" => "text/html" }, [renderer.render(context.attributes_for_render, 404)]]
       end
     end
   end

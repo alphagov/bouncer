@@ -48,12 +48,13 @@ module Bouncer
       #
       # We need to downcase because PostgreSQL is case-sensitive when querying,
       # and canonicalization doesn't handle this for the host.
-      @request.host.sub(/^aka-/, '').sub(/^aka\./, 'www.').downcase
+      @request.host.sub(/^aka-/, "").sub(/^aka\./, "www.").downcase
     end
 
   private
+
     def bluri
-      @_fullpath ||= begin
+      @bluri ||= begin
         bluri = BLURI(@request.url)
         bluri.canonicalize!(allow_query: significant_query_params)
       end
@@ -61,7 +62,7 @@ module Bouncer
 
     def significant_query_params
       # We must use the canonicalized_host, not @request.host
-      host_record = Host.find_by(hostname: self.host)
+      host_record = Host.find_by(hostname: host)
       # It would be nice to reuse this variable in RequestContext to avoid
       # duplicate queries, though the ActiveRecord query cache is now
       # preventing the repeat DB round trip.
