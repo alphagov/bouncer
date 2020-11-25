@@ -871,9 +871,9 @@ describe "HTTP request handling" do
       it_behaves_like "a 200"
 
       describe "#body" do
-        subject { super().body }
+        subject { JSON.parse(super().body) }
 
-        it { is_expected.to match %r{^OK$} }
+        it { is_expected.to have_key("status") }
       end
     end
   end
