@@ -2,7 +2,9 @@ module Bouncer
   module Outcome
     class Healthcheck < Base
       def serve
-        [200, { "Content-Type" => "text/plain" }, %w[OK]]
+        GovukHealthcheck.rack_response(
+          GovukHealthcheck::ActiveRecord,
+        ).call
       end
     end
   end
