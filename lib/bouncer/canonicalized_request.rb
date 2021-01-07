@@ -4,6 +4,13 @@ module Bouncer
       @request = Rack::Request.new(env_or_request)
     end
 
+    def valid?
+      bluri
+      true
+    rescue Addressable::URI::InvalidURIError
+      false
+    end
+
     def non_canonicalised_fullpath
       @request.fullpath
     end
