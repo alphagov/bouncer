@@ -17,6 +17,7 @@ require "bouncer/fallback_rules"
 require "bouncer/preemptive_rules"
 
 require "bouncer/outcome/base"
+require "bouncer/outcome/bad_request"
 require "bouncer/outcome/canary"
 require "bouncer/outcome/global_type"
 require "bouncer/outcome/healthcheck"

@@ -292,4 +292,19 @@ describe Bouncer::App do
       expect(last_response).to be_not_found
     end
   end
+
+  context "when the host is malformed" do
+    before do
+      # rubocop:disable RSpec/AnyInstance
+      allow_any_instance_of(Bouncer::RequestContext).to receive(:valid?).and_return(false)
+      # rubocop:enable RSpec/AnyInstance
+    end
+
+    let(:host) { double("host").as_null_object } # value unimportant, but needed for `url` to resolve
+
+    it "responds with the correct status code" do
+      get url
+      expect(last_response.status).to eq(400)
+    end
+  end
 end

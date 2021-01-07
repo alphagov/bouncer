@@ -9,6 +9,10 @@ module Bouncer
       @request = canonicalized_request
     end
 
+    def valid?
+      @request.valid?
+    end
+
     def host
       @host ||= Host.find_by(hostname: @request.host)
     end
