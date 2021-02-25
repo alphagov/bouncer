@@ -22,5 +22,5 @@ end
 
 group :development, :test do
   gem "rspec"
-  gem "rubocop-govuk"
+  gem "rubocop-govuk", "4.0.0.pre.1", require: false # Trialling pre-release
 end
