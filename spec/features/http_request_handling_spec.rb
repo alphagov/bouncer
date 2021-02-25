@@ -823,7 +823,7 @@ describe "HTTP request handling" do
     describe "#body" do
       subject { super().body }
 
-      it { is_expected.to match %r{non\-whitelisted} }
+      it { is_expected.to match %r{non-whitelisted} }
       it { is_expected.to match %r{spam.net} }
     end
 

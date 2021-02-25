@@ -15,6 +15,7 @@ module Benchmark
     DEFAULT_NUMBER_OF_RUNS = 1000
 
     attr_accessor :number_of_runs
+
     def initialize(number_of_runs)
       self.number_of_runs = (number_of_runs || DEFAULT_NUMBER_OF_RUNS).to_i
     end
