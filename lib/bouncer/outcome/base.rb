@@ -5,7 +5,7 @@ module Bouncer
 
       def_delegators :context, :request
 
-      private
+    private
 
       def guarded_redirect(url)
         if legal_redirect?(url)

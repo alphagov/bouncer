@@ -20,7 +20,7 @@ SimpleCov.start
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
-Dir[File.dirname(__FILE__) + "/support/*.rb"].sort.each { |file| require file }
+Dir["#{File.dirname(__FILE__)}/support/*.rb"].sort.each { |file| require file }
 
 RACK_ENV = "test".freeze
 require "rack/test"
