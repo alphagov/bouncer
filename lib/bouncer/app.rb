@@ -7,12 +7,12 @@ module Bouncer
     def call(env)
       context = RequestContext.new(CanonicalizedRequest.new(env))
 
-      outcome = if context.request.path == "/healthcheck"
+      outcome = if !context.valid?
+                  Outcome::BadRequest
+                elsif context.request.path == "/healthcheck"
                   Outcome::Healthcheck
                 elsif context.host.nil?
                   Outcome::UnrecognisedHost
-                elsif !context.valid?
-                  Outcome::BadRequest
                 elsif ["/404", "/410"].include?(context.request.path)
                   Outcome::TestThe4xxPages
                 elsif context.host.hostname == "www.direct.gov.uk" && context.request.path == "/__canary__"
