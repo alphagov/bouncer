@@ -3,7 +3,7 @@ source "https://rubygems.org/"
 gem "activerecord", "~> 6.0.3" # Ideally version should be synced with Transition
 gem "erubis", "2.7.0"
 gem "govuk_app_config"
-gem "nokogiri", "1.10.10"
+gem "nokogiri", "1.11.0"
 gem "optic14n", "2.1.0" # Ideally version should be synced with Transition
 gem "pg", "1.2.3"
 gem "rack", "~> 2.2.3"
