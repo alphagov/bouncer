@@ -9,6 +9,10 @@ module Bouncer
 
       outcome = if !context.valid?
                   Outcome::BadRequest
+                elsif context.request.path == "/healthcheck/live"
+                  Outcome::LivenessHealthcheck
+                elsif context.request.path == "/healthcheck/ready"
+                  Outcome::ReadinessHealthcheck
                 elsif context.request.path == "/healthcheck"
                   Outcome::Healthcheck
                 elsif context.host.nil?
