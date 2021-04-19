@@ -50,3 +50,7 @@ In order to test the redirect feature of this app, you can use a special `bounce
 5. **Start the Bouncer app and go to bouncer-redirect.dev.gov.uk.**
 
   You should see that it redirects to GOV.UK, as specified in the site file.
+
+## Licence
+
+[MIT License](LICENCE)
