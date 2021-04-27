@@ -13,8 +13,6 @@ module Bouncer
                   Outcome::LivenessHealthcheck
                 elsif context.request.path == "/healthcheck/ready"
                   Outcome::ReadinessHealthcheck
-                elsif context.request.path == "/healthcheck"
-                  Outcome::Healthcheck
                 elsif context.host.nil?
                   Outcome::UnrecognisedHost
                 elsif ["/404", "/410"].include?(context.request.path)

@@ -863,9 +863,23 @@ describe "HTTP request handling" do
       end
     end
 
-    describe "visiting /healthcheck" do
+    describe "visiting /healthcheck/live" do
       before do
-        get "http://www.minipax.gov.uk/healthcheck"
+        get "http://www.minipax.gov.uk/healthcheck/live"
+      end
+
+      it_behaves_like "a 200"
+
+      describe "#body" do
+        subject { super().body }
+
+        it { is_expected.to eq("OK") }
+      end
+    end
+
+    describe "visiting /healthcheck/ready" do
+      before do
+        get "http://www.minipax.gov.uk/healthcheck/ready"
       end
 
       it_behaves_like "a 200"
