@@ -47,7 +47,7 @@ GEM
       activesupport (>= 5.2)
       request_store
     method_source (1.0.0)
-    mini_portile2 (2.5.0)
+    mini_portile2 (2.5.1)
     minitest (5.14.4)
     mr-sparkle (0.3.0)
       listen (~> 1.0)
@@ -55,7 +55,7 @@ GEM
       rb-inotify (>= 0.8)
       unicorn (>= 4.5)
     multipart-post (2.1.1)
-    nokogiri (1.11.0)
+    nokogiri (1.11.4)
       mini_portile2 (~> 2.5.0)
       racc (~> 1.4)
     optic14n (2.1.0)
@@ -150,7 +150,7 @@ DEPENDENCIES
   erubis (= 2.7.0)
   govuk_app_config
   mr-sparkle (= 0.3.0)
-  nokogiri (= 1.11.0)
+  nokogiri (= 1.11.4)
   optic14n (= 2.1.0)
   pg (= 1.2.3)
   pry
