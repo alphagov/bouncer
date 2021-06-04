@@ -2,7 +2,7 @@ require './boot'
 require 'rack/static'
 require './lib/active_record/rack/connection_management'
 
-use Raven::Rack
+use Sentry::Rack::CaptureExceptions
 use Bouncer::Cacher
 
 # We need compatibility with redirector which serves its assets from '/''.
