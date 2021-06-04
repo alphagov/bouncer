@@ -9,7 +9,6 @@ require "whitelisted_host"
 require "optic14n"
 require "govuk_app_config"
 
-require "bouncer/error_reporting"
 require "bouncer/cacher"
 require "bouncer/canonicalized_request"
 require "bouncer/request_context"
