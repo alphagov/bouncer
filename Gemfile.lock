@@ -75,7 +75,7 @@ GEM
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     method_source (1.0.0)
-    mini_portile2 (2.5.3)
+    mini_portile2 (2.6.1)
     minitest (5.14.4)
     mr-sparkle (0.3.0)
       listen (~> 1.0)
@@ -83,8 +83,8 @@ GEM
       rb-inotify (>= 0.8)
       unicorn (>= 4.5)
     multipart-post (2.1.1)
-    nokogiri (1.11.4)
-      mini_portile2 (~> 2.5.0)
+    nokogiri (1.12.5)
+      mini_portile2 (~> 2.6.1)
       racc (~> 1.4)
     optic14n (2.1.0)
       addressable (~> 2.7)
@@ -198,7 +198,7 @@ DEPENDENCIES
   erubis (= 2.7.0)
   govuk_app_config
   mr-sparkle (= 0.3.0)
-  nokogiri (= 1.11.4)
+  nokogiri (= 1.12.5)
   optic14n (= 2.1.0)
   pg (= 1.2.3)
   pry
