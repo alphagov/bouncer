@@ -14,10 +14,11 @@ namespace :db do
       uri = URI.parse(ENV["TEST_DATABASE_URL"])
       host = "-h #{uri.host}"
       user = "-U #{uri.user}"
+      port = "-p #{uri.port}"
     end
 
-    sh "dropdb #{host} #{user} --if-exists transition_test"
-    sh "createdb #{host} #{user} --encoding=UTF8 --template=template0 transition_test"
-    sh "cat db/structure.sql | psql #{host} #{user} -d transition_test"
+    sh "dropdb #{port} #{host} #{user} -w --if-exists transition_test"
+    sh "createdb #{port} #{host} #{user} -w --encoding=UTF8 --template=template0 transition_test"
+    sh "cat db/structure.sql | psql #{port} #{host} #{user} -w -d transition_test"
   end
 end
