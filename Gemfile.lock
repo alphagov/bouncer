@@ -42,7 +42,7 @@ GEM
       ruby2_keywords (>= 0.0.4)
     faraday-net_http (2.0.1)
     ffi (1.9.25)
-    govuk_app_config (4.4.1)
+    govuk_app_config (4.4.2)
       logstasher (>= 1.2.2, < 2.2.0)
       prometheus_exporter (~> 2.0.2)
       puma (~> 5.0)
