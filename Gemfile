@@ -5,7 +5,7 @@ gem "erubis", "2.7.0"
 gem "govuk_app_config"
 gem "nokogiri", "1.12.5"
 gem "optic14n", "2.1.0" # Ideally version should be synced with Transition
-gem "pg", "1.3.1"
+gem "pg", "1.3.4"
 gem "rack", "~> 2.2.3"
 gem "rake", "13.0.1"
 
