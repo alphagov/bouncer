@@ -5,7 +5,7 @@ gem "erubis", "2.7.0"
 gem "govuk_app_config"
 gem "nokogiri", "1.13.6"
 gem "optic14n", "2.1.0" # Ideally version should be synced with Transition
-gem "pg", "1.3.5"
+gem "pg"
 gem "rack", "~> 2.2.3"
 gem "rake", "13.0.1"
 
@@ -22,5 +22,5 @@ end
 
 group :development, :test do
   gem "rspec"
-  gem "rubocop-govuk", "4.0.0.pre.1", require: false # Trialling pre-release
+  gem "rubocop-govuk", require: false # Trialling pre-release
 end
