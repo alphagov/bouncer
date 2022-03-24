@@ -14,7 +14,7 @@ namespace :db do
       uri = URI.parse(ENV["TEST_DATABASE_URL"])
       host = "-h #{uri.host}"
       user = "-U #{uri.user}"
-      port = "-p #{uri.port}"
+      port = "-p #{uri.port}" if uri.port
     end
 
     sh "dropdb #{port} #{host} #{user} -w --if-exists transition_test"
