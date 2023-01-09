@@ -6,9 +6,13 @@ require "active_record"
 require "erb"
 require "yaml"
 
-RACK_ENV ||= ENV["RACK_ENV"] || "development"
+def db_config_from_yaml
+  path = File.expand_path("config/database.yml", __dir__)
+  YAML.safe_load(ERB.new(File.read(path)).result)
+end
 
-ActiveRecord::Base.establish_connection(ENV["DATABASE_URL"] || YAML.safe_load(ERB.new(File.read(File.expand_path("config/database.yml", __dir__))).result)[RACK_ENV])
+RACK_ENV ||= ENV["RACK_ENV"] || "development"
+ActiveRecord::Base.establish_connection(ENV["DATABASE_URL"] || db_config_from_yaml[RACK_ENV])
 
 $LOAD_PATH.unshift File.expand_path("lib", __dir__)
 
