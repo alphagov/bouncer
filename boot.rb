@@ -1,4 +1,6 @@
 require "bundler/setup"
+require "bootsnap"
+Bootsnap.setup(cache_dir: ENV["BOOTSNAP_CACHE_DIR"] || "tmp/cache")
 
 require "active_record"
 require "erb"
