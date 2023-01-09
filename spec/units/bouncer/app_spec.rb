@@ -22,7 +22,7 @@ describe Bouncer::App do
     end
 
     it "tries to find the right host" do
-      expect(Host).to receive(:find_by).with(hostname: hostname)
+      expect(Host).to receive(:find_by).with(hostname:)
       get url
     end
 
@@ -63,7 +63,7 @@ describe Bouncer::App do
       end
 
       it "tries to find the right mapping" do
-        expect(mappings).to receive(:find_by).with(path: path)
+        expect(mappings).to receive(:find_by).with(path:)
         get url
       end
     end
@@ -72,7 +72,7 @@ describe Bouncer::App do
       let(:mapping) { double "mapping" }
 
       before do
-        allow(mapping).to receive_messages type: type
+        allow(mapping).to receive_messages type:
       end
 
       shared_examples "a redirector which recognises the host and path" do
@@ -90,7 +90,7 @@ describe Bouncer::App do
         let(:new_url)     { "http://www.gov.uk" }
 
         before do
-          allow(mapping).to receive_messages new_url: new_url
+          allow(mapping).to receive_messages new_url:
         end
 
         it_behaves_like "a redirector which recognises the host and path"

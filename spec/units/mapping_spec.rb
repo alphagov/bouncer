@@ -18,7 +18,7 @@ describe Mapping do
   end
 
   describe ".new" do
-    subject { described_class.new path: path, type: type, new_url: new_url }
+    subject { described_class.new path:, type:, new_url: }
 
     let(:path) { "path" }
     let(:type) { "type" }
