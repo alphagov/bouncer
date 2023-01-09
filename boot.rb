@@ -1,4 +1,9 @@
+require "bundler/setup"
+
 require "active_record"
+require "erb"
+require "yaml"
+
 RACK_ENV ||= ENV["RACK_ENV"] || "development"
 
 if ENV["DATABASE_URL"]
