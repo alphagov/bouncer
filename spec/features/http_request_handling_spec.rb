@@ -1262,7 +1262,7 @@ describe "HTTP request handling" do
       describe "overrides any mapping (PreemptiveRules)" do
         before do
           path = "/homeandleisure/floods/34678.aspx?page=1"
-          site.mappings.create(path: path, type: "archive")
+          site.mappings.create(path:, type: "archive")
           get "http://www.environment-agency.gov.uk#{path}"
         end
 

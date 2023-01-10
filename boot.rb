@@ -1,11 +1,18 @@
-require "active_record"
-RACK_ENV ||= ENV["RACK_ENV"] || "development"
+require "bundler/setup"
+require "bootsnap"
+Bootsnap.setup(cache_dir: ENV["BOOTSNAP_CACHE_DIR"] || "tmp/cache")
 
-if ENV["DATABASE_URL"]
-  ActiveRecord::Base.establish_connection(ENV["DATABASE_URL"])
-else
-  ActiveRecord::Base.establish_connection(YAML.safe_load(ERB.new(File.read(File.expand_path("config/database.yml", __dir__))).result)[RACK_ENV])
+require "active_record"
+require "erb"
+require "yaml"
+
+def db_config_from_yaml
+  path = File.expand_path("config/database.yml", __dir__)
+  YAML.safe_load(ERB.new(File.read(path)).result)
 end
+
+RACK_ENV ||= ENV["RACK_ENV"] || "development"
+ActiveRecord::Base.establish_connection(ENV["DATABASE_URL"] || db_config_from_yaml[RACK_ENV])
 
 $LOAD_PATH.unshift File.expand_path("lib", __dir__)
 

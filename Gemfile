@@ -1,6 +1,7 @@
 source "https://rubygems.org/"
 
 gem "activerecord", "7.0.4" # Ideally version should be synced with Transition
+gem "bootsnap", require: false
 gem "erubis", "2.7.0"
 gem "govuk_app_config"
 gem "nokogiri", "1.13.10"

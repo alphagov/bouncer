@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  workflow_dispatch: {}
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "Jenkinsfile"
+      - ".git**"
+  pull_request:
+
+jobs:
+  lint-ruby:
+    name: Lint Ruby
+    uses: alphagov/govuk-infrastructure/.github/workflows/rubocop.yml@main
+
+  test-ruby:
+    name: Test Ruby
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Postgres
+        id: setup-postgres
+        uses: alphagov/govuk-infrastructure/.github/actions/setup-postgres@main
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Initialize database
+        env:
+          RACK_ENV: test
+          TEST_DATABASE_URL: ${{ steps.setup-postgres.outputs.db-url }}
+        run: bundle exec rake db:reset
+
+      - name: Run RSpec
+        env:
+          RACK_ENV: test
+          TEST_DATABASE_URL: ${{ steps.setup-postgres.outputs.db-url }}
+        run: bundle exec rake spec

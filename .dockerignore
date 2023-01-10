@@ -1,0 +1,12 @@
+.dockerignore
+.git
+.gitignore
+.github
+Dockerfile
+Jenkinsfile
+README.md
+coverage
+docs
+log
+spec
+tmp
