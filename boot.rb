@@ -1,6 +1,10 @@
 require "bundler/setup"
 require "bootsnap"
-Bootsnap.setup(cache_dir: ENV["BOOTSNAP_CACHE_DIR"] || "tmp/cache")
+RACK_ENV = ENV.fetch("RACK_ENV", "development")
+Bootsnap.setup(
+  cache_dir: ENV.fetch("BOOTSNAP_CACHE_DIR", "tmp/cache"),
+  development_mode: RACK_ENV == "development",
+)
 
 require "active_record"
 require "erb"
@@ -11,7 +15,6 @@ def db_config_from_yaml
   YAML.safe_load(ERB.new(File.read(path)).result)
 end
 
-RACK_ENV ||= ENV["RACK_ENV"] || "development"
 ActiveRecord::Base.establish_connection(ENV["DATABASE_URL"] || db_config_from_yaml[RACK_ENV])
 
 $LOAD_PATH.unshift File.expand_path("lib", __dir__)
