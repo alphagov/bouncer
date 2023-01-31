@@ -78,10 +78,10 @@ GEM
       unicorn (>= 4.5)
     msgpack (1.6.0)
     nio4r (2.5.8)
-    nokogiri (1.14.0)
+    nokogiri (1.14.1)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
-    nokogiri (1.14.0-x86_64-darwin)
+    nokogiri (1.14.1-x86_64-darwin)
       racc (~> 1.4)
     optic14n (2.1.0)
       addressable (~> 2.7)
@@ -201,7 +201,7 @@ DEPENDENCIES
   erubis (= 2.7.0)
   govuk_app_config (~> 5.0.0)
   mr-sparkle (= 0.3.0)
-  nokogiri (= 1.14.0)
+  nokogiri (= 1.14.1)
   optic14n (= 2.1.0)
   pg
   pry
