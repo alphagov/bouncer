@@ -39,11 +39,11 @@ describe Bouncer::App do
     let(:mappings)     { double "mappings" }
 
     before do
-      allow(host).to receive_messages site: site
-      allow(site).to receive_messages mappings: mappings,
+      allow(host).to receive_messages(site:)
+      allow(site).to receive_messages mappings:,
                                       query_params: nil,
                                       global_type: nil,
-                                      organisation: organisation,
+                                      organisation:,
                                       tna_timestamp: nil
       allow(mappings).to receive_messages find_by: mapping
       allow(mappings).to receive_messages first: mapping

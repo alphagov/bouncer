@@ -902,7 +902,7 @@ describe "HTTP request handling" do
       before do
         path = "/an-archived-page"
         site.mappings.create \
-          path: path,
+          path:,
           type: "archive"
 
         get "http://www.minitrue.gov.uk#{path}"
@@ -1005,7 +1005,7 @@ describe "HTTP request handling" do
           path = "/dh_digitalassets/really-special-asset"
 
           dh_site.mappings.create \
-            path: path,
+            path:,
             type: "redirect",
             new_url: "http://www.gov.uk/government/organisations/dh/really-special-asset"
 
