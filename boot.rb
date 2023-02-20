@@ -1,5 +1,7 @@
 require "bundler/setup"
 require "bootsnap"
+require_relative "config/prometheus"
+
 RACK_ENV = ENV.fetch("RACK_ENV", "development")
 Bootsnap.setup(
   cache_dir: ENV.fetch("BOOTSNAP_CACHE_DIR", "tmp/cache"),
