@@ -51,6 +51,25 @@ In order to test the redirect feature of this app, you can use a special `bounce
 
   You should see that it redirects to GOV.UK, as specified in the site file.
 
+### Data storage
+
+Lists of domain names, old URLs and URLs to redirect to are stored in a
+PostgreSQL database to which the application has read-only access.
+
+## Example application URLs
+
+Here are some examples using a few of the many domain names which is served by
+Bouncer:
+
+| URL | Description |
+| --- | ----------- |
+| http://www.attorneygeneral.gov.uk/aboutus/pages/civilcriminalpanels.aspx | Serves a redirect to a page on GOV.UK |
+| http://www.bonavacantia.gov.uk/output/accessibility.aspx | Serves a 410 archive page |
+| http://rdpenetwork.defra.gov.uk/i-made-this-up | Serves a 404 not found page |
+| http://www.attorneygeneral.gov.uk/sitemap.xml | Serves a sitemap of all redirects for the domain |
+| http://www.attorneygeneral.gov.uk/robots.txt | Serves a minimal robots.txt |
+
+
 ## Licence
 
 [MIT License](LICENCE)
