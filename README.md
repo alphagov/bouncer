@@ -51,6 +51,16 @@ In order to test the redirect feature of this app, you can use a special `bounce
 
   You should see that it redirects to GOV.UK, as specified in the site file.
 
+### Testing on staging environment
+
+In contrast to other GOV.UK applications, Bouncer isn't available at x.staging.publishing.service.gov.uk
+
+This means that testing the application on our staging environment will require repointing the domains you wish to test by editing your computer’s host file to point them at Bouncer’s staging IP address. This should allow visiting the app in a web browser, for example. Alternatively, to make a request to our staging environment with curl:
+
+```
+curl -I -H"Host: www.attorneygeneral.gov.uk" http://0.0.0.0/aboutus/pages/civilcriminalpanels.aspx
+```
+
 ### Data storage
 
 Lists of domain names, old URLs and URLs to redirect to are stored in a
