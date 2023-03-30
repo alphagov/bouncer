@@ -2,6 +2,13 @@ require './boot'
 require 'rack/static'
 require './lib/active_record/rack/connection_management'
 
+if GovukPrometheusExporter.should_configure
+	require "prometheus_exporter"
+	require "prometheus_exporter/middleware"
+
+	use PrometheusExporter::Middleware, instrument: :prepend
+end
+
 use Sentry::Rack::CaptureExceptions
 use Bouncer::Cacher
 
