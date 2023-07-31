@@ -297,7 +297,7 @@ GEM
     puma (6.3.0)
       nio4r (~> 2.0)
     racc (1.7.1)
-    rack (2.2.7)
+    rack (2.2.8)
     rack-proxy (0.7.6)
       rack
     rack-test (2.1.0)
@@ -413,7 +413,7 @@ DEPENDENCIES
   optic14n (= 2.1.0)
   pg
   pry
-  rack (~> 2.2.7)
+  rack (~> 2.2.8)
   rack-test (= 2.1.0)
   rake (= 13.0.6)
   rspec
