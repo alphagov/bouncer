@@ -20,34 +20,22 @@ In order to test the redirect feature of this app, you can use a special `bounce
 
 1. **Setup [the Transition repo](https://github.com/alphagov/transition).**
 
-2. **Run the following command in the Transition repo.**
+  One of the seeded organisations will be "Cabinet Office", which we will use in the next step.
 
-  ```
-  bundle exec rake import:all:orgs_sites_hosts
-  ```
+2. **In the Transition app, [under the Cabinet Office organisation](http://transition.dev.gov.uk/organisations/cabinet-office), add a new site.**
 
-  One of the created organisations will be "cabinet-office", which we will use in the next step.
-
-3. **Create a temporary site file in the Transition repo.**
-
-  ```
-  site: bouncer-redirect
-  whitehall_slug: cabinet-office
-  homepage: https://www.gov.uk
-  tna_timestamp: 20141104112824
-  host: bouncer-redirect.dev.gov.uk
-  global: =301 https://www.gov.uk
-  ```
-
-4. **Run the following command in the Transition repo.**
-
-  ```
-  bundle exec rake 'import:org_sites_hosts[<path-to-file>]'
-  ```
+  | | |
+  | --- | --- |
+  | **Abbreviated name:** | bouncer-redirect |
+  | **TNA timestamp:** | 20141104112824 |
+  | **Homepage:** | https://www.gov.uk |
+  | **Hostname:** | bouncer-redirect.dev.gov.uk |
+  | **Global type:** | Redirect |
+  | **... with Global new URL:** | https://www.gov.uk |
 
   This will create the site in the shared Transition / Bouncer DB.
 
-5. **Start the Bouncer app and go to bouncer-redirect.dev.gov.uk.**
+3. **Start the Bouncer app and go to bouncer-redirect.dev.gov.uk.**
 
   You should see that it redirects to GOV.UK, as specified in the site file.
 
