@@ -361,7 +361,7 @@ describe "HTTP request handling" do
       it { is_expected.to include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>' }
       it { is_expected.to include '<div class="organisation ministry-of-truth">' }
       it { is_expected.to include 'Visit the new Ministry of Truth site at <a href="http://www.gov.uk/government/organisations/ministry-of-truth">www.gov.uk/mot</a>' }
-      it { is_expected.to include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk/an-archived-page?non-canonical-param=1">This item has been archived</a>' }
+      it { is_expected.to include '<a href="https://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk/an-archived-page?non-canonical-param=1">This item has been archived</a>' }
     end
   end
 
@@ -383,7 +383,7 @@ describe "HTTP request handling" do
       it { is_expected.to include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>' }
       it { is_expected.to include '<div class="organisation ministry-of-truth">' }
       it { is_expected.to include 'Visit the new Ministry of Truth site at <a href="http://www.gov.uk/government/organisations/ministry-of-truth">www.gov.uk/mot</a>' }
-      it { is_expected.to include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk/an-archived-page">This item has been archived</a>' }
+      it { is_expected.to include '<a href="https://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk/an-archived-page">This item has been archived</a>' }
       it { is_expected.to include 'Visit <a href="http://www.truthiness.co.uk/">www.truthiness.co.uk</a> for more information on this topic.' }
     end
   end
@@ -404,7 +404,7 @@ describe "HTTP request handling" do
       site.mappings.create \
         path: "/an-archived-page",
         type: "archive",
-        archive_url: "http://webarchive.nationalarchives.gov.uk/20130101000000/http://www.minitrue.gov.uk/an-archived-page/the_actual_page.php"
+        archive_url: "https://webarchive.nationalarchives.gov.uk/20130101000000/http://www.minitrue.gov.uk/an-archived-page/the_actual_page.php"
       get "http://www.minitrue.gov.uk/an-archived-page"
     end
 
@@ -416,7 +416,7 @@ describe "HTTP request handling" do
       it { is_expected.to include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>' }
       it { is_expected.to include '<div class="organisation ministry-of-truth">' }
       it { is_expected.to include 'Visit the new Ministry of Truth site at <a href="http://www.gov.uk/government/organisations/ministry-of-truth">www.gov.uk/mot</a>' }
-      it { is_expected.to include '<a href="http://webarchive.nationalarchives.gov.uk/20130101000000/http://www.minitrue.gov.uk/an-archived-page/the_actual_page.php">This item has been archived</a>' }
+      it { is_expected.to include '<a href="https://webarchive.nationalarchives.gov.uk/20130101000000/http://www.minitrue.gov.uk/an-archived-page/the_actual_page.php">This item has been archived</a>' }
     end
   end
 
@@ -457,7 +457,7 @@ describe "HTTP request handling" do
       it { is_expected.to include "<title>404 - Not Found</title>" }
       it { is_expected.to include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>' }
       it { is_expected.to include '<div class="organisation ministry-of-truth">' }
-      it { is_expected.to include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk/an-unrecognised-page">UK Government Web Archive</a>' }
+      it { is_expected.to include '<a href="https://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk/an-unrecognised-page">UK Government Web Archive</a>' }
     end
   end
 
@@ -484,7 +484,7 @@ describe "HTTP request handling" do
       it { is_expected.to include "<title>404 - Not Found</title>" }
       it { is_expected.to include '<a href="http://www.gov.uk/government/organisations/ministry-of-love"><span>Ministry of Love</span></a>' }
       it { is_expected.to include '<div class="organisation ministry-of-love">' }
-      it { is_expected.to include '<a href="http://webarchive.nationalarchives.gov.uk/20130724103251/http://www.miniluv.gov.uk/an-unrecognised-page">UK Government Web Archive</a>' }
+      it { is_expected.to include '<a href="https://webarchive.nationalarchives.gov.uk/20130724103251/http://www.miniluv.gov.uk/an-unrecognised-page">UK Government Web Archive</a>' }
     end
   end
 
@@ -661,7 +661,7 @@ describe "HTTP request handling" do
       it { is_expected.to include "<title>404 - Not Found</title>" }
       it { is_expected.to include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>' }
       it { is_expected.to include '<div class="organisation ministry-of-truth">' }
-      it { is_expected.to include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk/404">UK Government Web Archive</a>' }
+      it { is_expected.to include '<a href="https://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk/404">UK Government Web Archive</a>' }
     end
   end
 
@@ -692,7 +692,7 @@ describe "HTTP request handling" do
       it { is_expected.to include '<a href="http://www.gov.uk/government/organisations/ministry-of-truth"><span>Ministry of Truth</span></a>' }
       it { is_expected.to include '<div class="organisation ministry-of-truth">' }
       it { is_expected.to include 'Visit the new Ministry of Truth site at <a href="http://www.gov.uk/government/organisations/ministry-of-truth">www.gov.uk/mot</a>' }
-      it { is_expected.to include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk/410">This item has been archived</a>' }
+      it { is_expected.to include '<a href="https://webarchive.nationalarchives.gov.uk/20121026065214/http://www.minitrue.gov.uk/410">This item has been archived</a>' }
     end
   end
 
@@ -996,7 +996,7 @@ describe "HTTP request handling" do
           it { is_expected.to include '<a href="https://www.gov.uk/government/organisations/department-of-health"><span>Department of Health</span></a>' }
           it { is_expected.to include '<div class="organisation department-of-health">' }
           it { is_expected.to include 'Visit the new Department of Health site at <a href="https://www.gov.uk/government/organisations/department-of-health">www.gov.uk/doh</a>' }
-          it { is_expected.to include '<a href="http://webarchive.nationalarchives.gov.uk/20121026065214/http://www.dh.gov.uk/a/b/dh_digitalassets/c">This item has been archived</a>' }
+          it { is_expected.to include '<a href="https://webarchive.nationalarchives.gov.uk/20121026065214/http://www.dh.gov.uk/a/b/dh_digitalassets/c">This item has been archived</a>' }
         end
       end
 

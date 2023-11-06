@@ -48,7 +48,7 @@ module Bouncer
 
     def default_archive_url
       tna_timestamp = site.tna_timestamp.try(:strftime, "%Y%m%d%H%M%S")
-      "http://webarchive.nationalarchives.gov.uk/#{tna_timestamp}/http://#{host.hostname}#{request.non_canonicalised_fullpath}"
+      "https://webarchive.nationalarchives.gov.uk/#{tna_timestamp}/http://#{host.hostname}#{request.non_canonicalised_fullpath}"
     end
   end
 end
