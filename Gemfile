@@ -1,6 +1,6 @@
 source "https://rubygems.org/"
 
-gem "activerecord", "7.1.1" # Ideally version should be synced with Transition
+gem "activerecord", "7.1.2" # Ideally version should be synced with Transition
 gem "bootsnap", require: false
 gem "erubis", "2.7.0"
 gem "govuk_app_config", "~> 9.5.0"
