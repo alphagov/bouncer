@@ -62,7 +62,7 @@ GEM
     google-protobuf (3.25.1-x86_64-darwin)
     googleapis-common-protos-types (1.10.0)
       google-protobuf (~> 3.18)
-    govuk_app_config (9.6.0)
+    govuk_app_config (9.7.0)
       logstasher (~> 2.1)
       opentelemetry-exporter-otlp (>= 0.25, < 0.27)
       opentelemetry-instrumentation-all (>= 0.39.1, < 0.52.0)
@@ -444,7 +444,7 @@ DEPENDENCIES
   bootsnap
   database_cleaner (= 2.0.2)
   erubis (= 2.7.0)
-  govuk_app_config (~> 9.6.0)
+  govuk_app_config (~> 9.7.0)
   mr-sparkle (= 0.3.0)
   nokogiri (= 1.15.5)
   optic14n (= 2.1.0)
