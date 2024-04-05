@@ -8,7 +8,7 @@ gem "nokogiri", "1.16.3"
 gem "optic14n", "2.1.0" # Ideally version should be synced with Transition
 gem "pg"
 gem "rack", "~> 2.2.9"
-gem "rake", "13.2.0"
+gem "rake", "13.2.1"
 
 group :development do
   gem "mr-sparkle", "0.3.0"
