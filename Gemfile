@@ -11,6 +11,7 @@ gem "rack", "~> 2.2.9"
 gem "rake", "13.2.1"
 
 group :development do
+  gem "brakeman"
   gem "mr-sparkle", "0.3.0"
 end
 
