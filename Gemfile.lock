@@ -103,10 +103,10 @@ GEM
     msgpack (1.7.2)
     mutex_m (0.2.0)
     nio4r (2.7.3)
-    nokogiri (1.16.5)
+    nokogiri (1.16.6)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
-    nokogiri (1.16.5-x86_64-darwin)
+    nokogiri (1.16.6-x86_64-darwin)
       racc (~> 1.4)
     opentelemetry-api (1.2.5)
     opentelemetry-common (0.21.0)
@@ -460,7 +460,7 @@ DEPENDENCIES
   erubis (= 2.7.0)
   govuk_app_config (~> 9.11.2)
   mr-sparkle (= 0.3.0)
-  nokogiri (= 1.16.5)
+  nokogiri (= 1.16.6)
   optic14n (= 2.1.0)
   pg
   pry
