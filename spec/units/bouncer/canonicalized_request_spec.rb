@@ -8,7 +8,7 @@ describe Bouncer::CanonicalizedRequest do
 
     it "returns true if valid URI passed" do
       canonicalized_request = described_class.new(env)
-      allow(canonicalized_request).to receive(:bluri).and_return(instance_double("Rack::Request"))
+      allow(canonicalized_request).to receive(:bluri).and_return(instance_double(Rack::Request))
       expect(canonicalized_request.valid?).to be(true)
     end
 
