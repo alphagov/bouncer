@@ -44,7 +44,7 @@ describe "HTTP request handling" do
     describe "#location" do
       subject { super().location }
 
-      it { is_expected.to eq(nil) }
+      it { is_expected.to be_nil }
     end
 
     specify { expect(last_response.headers).not_to include("Cache-Control") }
@@ -252,7 +252,7 @@ describe "HTTP request handling" do
     describe "#location" do
       subject { super().location }
 
-      it { is_expected.to eq(nil) }
+      it { is_expected.to be_nil }
     end
   end
 
@@ -830,7 +830,7 @@ describe "HTTP request handling" do
     describe "#location" do
       subject { super().location }
 
-      it { is_expected.to eq(nil) }
+      it { is_expected.to be_nil }
     end
   end
 
@@ -1147,7 +1147,7 @@ describe "HTTP request handling" do
         describe "#location" do
           subject { super().location }
 
-          it { is_expected.to eq(nil) }
+          it { is_expected.to be_nil }
         end
       end
     end
@@ -1285,7 +1285,7 @@ describe "HTTP request handling" do
         describe "#location" do
           subject { super().location }
 
-          it { is_expected.to eq(nil) }
+          it { is_expected.to be_nil }
         end
       end
     end
