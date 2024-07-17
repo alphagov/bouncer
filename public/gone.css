@@ -34,7 +34,7 @@ body {
 
 #banner {
   background: #0b0c0d;
-  height: 51px;
+  height: 60px;
 }
 
 h1 {
@@ -44,15 +44,15 @@ h1 {
 h1 a {
   position: relative;
   display: block;
-  height: 30px;
-  width: 192px;
+  height: 40px;
+  width: 155px;
   overflow: hidden;
 }
 
 h1 a img {
   position: relative;
   display: block;
-  height: 25px;
+  height: 40px;
   width: auto;
 }
 
