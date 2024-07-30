@@ -5,7 +5,7 @@ describe "Benchmarking", :performance do
   include Rack::Test::Methods
 
   def app
-    Rack::Builder.parse_file("config.ru")[0]
+    Rack::Builder.parse_file("config.ru")
   end
 
   let(:number_of_runs) { ENV["NUMBER_OF_RUNS"] || 1000 }

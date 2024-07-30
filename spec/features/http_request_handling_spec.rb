@@ -6,7 +6,7 @@ describe "HTTP request handling" do
   subject { last_response }
 
   def app
-    Rack::Builder.parse_file("config.ru")[0]
+    Rack::Builder.parse_file("config.ru")
   end
 
   let(:department_of_health) do
@@ -896,7 +896,7 @@ describe "HTTP request handling" do
     # In dev (but not production), CommonLogger middleware is in use, which expects
     # us not to violate the Rack spec. Part of this is not allowing nil query strings,
     # which at time of writing optic14n does.
-    let(:app) { Rack::CommonLogger.new(Rack::Builder.parse_file("config.ru")[0]) }
+    let(:app) { Rack::CommonLogger.new(Rack::Builder.parse_file("config.ru")) }
 
     describe "Nil querystrings do not faze us" do
       before do
