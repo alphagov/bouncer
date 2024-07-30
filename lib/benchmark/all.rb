@@ -21,7 +21,7 @@ module Benchmark
     end
 
     def app
-      @app ||= Rack::Builder.parse_file("config.ru")[0]
+      @app ||= Rack::Builder.parse_file("config.ru")
     end
 
     def run!
