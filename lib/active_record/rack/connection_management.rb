@@ -10,10 +10,10 @@ module ActiveRecord
       def call(env)
         testing = env["rack.test"]
         response = @app.call(env)
-        ActiveRecord::Base.clear_active_connections! unless testing
+        ActiveRecord::Base.connection_handler.clear_active_connections! unless testing
         response
       rescue StandardError
-        ActiveRecord::Base.clear_active_connections! unless testing
+        ActiveRecord::Base.connection_handler.clear_active_connections! unless testing
         raise
       end
     end
