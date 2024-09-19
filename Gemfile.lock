@@ -60,10 +60,10 @@ GEM
     erubis (2.7.0)
     ffi (1.17.0)
     ffi (1.17.0-x86_64-darwin)
-    google-protobuf (4.28.0)
+    google-protobuf (4.28.2)
       bigdecimal
       rake (>= 13)
-    google-protobuf (4.28.0-x86_64-darwin)
+    google-protobuf (4.28.2-x86_64-darwin)
       bigdecimal
       rake (>= 13)
     googleapis-common-protos-types (1.15.0)
