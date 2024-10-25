@@ -47,7 +47,7 @@ GEM
     concurrent-ruby (1.3.4)
     connection_pool (2.4.1)
     crass (1.0.6)
-    database_cleaner (2.0.2)
+    database_cleaner (2.1.0)
       database_cleaner-active_record (>= 2, < 3)
     database_cleaner-active_record (2.2.0)
       activerecord (>= 5.a)
@@ -456,7 +456,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord (= 7.2.1.2)
   bootsnap
-  database_cleaner (= 2.0.2)
+  database_cleaner (= 2.1.0)
   erubis (= 2.7.0)
   govuk_app_config (~> 9.14.4)
   mr-sparkle (= 0.3.0)

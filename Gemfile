@@ -15,7 +15,7 @@ group :development do
 end
 
 group :test do
-  gem "database_cleaner", "2.0.2"
+  gem "database_cleaner", "2.1.0"
   gem "pry"
   gem "rack-test", "2.1.0"
   gem "simplecov"
