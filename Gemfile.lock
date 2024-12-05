@@ -317,7 +317,7 @@ GEM
       opentelemetry-semantic_conventions
     opentelemetry-semantic_conventions (1.10.1)
       opentelemetry-api (~> 1.0)
-    optic14n (3.0.1)
+    optic14n (3.0.2)
       addressable (~> 2.7)
     parallel (1.26.3)
     parser (3.3.6.0)
@@ -460,7 +460,7 @@ DEPENDENCIES
   govuk_app_config (~> 9.15.3)
   mr-sparkle (= 0.3.0)
   nokogiri (= 1.16.8)
-  optic14n (= 3.0.1)
+  optic14n (= 3.0.2)
   pg
   pry
   rack (~> 3.1.8)
