@@ -456,7 +456,8 @@ CREATE TABLE public.sites (
     global_type character varying(255),
     homepage_title character varying(255),
     homepage_furl character varying(255),
-    precompute_all_hits_view boolean DEFAULT false NOT NULL
+    precompute_all_hits_view boolean DEFAULT false NOT NULL,
+    alternative_archive_text: text,
 );
 
 

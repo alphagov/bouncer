@@ -21,19 +21,23 @@
       <div id="message" role="main">
         <div class="inner">
           <div id="detail">
-            <h2>
-              <div class="organisation <%= css || "no-organisation" %>">
-                <a href="<%= homepage %>"><span><%= title %></span></a>
-              </div>
-              <a href="<%= archive_url %>">This item has been archived</a>
-            </h2>
-            <p class="either-or">You can either</p>
-            <p class="call-to-action"><a href="<%= archive_url %>">View the item you were looking for</a> in the UK Government Web Archive</p>
-            <p class="either-or">or</p>
-            <p class="call-to-action">Visit the new <%= title %> site at <a href="<%= homepage %>"><%= furl || homepage %></a></p>
-            <% if suggested_url %>
+            <% if alternative_archive_text %>
+              <%== alternative_archive_text %>
+            <% else %>
+              <h2>
+                <div class="organisation <%= css || "no-organisation" %>">
+                  <a href="<%= homepage %>"><span><%= title %></span></a>
+                </div>
+                <a href="<%= archive_url %>">This item has been archived</a>
+              </h2>
+              <p class="either-or">You can either</p>
+              <p class="call-to-action"><a href="<%= archive_url %>">View the item you were looking for</a> in the UK Government Web Archive</p>
               <p class="either-or">or</p>
-              <p class="call-to-action">Visit <a href="<%= suggested_url %>"><%= suggested_url.gsub(%r{\Ahttps?://|/\z}, '') %></a> for more information on this topic.</p>
+              <p class="call-to-action">Visit the new <%= title %> site at <a href="<%= homepage %>"><%= furl || homepage %></a></p>
+              <% if suggested_url %>
+                <p class="either-or">or</p>
+                <p class="call-to-action">Visit <a href="<%= suggested_url %>"><%= suggested_url.gsub(%r{\Ahttps?://|/\z}, '') %></a> for more information on this topic.</p>
+              <% end %>
             <% end %>
           </div>
           <div id="footer">
