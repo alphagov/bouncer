@@ -11,7 +11,7 @@ module Bouncer
         if legal_redirect?(url)
           [301, { "Location" => url }, []]
         else
-          [501, { "Content-Type" => "text/plain" }, "Refusing to redirect to non-whitelisted domain: #{url}"]
+          [501, { "content-type" => "text/plain" }, "Refusing to redirect to non-whitelisted domain: #{url}"]
         end
       end
 

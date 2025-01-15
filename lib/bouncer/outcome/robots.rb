@@ -8,7 +8,7 @@ module Bouncer
           Disallow:
           Sitemap: #{url}
         ROBOTS
-        [200, { "Content-Type" => "text/plain" }, [robots]]
+        [200, { "content-type" => "text/plain" }, [robots]]
       end
     end
   end

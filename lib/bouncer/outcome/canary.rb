@@ -2,8 +2,8 @@ module Bouncer
   module Outcome
     class Canary < Base
       HEADERS = {
-        "Content-Type" => "text/plain",
-        "Cache-Control" => "private",
+        "content-type" => "text/plain",
+        "cache-control" => "private",
       }.freeze
 
       def serve

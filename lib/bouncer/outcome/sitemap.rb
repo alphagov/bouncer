@@ -4,7 +4,7 @@ module Bouncer
       MAXIMUM_SIZE = 50_000
 
       def serve
-        [200, { "Content-Type" => "application/xml" }, [build_sitemap.to_xml]]
+        [200, { "content-type" => "application/xml" }, [build_sitemap.to_xml]]
       end
 
       def build_sitemap

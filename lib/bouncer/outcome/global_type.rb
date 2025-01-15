@@ -12,10 +12,10 @@ module Bouncer
                     end
           guarded_redirect(new_url)
         when "archive"
-          [410, { "Content-Type" => "text/html" }, [renderer.render(context.attributes_for_render, 410)]]
+          [410, { "content-type" => "text/html" }, [renderer.render(context.attributes_for_render, 410)]]
         else
           message = "Can't serve unexpected global_type: #{context.site.global_type} for #{context.site.default_hostname}"
-          [500, { "Content-Type" => "text/plain" }, [message]]
+          [500, { "content-type" => "text/plain" }, [message]]
         end
       end
     end

@@ -47,7 +47,7 @@ describe "HTTP request handling" do
       it { is_expected.to be_nil }
     end
 
-    specify { expect(last_response.headers).not_to include("Cache-Control") }
+    specify { expect(last_response.headers).not_to include("cache-control") }
   end
 
   shared_examples "a 200" do
@@ -57,7 +57,7 @@ describe "HTTP request handling" do
       it { is_expected.to eq(200) }
     end
 
-    specify { expect(last_response.headers["Cache-Control"]).to eq("public, max-age=3600") }
+    specify { expect(last_response.headers["cache-control"]).to eq("public, max-age=3600") }
   end
 
   shared_examples "a 301" do
@@ -67,7 +67,7 @@ describe "HTTP request handling" do
       it { is_expected.to eq(301) }
     end
 
-    specify { expect(last_response.headers["Cache-Control"]).to eq("public, max-age=3600") }
+    specify { expect(last_response.headers["cache-control"]).to eq("public, max-age=3600") }
   end
 
   shared_examples "a 410" do
@@ -83,7 +83,7 @@ describe "HTTP request handling" do
       it { is_expected.to eq("text/html") }
     end
 
-    specify { expect(last_response.headers["Cache-Control"]).to eq("public, max-age=3600") }
+    specify { expect(last_response.headers["cache-control"]).to eq("public, max-age=3600") }
   end
 
   shared_examples "a 404" do
@@ -93,7 +93,7 @@ describe "HTTP request handling" do
       it { is_expected.to eq(404) }
     end
 
-    specify { expect(last_response.headers["Cache-Control"]).to eq("public, max-age=3600") }
+    specify { expect(last_response.headers["cache-control"]).to eq("public, max-age=3600") }
   end
 
   shared_examples "a 503" do
@@ -103,7 +103,7 @@ describe "HTTP request handling" do
       it { is_expected.to eq(503) }
     end
 
-    specify { expect(last_response.headers["Cache-Control"]).to eq("private") }
+    specify { expect(last_response.headers["cache-control"]).to eq("private") }
   end
 
   describe "redirects get a cache header of 1 hour" do
@@ -1733,7 +1733,7 @@ describe "HTTP request handling" do
           it { is_expected.to eq(200) }
         end
 
-        specify { expect(last_response.headers["Cache-Control"]).to eq("private") }
+        specify { expect(last_response.headers["cache-control"]).to eq("private") }
       end
 
       context "when the Database errors when finding a Host" do

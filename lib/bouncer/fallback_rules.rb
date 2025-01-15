@@ -7,7 +7,7 @@ module Bouncer
     end
 
     def self.gone(context, renderer)
-      [410, { "Content-Type" => "text/html" }, [renderer.render(context.attributes_for_render, "410")]]
+      [410, { "Ccontent-Type" => "text/html" }, [renderer.render(context.attributes_for_render, "410")]]
     end
 
     def self.try(context, renderer)
