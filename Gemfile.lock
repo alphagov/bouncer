@@ -59,19 +59,20 @@ GEM
     diff-lcs (1.6.1)
     docile (1.4.1)
     drb (2.2.1)
+    erb (5.0.1)
     erubi (1.13.1)
     erubis (2.7.0)
     ffi (1.17.1)
     ffi (1.17.1-x86_64-darwin)
-    google-protobuf (4.30.2)
+    google-protobuf (4.31.0)
       bigdecimal
       rake (>= 13)
-    google-protobuf (4.30.2-x86_64-darwin)
+    google-protobuf (4.31.0-x86_64-darwin)
       bigdecimal
       rake (>= 13)
     googleapis-common-protos-types (1.20.0)
       google-protobuf (>= 3.18, < 5.a)
-    govuk_app_config (9.17.3)
+    govuk_app_config (9.17.4)
       logstasher (~> 2.1)
       opentelemetry-exporter-otlp (>= 0.25, < 0.31)
       opentelemetry-instrumentation-all (>= 0.39.1, < 0.77.0)
@@ -102,11 +103,11 @@ GEM
     logstasher (2.1.5)
       activesupport (>= 5.2)
       request_store
-    loofah (2.24.0)
+    loofah (2.24.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
     method_source (1.1.0)
-    mini_portile2 (2.8.8)
+    mini_portile2 (2.8.9)
     minitest (5.25.5)
     mr-sparkle (0.3.0)
       listen (~> 1.0)
@@ -205,7 +206,7 @@ GEM
     opentelemetry-instrumentation-aws_lambda (0.3.0)
       opentelemetry-api (~> 1.0)
       opentelemetry-instrumentation-base (~> 0.23.0)
-    opentelemetry-instrumentation-aws_sdk (0.8.0)
+    opentelemetry-instrumentation-aws_sdk (0.8.1)
       opentelemetry-api (~> 1.0)
       opentelemetry-instrumentation-base (~> 0.23.0)
     opentelemetry-instrumentation-base (0.23.0)
@@ -343,7 +344,7 @@ GEM
       ast (~> 2.4.1)
       racc
     pg (1.5.9)
-    plek (5.2.1)
+    plek (5.2.2)
     pp (0.6.2)
       prettyprint
     prettyprint (0.2.0)
@@ -353,7 +354,7 @@ GEM
     pry (0.15.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
-    psych (5.2.4)
+    psych (5.2.6)
       date
       stringio
     public_suffix (6.0.1)
@@ -393,7 +394,8 @@ GEM
       ffi (~> 1.0)
     rb-kqueue (0.2.8)
       ffi (>= 0.5.0)
-    rdoc (6.13.1)
+    rdoc (6.14.0)
+      erb
       psych (>= 4.0.0)
     regexp_parser (2.10.0)
     reline (0.6.1)
@@ -451,10 +453,10 @@ GEM
       rubocop (~> 1.72, >= 1.72.1)
     ruby-progressbar (1.13.0)
     securerandom (0.4.1)
-    sentry-rails (5.23.0)
+    sentry-rails (5.24.0)
       railties (>= 5.0)
-      sentry-ruby (~> 5.23.0)
-    sentry-ruby (5.23.0)
+      sentry-ruby (~> 5.24.0)
+    sentry-ruby (5.24.0)
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
     simplecov (0.22.0)
@@ -478,7 +480,7 @@ GEM
     uri (1.0.3)
     useragent (0.16.11)
     webrick (1.9.1)
-    zeitwerk (2.7.2)
+    zeitwerk (2.7.3)
 
 PLATFORMS
   ruby
@@ -489,7 +491,7 @@ DEPENDENCIES
   bootsnap
   database_cleaner (= 2.1.0)
   erubis (= 2.7.0)
-  govuk_app_config (~> 9.17.3)
+  govuk_app_config (~> 9.17.4)
   mr-sparkle (= 0.3.0)
   nokogiri (= 1.18.8)
   optic14n (= 4.0.0)
