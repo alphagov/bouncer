@@ -72,7 +72,7 @@ GEM
       rake (>= 13)
     googleapis-common-protos-types (1.20.0)
       google-protobuf (>= 3.18, < 5.a)
-    govuk_app_config (9.17.14)
+    govuk_app_config (9.17.15)
       logstasher (~> 2.1)
       opentelemetry-exporter-otlp (>= 0.25, < 0.31)
       opentelemetry-instrumentation-all (>= 0.39.1, < 0.79.0)
@@ -394,7 +394,7 @@ GEM
       ffi (~> 1.0)
     rb-kqueue (0.2.8)
       ffi (>= 0.5.0)
-    rdoc (6.14.1)
+    rdoc (6.14.2)
       erb
       psych (>= 4.0.0)
     regexp_parser (2.10.0)
@@ -491,7 +491,7 @@ DEPENDENCIES
   bootsnap
   database_cleaner (= 2.1.0)
   erubis (= 2.7.0)
-  govuk_app_config (~> 9.17.14)
+  govuk_app_config (~> 9.17.15)
   mr-sparkle (= 0.3.0)
   nokogiri (= 1.18.8)
   optic14n (= 4.0.0)
