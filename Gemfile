@@ -3,7 +3,7 @@ source "https://rubygems.org/"
 gem "activerecord", "8.0.2.1" # Ideally version should be synced with Transition
 gem "bootsnap", require: false
 gem "erubis", "2.7.0"
-gem "govuk_app_config", "~> 9.19.1"
+gem "govuk_app_config", "~> 9.19.2"
 gem "nokogiri", "1.18.9"
 gem "optic14n", "4.0.0" # Ideally version should be synced with Transition
 gem "pg"
