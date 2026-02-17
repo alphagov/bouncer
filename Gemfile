@@ -7,7 +7,7 @@ gem "govuk_app_config", "~> 9.23.6"
 gem "nokogiri", "1.19.0"
 gem "optic14n", "4.0.0" # Ideally version should be synced with Transition
 gem "pg"
-gem "rack", "~> 3.2.4"
+gem "rack", "~> 3.2.5"
 gem "rake", "13.3.1"
 
 group :development do
