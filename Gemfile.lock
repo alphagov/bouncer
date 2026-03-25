@@ -1,9 +1,9 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    actionpack (8.0.3)
-      actionview (= 8.0.3)
-      activesupport (= 8.0.3)
+    actionpack (8.0.5)
+      actionview (= 8.0.5)
+      activesupport (= 8.0.5)
       nokogiri (>= 1.8.5)
       rack (>= 2.2.4)
       rack-session (>= 1.0.1)
@@ -11,19 +11,19 @@ GEM
       rails-dom-testing (~> 2.2)
       rails-html-sanitizer (~> 1.6)
       useragent (~> 0.16)
-    actionview (8.0.3)
-      activesupport (= 8.0.3)
+    actionview (8.0.5)
+      activesupport (= 8.0.5)
       builder (~> 3.1)
       erubi (~> 1.11)
       rails-dom-testing (~> 2.2)
       rails-html-sanitizer (~> 1.6)
-    activemodel (8.0.3)
-      activesupport (= 8.0.3)
-    activerecord (8.0.3)
-      activemodel (= 8.0.3)
-      activesupport (= 8.0.3)
+    activemodel (8.0.5)
+      activesupport (= 8.0.5)
+    activerecord (8.0.5)
+      activemodel (= 8.0.5)
+      activesupport (= 8.0.5)
       timeout (>= 0.4.0)
-    activesupport (8.0.3)
+    activesupport (8.0.5)
       base64
       benchmark (>= 0.3)
       bigdecimal
@@ -342,9 +342,9 @@ GEM
     rails-html-sanitizer (1.7.0)
       loofah (~> 2.25)
       nokogiri (>= 1.15.7, != 1.16.7, != 1.16.6, != 1.16.5, != 1.16.4, != 1.16.3, != 1.16.2, != 1.16.1, != 1.16.0.rc1, != 1.16.0)
-    railties (8.0.3)
-      actionpack (= 8.0.3)
-      activesupport (= 8.0.3)
+    railties (8.0.5)
+      actionpack (= 8.0.5)
+      activesupport (= 8.0.5)
       irb (~> 1.13)
       rackup (>= 1.0.0)
       rake (>= 12.2)
@@ -435,7 +435,7 @@ GEM
     statsd-ruby (1.5.0)
     stringio (3.2.0)
     thor (1.5.0)
-    timeout (0.4.3)
+    timeout (0.6.1)
     tsort (0.2.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
@@ -455,7 +455,7 @@ PLATFORMS
   x86_64-darwin-20
 
 DEPENDENCIES
-  activerecord (= 8.0.3)
+  activerecord (= 8.0.5)
   bootsnap
   database_cleaner (= 2.1.0)
   erubis (= 2.7.0)
