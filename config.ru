@@ -20,6 +20,6 @@ use Bouncer::Cacher
 urls = ["/favicon.ico"] + Dir["public/*.css", "public/*.png", "public/*.js"].map { |path| path.gsub("public", "") }
 use Rack::Static, urls: urls, root: 'public'
 
-ActiveRecord::QueryCache.run
+ActiveRecord::QueryCache::ExecutorHooks.run
 use ActiveRecord::Rack::ConnectionManagement
 run Bouncer::App.new
