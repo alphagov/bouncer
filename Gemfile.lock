@@ -44,6 +44,7 @@ GEM
     bootsnap (1.23.0)
       msgpack (~> 1.2)
     builder (3.3.0)
+    cgi (0.5.1)
     coderay (1.1.3)
     concurrent-ruby (1.3.6)
     connection_pool (2.5.5)
@@ -298,8 +299,9 @@ GEM
       opentelemetry-semantic_conventions
     opentelemetry-semantic_conventions (1.36.0)
       opentelemetry-api (~> 1.0)
-    optic14n (4.1.0)
+    optic14n (4.2.0)
       addressable (~> 2.7)
+      cgi
     parallel (1.27.0)
     parser (3.3.10.1)
       ast (~> 2.4.1)
@@ -461,7 +463,7 @@ DEPENDENCIES
   govuk_app_config (~> 9.23.7)
   mr-sparkle (= 0.3.0)
   nokogiri (= 1.19.2)
-  optic14n (= 4.1.0)
+  optic14n (= 4.2.0)
   pg
   pry
   rack (~> 3.2.6)

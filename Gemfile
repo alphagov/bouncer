@@ -5,7 +5,7 @@ gem "bootsnap", require: false
 gem "erubis", "2.7.0"
 gem "govuk_app_config", "~> 9.23.7"
 gem "nokogiri", "1.19.2"
-gem "optic14n", "4.1.0" # Ideally version should be synced with Transition
+gem "optic14n", "4.2.0" # Ideally version should be synced with Transition
 gem "pg"
 gem "rack", "~> 3.2.6"
 gem "rake", "13.3.1"
