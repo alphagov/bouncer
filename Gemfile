@@ -15,9 +15,7 @@ group :development do
 end
 
 group :test do
-  gem "benchmark"
   gem "database_cleaner", "2.1.0"
-  gem "ostruct"
   gem "pry"
   gem "rack-test", "2.2.0"
   gem "simplecov"
