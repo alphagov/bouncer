@@ -6,6 +6,7 @@ gem "erubis", "2.7.0"
 gem "govuk_app_config", "~> 9.23.8"
 gem "nokogiri", "1.19.2"
 gem "optic14n", "4.2.0" # Ideally version should be synced with Transition
+gem "ostruct"
 gem "pg"
 gem "rack", "~> 3.2.6"
 gem "rake", "13.3.1"
@@ -15,6 +16,7 @@ group :development do
 end
 
 group :test do
+  gem "benchmark"
   gem "database_cleaner", "2.1.0"
   gem "pry"
   gem "rack-test", "2.2.0"
