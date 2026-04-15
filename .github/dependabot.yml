@@ -2,6 +2,8 @@ version: 2
 updates:
   - package-ecosystem: bundler
     directory: /
+    cooldown:
+      default-days: 3
     schedule:
       interval: daily
 
@@ -12,6 +14,8 @@ updates:
   # config will save a dev from trying to upgrade ruby via Dependabot.
   - package-ecosystem: docker
     directory: /
+    cooldown:
+      default-days: 7
     schedule:
       interval: weekly
     ignore:
@@ -19,5 +23,7 @@ updates:
 
   - package-ecosystem: github-actions
     directory: /
+    cooldown:
+      default-days: 3
     schedule:
       interval: daily
