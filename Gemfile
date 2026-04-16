@@ -9,7 +9,7 @@ gem "optic14n", "4.2.0" # Ideally version should be synced with Transition
 gem "ostruct"
 gem "pg"
 gem "rack", "~> 3.2.6"
-gem "rake", "13.4.1"
+gem "rake", "13.4.2"
 
 group :development do
   gem "mr-sparkle", "0.3.0"
