@@ -121,10 +121,10 @@ GEM
       unicorn (>= 4.5)
     msgpack (1.8.0)
     nio4r (2.7.5)
-    nokogiri (1.19.2)
+    nokogiri (1.19.3)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
-    nokogiri (1.19.2-x86_64-darwin)
+    nokogiri (1.19.3-x86_64-darwin)
       racc (~> 1.4)
     opentelemetry-api (1.9.0)
       logger
@@ -466,7 +466,7 @@ DEPENDENCIES
   erubis (= 2.7.0)
   govuk_app_config (~> 9.24.0)
   mr-sparkle (= 0.3.0)
-  nokogiri (= 1.19.2)
+  nokogiri (= 1.19.3)
   optic14n (= 4.2.0)
   ostruct
   pg
