@@ -430,7 +430,7 @@ GEM
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
       logger
-    simplecov (1.0.2)
+    simplecov (1.0.3)
     statsd-ruby (1.5.0)
     thor (1.5.0)
     timeout (0.6.1)
