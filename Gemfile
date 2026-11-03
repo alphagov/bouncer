@@ -8,7 +8,7 @@ gem "nokogiri", "1.19.4"
 gem "optic14n", "4.2.0" # Ideally version should be synced with Transition
 gem "ostruct"
 gem "pg"
-gem "rack", "~> 3.2.7"
+gem "rack", "~> 3.2.8"
 gem "rake", "13.4.1"
 
 group :development do
