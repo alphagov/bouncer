@@ -324,7 +324,7 @@ GEM
     puma (8.0.2)
       nio4r (~> 2.0)
     racc (1.8.1)
-    rack (3.2.7)
+    rack (3.2.8)
     rack-proxy (1.0.2)
       rack (>= 2.0, < 4)
     rack-session (2.1.2)
@@ -465,7 +465,7 @@ DEPENDENCIES
   ostruct
   pg
   pry
-  rack (~> 3.2.7)
+  rack (~> 3.2.8)
   rack-test (= 2.3.0)
   rake (= 13.4.1)
   rspec
