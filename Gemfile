@@ -4,7 +4,7 @@ gem "activerecord", "8.1.4" # Ideally version should be synced with Transition
 gem "bootsnap", require: false
 gem "erubis", "2.7.0"
 gem "govuk_app_config", "~> 9.26.0"
-gem "nokogiri", "1.19.4"
+gem "nokogiri", "1.19.7"
 gem "optic14n", "4.2.0" # Ideally version should be synced with Transition
 gem "ostruct"
 gem "pg"
